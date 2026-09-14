@@ -1,46 +1,45 @@
-# 01. 아키텍처
+# 01. Architecture
 
-> **초기 설계 이력 — 현재 구현 기준 아님.** 이 문서는 v2 이전 초안입니다. 현재 기준은 [재설계 v2](ARCHITECTURE-V2.ko.md)이며, 충돌하는 내용은 v2가 우선합니다. [검토 결과](REVIEW-CLAUDE-DESIGN.ko.md)와 [Phase 0 확인 기록](PHASE-0-DESIGN.ko.md)을 함께 확인하세요.
+> **Draft history — not the current implementation baseline.** This document predates v2. The current baseline is [Architecture v2](ARCHITECTURE-V2.md), and v2 wins wherever they conflict. See also [the design review](REVIEW-CLAUDE-DESIGN.md) and [the Phase 0 verification record](PHASE-0-DESIGN.md).
 
-## 1. 배포 토폴로지
+## 1. Deployment topology
 
-VMware VM은 사내 메일에 접근할 수 있지만 외부망이 제한되고,
-외부 환경은 Dataloy API에 접근할 수 있지만 사내 메일에는 닿지 않습니다.
-따라서 **경계를 하나 두고 그 위로 정규화된 데이터만 흐르게** 합니다.
+The VMware VM can reach corporate mail but has limited external access, while the outside can reach the Dataloy API but not corporate mail.
+So we draw one boundary and let **only normalised data cross it**.
 
 ```
-┌─────────────────────── VMware VM (사내망) ────────────────────────┐
+┌─────────────────── VMware VM (corporate network) ─────────────────┐
 │                                                                   │
-│   Outlook (Desktop)                                               │
+│   Outlook (desktop)                                               │
 │        ▲                                                          │
-│        │ COM / Graph / IMAP  (어댑터로 추상화)                     │
+│        │ COM / Graph / IMAP  (behind an adapter)                  │
 │        │                                                          │
 │   ┌────┴──────────────┐        ┌──────────────────┐               │
 │   │  outlook-mcp      │◀──────▶│  Claude Code     │               │
-│   │  (MCP stdio 서버) │  MCP   │  (VM 내부 실행)  │               │
+│   │  (MCP stdio srv)  │  MCP   │  (runs in VM)    │               │
 │   └────┬──────────────┘        └──────────────────┘               │
-│        │ 원문 + 파싱 결과                                          │
+│        │ raw + parsed results                                     │
 │        ▼                                                          │
 │   ┌───────────────────┐                                           │
 │   │ vm_store.sqlite   │  emails_raw / vessel_reports              │
 │   └────┬──────────────┘                                           │
-│        │ export (정규화 JSONL, 선택적 redaction)                   │
+│        │ export (normalised JSONL, optional redaction)            │
 └────────┼──────────────────────────────────────────────────────────┘
          │
-    ═════╪═══════════ 신뢰 경계 (Trust Boundary) ═══════════
-         │  공유 폴더 / 마운트 / HTTP 풀 — Transport 인터페이스로 추상화
+    ═════╪═══════════════ Trust boundary ═══════════════════
+         │  Shared folder / mount / HTTP pull — behind a Transport interface
          ▼
-┌─────────────────────── 외부 (분석·표현) ──────────────────────────┐
+┌─────────────────── Outside (analysis and presentation) ───────────┐
 │                                                                   │
 │   ┌───────────────────┐        ┌──────────────────┐               │
 │   │  dataloy-mcp      │◀──────▶│                  │               │
 │   ├───────────────────┤  MCP   │  Claude Code     │               │
-│   │  fleet-mcp        │◀──────▶│  (외부 실행)     │               │
+│   │  fleet-mcp        │◀──────▶│  (runs outside)  │               │
 │   └────┬──────────────┘        └──────────────────┘               │
 │        │                                                          │
 │   ┌────▼──────────────┐   ┌──────────────┐   ┌─────────────────┐  │
 │   │ fleet.sqlite      │──▶│ Reconcile    │──▶│ Dashboard       │  │
-│   │ (통합 저장소)     │   │ Engine       │   │ (FastAPI+지도)  │  │
+│   │ (combined store)  │   │ engine       │   │ (FastAPI + map) │  │
 │   └───────────────────┘   └──────────────┘   └─────────────────┘  │
 │        ▲                                                          │
 │        │ OAuth2 (client_credentials)                              │
@@ -50,111 +49,111 @@ VMware VM은 사내 메일에 접근할 수 있지만 외부망이 제한되고,
 └───────────────────────────────────────────────────────────────────┘
 ```
 
-### 왜 이 구조인가
+### Why this shape
 
-- **어댑터로 Outlook 접근을 추상화** — COM / Graph / IMAP 중 무엇이 허용될지 아직 확정되지 않았고, 환경에 따라 바뀔 수 있습니다. 상위 코드가 이를 몰라야 합니다.
-- **경계를 넘는 것은 정규화된 데이터뿐** — 메일 원문은 VM 안에 남습니다. 원문이 필요하면 VM 쪽 MCP 도구로 그때 조회합니다.
-- **MCP 서버를 3개로 분리** — 각각 신뢰 경계와 자격증명 범위가 다릅니다. 하나로 합치면 VM 자격증명과 Dataloy 자격증명이 같은 프로세스에 놓입니다.
+- **Outlook access sits behind an adapter** — which of COM / Graph / IMAP will be permitted is not settled, and it can change with the environment. The code above it should not know.
+- **Only normalised data crosses the boundary** — raw mail stays inside the VM. If the raw content is needed, it is fetched at that moment through the VM-side MCP tool.
+- **Three MCP servers, not one** — each has a different trust boundary and credential scope. Merging them puts the VM credentials and the Dataloy credentials in the same process.
 
-## 2. 컴포넌트
+## 2. Components
 
-| 컴포넌트 | 위치 | 책임 | 언어 |
+| Component | Location | Responsibility | Language |
 |---|---|---|---|
-| `core` | 공통 | 도메인 모델, 파서, 좌표·시간 유틸, 스키마 | Python |
-| `outlook-mcp` | VM 내부 | Outlook 검색/조회/첨부 추출, 원문 보관 | Python |
-| `dataloy-mcp` | 외부 | Dataloy REST 읽기 전용 래핑 | Python |
-| `fleet-mcp` | 외부 | 통합 질의, 브리핑, 대조 결과 | Python |
-| `reconcile` | 외부 | 매칭 + 불일치 규칙 엔진 | Python |
-| `dashboard` | 외부 | HTTP API + 지도 UI | Python(FastAPI) + 정적 프론트 |
-| `transport` | 양쪽 | 경계 넘김 (export / import) | Python |
+| `core` | shared | Domain models, parsers, coordinate/time utilities, schema | Python |
+| `outlook-mcp` | in VM | Outlook search/retrieval/attachment extraction, raw retention | Python |
+| `dataloy-mcp` | outside | Read-only wrapper over the Dataloy REST API | Python |
+| `fleet-mcp` | outside | Combined queries, briefs, comparison results | Python |
+| `reconcile` | outside | Matching plus the discrepancy rule engine | Python |
+| `dashboard` | outside | HTTP API plus the map UI | Python (FastAPI) + static frontend |
+| `transport` | both | Crossing the boundary (export / import) | Python |
 
-### 스택 선택 근거
+### Why this stack
 
-Python 단일 스택으로 갑니다. 이유:
+A single Python stack, because:
 
-1. **Outlook COM 제어는 `pywin32`가 사실상 유일한 실용 경로**입니다. 이게 VM 쪽 언어를 결정합니다.
-2. 파싱(정규식, `openpyxl`, `dateutil`)과 지리 계산(`pyproj`, `searoute`) 생태계가 Python에 있습니다.
-3. 대시보드 프론트는 빌드 도구 없이 **MapLibre GL JS + 바닐라 JS/정적 HTML**로 충분합니다. 데이터는 FastAPI가 JSON으로 내려줍니다. React/Node 빌드 체인을 들이면 VM 내부·사내 서버 배포가 복잡해집니다.
+1. **`pywin32` is effectively the only practical route to driving Outlook over COM.** That decides the language on the VM side.
+2. The parsing (regex, `openpyxl`, `dateutil`) and geospatial (`pyproj`, `searoute`) ecosystems are in Python.
+3. The dashboard frontend needs no build tooling — **MapLibre GL JS plus plain JS and static HTML** is enough, with FastAPI serving JSON. Pulling in a React/Node build chain complicates deployment inside the VM and on an in-house server.
 
-두 스택을 관리하는 비용보다 단일 스택의 단순함이 이 규모에서는 유리하다고 판단했습니다.
+At this size, the simplicity of one stack beats the cost of maintaining two.
 
-## 3. 디렉터리 구조 (제안)
+## 3. Proposed directory layout
 
 ```
 VMwareconnect/
 ├── docs/
-├── pyproject.toml                 # uv / pip 단일 워크스페이스
+├── pyproject.toml                 # single uv / pip workspace
 ├── src/
 │   └── vmwareconnect/
 │       ├── core/
 │       │   ├── models.py          # VesselReport, VoyageState, Discrepancy …
 │       │   ├── enums.py           # ReportType, VesselStatus, Severity
-│       │   ├── geo.py             # 좌표 파싱, haversine, 항로거리
-│       │   ├── timeutil.py        # LT/UTC 변환, tz 추론
-│       │   └── store.py           # SQLite 접근 계층
+│       │   ├── geo.py             # coordinate parsing, haversine, route distance
+│       │   ├── timeutil.py        # LT/UTC conversion, tz inference
+│       │   └── store.py           # SQLite access layer
 │       ├── outlook/
 │       │   ├── adapter.py         # OutlookAdapter (ABC)
-│       │   ├── adapter_com.py     # pywin32 구현
-│       │   ├── adapter_graph.py   # Microsoft Graph 구현
-│       │   ├── adapter_imap.py    # IMAP 구현
-│       │   └── server.py          # outlook-mcp 진입점
+│       │   ├── adapter_com.py     # pywin32 implementation
+│       │   ├── adapter_graph.py   # Microsoft Graph implementation
+│       │   ├── adapter_imap.py    # IMAP implementation
+│       │   └── server.py          # outlook-mcp entry point
 │       ├── parsing/
-│       │   ├── registry.py        # 템플릿 레지스트리
-│       │   ├── templates/         # 선사/선박별 추출 규칙 (YAML)
-│       │   ├── generic.py         # 범용 라벨 스캐너
-│       │   ├── attachments.py     # xlsx/pdf 노온폼 파서
-│       │   └── llm.py             # Claude 폴백 추출 (MCP 도구로 노출)
+│       │   ├── registry.py        # template registry
+│       │   ├── templates/         # per-operator/vessel extraction rules (YAML)
+│       │   ├── generic.py         # generic label scanner
+│       │   ├── attachments.py     # xlsx/pdf noon-form parsers
+│       │   └── llm.py             # Claude fallback extraction (exposed as an MCP tool)
 │       ├── dataloy/
-│       │   ├── client.py          # OAuth2 + ws/rest 클라이언트
-│       │   ├── mapper.py          # Dataloy JSON → 도메인 모델
-│       │   └── server.py          # dataloy-mcp 진입점
+│       │   ├── client.py          # OAuth2 + ws/rest client
+│       │   ├── mapper.py          # Dataloy JSON → domain models
+│       │   └── server.py          # dataloy-mcp entry point
 │       ├── reconcile/
-│       │   ├── matcher.py         # 선박·항차 동일성 판정
-│       │   ├── rules.py           # 불일치 규칙 (R-001 …)
+│       │   ├── matcher.py         # vessel and voyage identity
+│       │   ├── rules.py           # discrepancy rules (R-001 …)
 │       │   └── engine.py
 │       ├── transport/
 │       │   ├── base.py            # Transport (ABC)
-│       │   ├── file_drop.py       # 공유 폴더 방식 (기본)
-│       │   └── http_pull.py       # HTTP 폴링 방식
+│       │   ├── file_drop.py       # shared folder (default)
+│       │   └── http_pull.py       # HTTP polling
 │       ├── fleet/
-│       │   └── server.py          # fleet-mcp 진입점
+│       │   └── server.py          # fleet-mcp entry point
 │       └── dashboard/
 │           ├── api.py             # FastAPI
 │           └── static/            # index.html, map.js, styles.css
 └── tests/
-    ├── fixtures/emails/           # 실제 리포트 샘플 (익명화)
+    ├── fixtures/emails/           # real report samples (anonymised)
     └── ...
 ```
 
-## 4. 데이터 흐름 (일일 사이클)
+## 4. Data flow (daily cycle)
 
 ```
-1. [VM] Claude가 outlook_sync(since=어제) 호출
-        → 신규 메일 수집, emails_raw 적재
-2. [VM] 각 메일에 대해 파싱 시도 (템플릿 → 범용 → Claude 직접 추출)
-        → vessel_reports 적재, parse_confidence 기록
-3. [VM] transport.export() → 정규화 JSONL 생성
-4. [경계] 공유 폴더로 이동
-5. [외부] transport.import_() → fleet.sqlite 병합
-6. [외부] dataloy_sync() → OPR 항차/기항지/이벤트로그 갱신
-7. [외부] reconcile.run() → 매칭 + 규칙 평가 → discrepancies 적재
-8. [외부] 대시보드 갱신, Claude가 fleet_daily_brief()로 요약 생성
+1. [VM] Claude calls outlook_sync(since=yesterday)
+        → collect new mail, load into emails_raw
+2. [VM] Attempt parsing per mail (template → generic → Claude direct extraction)
+        → load into vessel_reports, record parse_confidence
+3. [VM] transport.export() → produce normalised JSONL
+4. [boundary] Move to the shared folder
+5. [outside] transport.import_() → merge into fleet.sqlite
+6. [outside] dataloy_sync() → refresh OPR voyages, port calls and event logs
+7. [outside] reconcile.run() → match, evaluate rules, load discrepancies
+8. [outside] Refresh the dashboard; Claude generates the summary via fleet_daily_brief()
 ```
 
-1~3단계는 Claude가 VM 안에서 대화적으로 수행합니다.
-6~8단계는 스케줄러(또는 Claude)가 외부에서 수행합니다.
+Steps 1–3 are performed by Claude interactively inside the VM.
+Steps 6–8 are performed outside by a scheduler (or by Claude).
 
-## 5. 신뢰 경계와 보안 원칙
+## 5. Trust boundary and security principles
 
-| 원칙 | 구현 |
+| Principle | Implementation |
 |---|---|
-| 메일 원문은 경계를 넘지 않는다 | export 시 `redact=true`(기본)면 정규화 필드 + 메시지 ID만 전송. 본문·첨부는 VM에 잔류 |
-| 자격증명 분리 | Dataloy 토큰은 외부 프로세스만 보유. VM 쪽은 Dataloy에 전혀 접근하지 않음 |
-| Dataloy는 읽기 전용 | v1의 `dataloy-mcp`는 GET만 노출. 쓰기 도구를 아예 정의하지 않음 |
-| 자격증명은 코드·저장소 밖 | 환경변수 또는 OS 자격증명 저장소. `.env`는 `.gitignore` |
-| 감사 추적 | 모든 파싱 결과에 원본 `message_id`, `parse_method`, `parse_confidence` 기록. 결과를 항상 원문까지 거슬러 올라갈 수 있어야 함 |
-| 메일 본문은 신뢰하지 않는 입력 | 외부에서 들어온 텍스트입니다. 파싱 대상일 뿐이며, 그 안의 지시문을 실행 지시로 해석하지 않습니다 |
+| Raw mail never crosses the boundary | With `redact=true` (the default), export sends only normalised fields plus the message ID. Bodies and attachments stay in the VM |
+| Credential separation | Only the external process holds the Dataloy token. The VM side never touches Dataloy |
+| Dataloy is read-only | v1's `dataloy-mcp` exposes GET only. No write tool is defined at all |
+| Credentials live outside the code and the repository | Environment variables or the OS credential store. `.env` is in `.gitignore` |
+| Audit trail | Every parse result records the source `message_id`, `parse_method` and `parse_confidence`. Any result must be traceable back to the raw mail |
+| Mail bodies are untrusted input | This is text from outside. It is material to parse, and instructions inside it are never treated as instructions to execute |
 
-마지막 항목은 LLM 폴백 파서를 쓸 때 실질적인 의미가 있습니다.
-`parsing/llm.py`는 메일 본문을 **데이터로만** 다루도록 프롬프트를 구성하고,
-추출 결과는 스키마 검증을 통과한 필드만 채택합니다.
+That last item has real consequences for the LLM fallback parser.
+`parsing/llm.py` builds its prompt so the mail body is treated **as data only**,
+and only fields that pass schema validation are accepted from the result.

@@ -1,129 +1,129 @@
-# 04. Dataloy VMS API 연동
+# 04. Dataloy VMS API integration
 
-> **초기 설계 이력 — 현재 구현 기준 아님.** 이 문서는 v2 이전 초안입니다. 현재 기준은 [재설계 v2](ARCHITECTURE-V2.ko.md)이며, 충돌하는 내용은 v2가 우선합니다. [검토 결과](REVIEW-CLAUDE-DESIGN.ko.md)와 [Phase 0 확인 기록](PHASE-0-DESIGN.ko.md)을 함께 확인하세요.
+> **Draft history — not the current implementation baseline.** This document predates v2. The current baseline is [Architecture v2](ARCHITECTURE-V2.md), and v2 wins wherever they conflict. See also [the design review](REVIEW-CLAUDE-DESIGN.md) and [the Phase 0 verification record](PHASE-0-DESIGN.md).
 
-> 아래 내용은 공개된 Dataloy VMS API 문서(https://api.dataloy.com)를 근거로 작성했습니다.
-> 다만 **테넌트마다 base URL, API 버전, 활성화된 모듈, 상태 코드값이 다를 수 있습니다.**
-> Phase 0에서 실제 테넌트로 검증하기 전까지는 모두 가설로 취급합니다.
-> 미확인 항목은 `09-open-questions.md`에 정리되어 있습니다.
+> What follows is based on the public Dataloy VMS API documentation (https://api.dataloy.com).
+> However, **the base URL, API version, enabled modules and status code values can differ per tenant.**
+> Until verified against the real tenant in Phase 0, treat all of it as hypothesis.
+> The open items are collected in [09-open-questions.md](09-open-questions.md).
 
-## 1. 인증
+## 1. Authentication
 
-Dataloy는 OAuth 2.0 `client_credentials`를 사용합니다.
-신규 고객은 OAuth 2.0으로 설정되지만, 여러 고객을 대상으로 하는 통합은
-**Basic 인증도 함께 지원**해야 한다고 문서에 명시되어 있습니다.
+Dataloy uses OAuth 2.0 `client_credentials`.
+New customers are set up with OAuth 2.0, but the documentation states that an integration
+targeting multiple customers must **also support Basic authentication**.
 
 ```
 POST {token_url}
   grant_type=client_credentials
   client_id={M2M_CLIENT_ID}
   client_secret={M2M_CLIENT_SECRET}
-  audience=https://dataloy        # 운영
-  audience=https://dataloy.dev    # 테스트/개발
+  audience=https://dataloy        # production
+  audience=https://dataloy.dev    # test / development
 ```
 
-발급된 토큰은 Bearer로 전달합니다.
+The issued token is passed as a Bearer token.
 
 ```
 Authorization: Bearer {access_token}
 ```
 
-### 클라이언트 설계
+### Client design
 
 ```python
 class DataloyAuth(ABC):
     def headers(self) -> dict[str, str]: ...
 
 class OAuth2Auth(DataloyAuth):
-    """토큰 캐시 + 만료 60초 전 선제 갱신 + 401 시 1회 강제 갱신 후 재시도"""
+    """Token cache + pre-emptive refresh 60s before expiry + one forced refresh and retry on 401"""
 
 class BasicAuth(DataloyAuth):
-    """레거시 테넌트 대응"""
+    """For legacy tenants"""
 ```
 
-두 방식을 인터페이스로 분리해 두면 테넌트 확인 결과에 따라 설정만 바꾸면 됩니다.
-자격증명은 환경변수(`DATALOY_CLIENT_ID`, `DATALOY_CLIENT_SECRET`, `DATALOY_TOKEN_URL`,
-`DATALOY_BASE_URL`, `DATALOY_AUDIENCE`)로 주입하고 저장소에 커밋하지 않습니다.
+Splitting the two behind an interface means that once the tenant is confirmed, only configuration changes.
+Credentials are injected through environment variables (`DATALOY_CLIENT_ID`, `DATALOY_CLIENT_SECRET`,
+`DATALOY_TOKEN_URL`, `DATALOY_BASE_URL`, `DATALOY_AUDIENCE`) and are never committed.
 
-## 2. 리소스와 질의
+## 2. Resources and queries
 
-엔드포인트는 `{base_url}/ws/rest/{Resource}` 형태입니다.
-모든 리소스는 **자기 속성과 연결된 리소스의 속성 모두에 대해 필터링**을 지원합니다.
+Endpoints take the form `{base_url}/ws/rest/{Resource}`.
+Every resource supports **filtering on its own properties and on those of linked resources**.
 
-### 2.1 필터 문법
+### 2.1 Filter syntax
 
 ```
-?filter={속성경로}({연산자}){값}
+?filter={property.path}({operator}){value}
 ```
 
-| 연산자 | 의미 |
+| Operator | Meaning |
 |---|---|
-| `EQ` | 같음 |
-| `NE` | 다름 |
-| `IN` | 목록 포함 |
+| `EQ` | equals |
+| `NE` | not equal |
+| `IN` | in a list |
 
-확인된 실제 예시:
+Confirmed real examples:
 
 ```http
-# Operational 항차만
+# Operational voyages only
 GET /ws/rest/Voyage?filter=voyageHeader.voyageStatus.statusTypeCode(EQ)OPR
 
-# Nominated + Operational 기항지
+# Nominated + Operational port calls
 GET /ws/rest/PortCall?filter=voyage.voyageHeader.voyageStatus.statusTypeCode(IN)(NOM,OPR)
 
-# 견적 제외
+# Exclude estimates
 GET /ws/rest/Voyage?filter=voyageHeader.voyageStatus.statusTypeCode(NE)EST
 
-# 특정 선박
+# A specific vessel
 GET /ws/rest/PortCall?filter=voyage.vessel.imoNumber(EQ)9123456
 ```
 
-> `LT`/`GT`/`LIKE` 등 추가 연산자의 존재 여부는 미확인입니다.
-> 날짜 범위 필터가 필요하므로 Phase 0에서 반드시 확인합니다.
-> 지원되지 않으면 클라이언트 측에서 필터링합니다 (데이터 양이 작아 실용상 문제없음).
+> Whether additional operators such as `LT`/`GT`/`LIKE` exist is unverified.
+> Date range filters are needed, so this must be confirmed in Phase 0.
+> If unsupported, filter client-side (the data volume is small enough that this is fine in practice).
 
-### 2.2 페이지네이션
+### 2.2 Pagination
 
-기본 반환 한도는 **2000건**입니다. 초과 시 페이지네이션이 필요합니다.
-클라이언트는 항상 페이지네이션을 전제로 구현하고, 한 번에 500건씩 가져옵니다.
+The default return limit is **2000 records**. Beyond that, pagination is required.
+The client always assumes pagination and fetches 500 at a time.
 
 ```python
 def paginate(self, resource: str, **params) -> Iterator[dict]:
-    """한도에 걸리지 않도록 항상 분할 요청. 마지막 페이지까지 소진."""
+    """Always split the request so the limit is never hit. Drain to the last page."""
 ```
 
-### 2.3 사용할 리소스 (읽기 전용)
+### 2.3 Resources used (read-only)
 
-| 리소스 | 용도 |
+| Resource | Purpose |
 |---|---|
-| `Voyage` | OPR 항차 목록, 항차 번호, 상태, 선박 참조 |
-| `PortCall` | 기항지 순서, 항구, `reasonForCall`, ETA/ETD, `eventLogs` |
-| `Vessel` | 선박 마스터 (이름, IMO, 콜사인) — 메일↔선박 매칭의 기준 |
-| `EventLog` | 기항지별 이벤트(도착/접안/하역/출항)와 시각 |
-| `Port` | 항구 코드·좌표 (지도 표시 및 거리 계산용) |
+| `Voyage` | The OPR voyage list, voyage number, status, vessel reference |
+| `PortCall` | Port call order, port, `reasonForCall`, ETA/ETD, `eventLogs` |
+| `Vessel` | Vessel master (name, IMO, call sign) — the basis for mail-to-vessel matching |
+| `EventLog` | Per-port-call events (arrival, berthing, cargo, departure) and their times |
+| `Port` | Port codes and coordinates (for map display and distance calculation) |
 
-문서에 따르면 `PortCall`의 `EventLog`는 **ROB와 연결**되어 특정 이벤트 시점의
-연료 잔량(예: 도착 시 FO)을 담을 수 있습니다. 이는 본선 보고의 ROB와
-직접 대조할 수 있는 지점이므로 규칙 `R-004`에서 활용합니다.
+According to the documentation, a `PortCall`'s `EventLog` is **linked to ROBs**, so it can hold
+the fuel remaining at a given event (for example FO on arrival). That is directly comparable with
+the ROB in a vessel report, which rule `R-004` uses.
 
-**v1에서 쓰기 도구는 정의하지 않습니다.** 도구 자체가 없으면 실수로 호출될 수 없습니다.
+**No write tools are defined in v1.** A tool that does not exist cannot be called by mistake.
 
-### 2.4 항차 상태 코드
+### 2.4 Voyage status codes
 
-| 코드 | 의미 |
+| Code | Meaning |
 |---|---|
-| `EST` | Estimate (견적) |
-| `NOM` | Nominated (지명) |
-| `OPR` | **Operational (운항 중)** ← 본 시스템의 주 대상 |
+| `EST` | Estimate |
+| `NOM` | Nominated |
+| `OPR` | **Operational** ← the primary target of this system |
 
-> 코드값이 테넌트별로 커스터마이즈 가능한지 미확인입니다.
-> `VoyageStatus` 리소스를 먼저 조회해 실제 코드 목록을 확인한 뒤 상수를 확정합니다.
-> 코드를 하드코딩하지 말고 설정으로 뺍니다.
+> Whether the code values are customisable per tenant is unverified.
+> Query the `VoyageStatus` resource first to confirm the real code list, then fix the constants.
+> Do not hardcode the codes — put them in configuration.
 
-## 3. Vessel Report API
+## 3. The Vessel Report API
 
-Dataloy에는 **본선 보고를 받는 별도 API**가 존재합니다.
-확인된 페이로드 형태:
+Dataloy has **a separate API for receiving vessel reports**.
+The confirmed payload shape:
 
 ```json
 {
@@ -139,74 +139,74 @@ Dataloy에는 **본선 보고를 받는 별도 API**가 존재합니다.
 }
 ```
 
-### 이것이 설계에 주는 함의
+### What this means for the design
 
-**이 테넌트에서 Vessel Report API가 이미 사용 중이라면, 메일 파싱 부담이 크게 줄어듭니다.**
-일부 선박이 이미 이 경로로 보고를 올리고 있을 수 있기 때문입니다.
+**If the Vessel Report API is already in use on this tenant, the mail-parsing burden drops sharply**,
+because some vessels may already be submitting reports through that route.
 
-Phase 0에서 반드시 확인할 것:
-1. 이 테넌트에 Vessel Report 모듈이 활성화되어 있는가
-2. 최근 30일간 `VesselReport` 레코드가 존재하는가, 어느 선박에 대해서인가
+To confirm in Phase 0:
+1. Is the Vessel Report module enabled on this tenant?
+2. Do `VesselReport` records exist for the last 30 days, and for which vessels?
 
-결과에 따라 전략이 갈립니다.
+The strategy branches on the answer.
 
-| 확인 결과 | 전략 |
+| Finding | Strategy |
 |---|---|
-| Vessel Report가 활발히 사용 중 | **Dataloy를 1차 소스로** 삼고, 메일은 Dataloy에 없는 선박·기간을 메우는 보완재로 사용. 파싱 부담 대폭 감소 |
-| 일부만 사용 | 선박별로 소스 우선순위를 다르게 적용. `VesselReport.source`로 구분 |
-| 미사용 | 설계대로 메일 파싱이 주 경로. (기본 가정) |
+| Vessel Report actively in use | Make **Dataloy the primary source** and use mail to fill the vessels and periods Dataloy lacks. Parsing burden drops a lot |
+| Partially in use | Apply a different source priority per vessel, distinguished by `VesselReport.source` |
+| Not in use | Mail parsing is the main path, as designed (the default assumption) |
 
-또한 중장기적으로는 **메일에서 파싱한 결과를 Vessel Report API로 Dataloy에 되먹이는**
-경로가 열립니다. 이것이 v2의 쓰기 기능이며, 사람 승인 게이트를 반드시 둡니다.
+In the medium term this also opens a path for **feeding the parsed mail results back into Dataloy**
+through the Vessel Report API. That is the v2 write capability, and it must sit behind a human approval gate.
 
-## 4. Webhook
+## 4. Webhooks
 
-Dataloy는 `WebhookSubscription` 리소스로 웹훅을 지원합니다.
-Voyage 구독 시 해당 객체와 **하위 객체 계층의 모든 변경**이 푸시됩니다.
+Dataloy supports webhooks through the `WebhookSubscription` resource.
+Subscribing to a Voyage pushes **every change to that object and its object hierarchy**.
 
-동작 특성:
-- 구독 시스템이 응답하지 않거나 지연되면 **1분 간격 5회 재시도 후 구독을 비활성화**합니다 (재시도 횟수·간격은 설정 가능).
+Behaviour:
+- If the subscribing system does not respond or is too slow, the server **retries 5 times at one-minute intervals and then deactivates the subscription** (retry count and interval are configurable).
 
-### v1에서는 웹훅을 쓰지 않습니다
+### v1 does not use webhooks
 
-이유:
-1. 외부 환경에 **공인 인바운드 엔드포인트**가 필요합니다. 사내망 배포에서는 대개 불가합니다.
-2. 구독이 조용히 비활성화되면 데이터가 멈추는데 이를 알아채기 어렵습니다.
-3. 목적이 **일일 단위 브리핑**이므로 폴링으로 충분합니다.
+Because:
+1. It requires a **publicly reachable inbound endpoint** in the external environment. On an in-house deployment that is usually impossible.
+2. If the subscription is quietly deactivated, the data stops and it is hard to notice.
+3. The purpose is **a daily brief**, for which polling is sufficient.
 
-대신 폴링 주기를 설정 가능하게 두고(기본 1시간), 인바운드가 가능한 환경으로 옮겨갈 때
-웹훅을 추가 경로로 붙일 수 있도록 `dataloy/sync.py`를 소스 중립적으로 작성합니다.
+Instead, make the polling interval configurable (default 1 hour) and write `dataloy/sync.py`
+source-neutrally, so a webhook can be added as an extra path once the environment allows inbound.
 
-## 5. 동기화 전략
+## 5. Sync strategy
 
 ```python
 def sync_operational(self) -> SyncResult:
     """
-    1. Voyage?filter=voyageHeader.voyageStatus.statusTypeCode(EQ)OPR  → 대상 항차
-    2. 각 항차의 PortCall (+ eventLogs) 조회
-    3. Vessel 마스터 갱신 (신규 선박 등록 / alias 축적)
-    4. Port 좌표 캐시 (거의 안 변하므로 장기 캐시)
-    5. raw_json 통째로 보관  ← 매퍼 개선 시 재처리 가능
+    1. Voyage?filter=voyageHeader.voyageStatus.statusTypeCode(EQ)OPR  → target voyages
+    2. Fetch each voyage's PortCall (+ eventLogs)
+    3. Refresh the Vessel master (register new vessels / accumulate aliases)
+    4. Cache Port coordinates (they barely change, so cache long)
+    5. Keep raw_json whole  ← allows reprocessing when the mapper improves
     """
 ```
 
-- `raw_json`을 항상 보관합니다. 필드 매핑은 테넌트 확인 후 바뀔 가능성이 높고, 그때 API를 다시 호출하지 않아도 되게 하기 위함입니다.
-- 회계 통합 가이드에 언급된 **"마지막 실행 이후 변경된 항차" 조회**를 쓸 수 있으면 증분 동기화로 전환합니다. 가능 여부는 Phase 0에서 확인합니다.
-- Port 좌표를 Dataloy가 제공하지 않으면 UN/LOCODE 공개 데이터셋으로 보완합니다.
+- Always keep `raw_json`. The field mapping is likely to change once the tenant is confirmed, and this avoids re-calling the API then.
+- If the **"voyages changed since the last run"** query mentioned in the accounting integration guide is usable, switch to incremental sync. Confirm in Phase 0.
+- If Dataloy does not provide port coordinates, fill the gap from the public UN/LOCODE dataset.
 
-## 6. 오류 처리
+## 6. Error handling
 
-| 상황 | 처리 |
+| Situation | Handling |
 |---|---|
-| 401 | 토큰 1회 강제 갱신 후 재시도. 재실패 시 자격증명 문제로 보고 |
-| 429 / 5xx | 지수 백오프 재시도 (2s, 4s, 8s, 16s), 최대 4회 |
-| 타임아웃 | 요청당 30초. 페이지 단위로 실패하므로 부분 성공을 허용하고 결과에 명시 |
-| 스키마 불일치 | 예외로 중단하지 않음. `raw_json`은 저장하고 매핑 실패를 경고로 기록 |
+| 401 | One forced token refresh and retry. On a second failure, report it as a credential problem |
+| 429 / 5xx | Exponential backoff retry (2s, 4s, 8s, 16s), up to 4 attempts |
+| Timeout | 30s per request. Failures are per page, so partial success is allowed and stated in the result |
+| Schema mismatch | Do not abort with an exception. Store `raw_json` and record the mapping failure as a warning |
 
-마지막 항목이 중요합니다. Dataloy가 필드를 하나 바꿨다고 해서
-아침 브리핑 전체가 실패하면 안 됩니다. **부분 실패를 표시하되 나머지는 보여줍니다.**
+That last row matters. One changed Dataloy field must not fail the entire morning brief.
+**Show the partial failure, and show the rest anyway.**
 
-## 출처
+## Sources
 
 - [Dataloy VMS API — Authentication / Authorization](https://api.dataloy.com/dataloy-rest-api/authentication-authorization)
 - [Dataloy VMS API — Getting Started](https://api.dataloy.com/dataloy-rest-api/getting-started)

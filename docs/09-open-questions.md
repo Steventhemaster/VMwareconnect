@@ -1,80 +1,80 @@
-# 09. 미확인 사항 및 검증 필요 항목
+# 09. Open questions and items requiring verification
 
-> **초기 설계 이력 — 현재 구현 기준 아님.** 이 문서는 v2 이전 초안입니다. 현재 기준은 [재설계 v2](ARCHITECTURE-V2.ko.md)이며, 충돌하는 내용은 v2가 우선합니다. [검토 결과](REVIEW-CLAUDE-DESIGN.ko.md)와 [Phase 0 확인 기록](PHASE-0-DESIGN.ko.md)을 함께 확인하세요.
+> **Draft history — not the current implementation baseline.** This document predates v2. The current baseline is [Architecture v2](ARCHITECTURE-V2.md), and v2 wins wherever they conflict. See also [the design review](REVIEW-CLAUDE-DESIGN.md) and [the Phase 0 verification record](PHASE-0-DESIGN.md).
 
-이 문서는 **설계가 가설 위에 서 있는 지점**을 명시합니다.
-구현 중에 확인되는 대로 갱신하고, 해당 설계 문서를 개정합니다.
+This document states **where the design rests on hypothesis**.
+It is updated as items are confirmed during implementation, and the corresponding design document is revised.
 
-## A. Dataloy (Phase 0에서 확인)
+## A. Dataloy (confirm in Phase 0)
 
-| # | 항목 | 왜 중요한가 | 확인 방법 |
+| # | Item | Why it matters | How to confirm |
 |---|---|---|---|
-| A1 | 테넌트 base URL, API 버전 | 모든 호출의 전제 | 계약 문서 / 관리자 |
-| A2 | OAuth2인가 Basic인가, token URL과 audience | 인증 구현 분기 | 토큰 발급 시도 |
-| A3 | `statusTypeCode` 실제 코드 목록 | `OPR` 하드코딩이 맞는지 | `VoyageStatus` 리소스 조회 |
-| A4 | **Vessel Report 모듈 활성화 여부** | **Phase 2 규모를 절반으로 줄일 수 있는 분기점** | `VesselReport` 조회 |
-| A5 | 날짜 범위 필터 연산자(`LT`/`GT`) 지원 | 미지원 시 클라이언트 필터링 | 직접 호출 시도 |
-| A6 | 날짜 필드의 시간대 (UTC인가 현지시인가) | **틀리면 ETA 비교 전체가 무의미** | 알려진 값과 대조 |
-| A7 | `PortCall`의 ATA/ATD 필드명과 사용 여부 | R-007 규칙의 전제 | 응답 샘플 확인 |
-| A8 | Port 좌표 제공 여부 | 미제공 시 UN/LOCODE 데이터셋 필요 | `Port` 리소스 조회 |
-| A9 | 증분 조회("변경된 항차") 지원 여부 | 동기화 효율 | 회계 통합 가이드 확인 |
-| A10 | API 호출 제한(rate limit) | 폴링 주기 결정 | 문서 / 실측 |
+| A1 | Tenant base URL and API version | The premise of every call | Contract documents / the administrator |
+| A2 | OAuth2 or Basic, plus the token URL and audience | Which authentication branch to implement | Attempt to issue a token |
+| A3 | The real `statusTypeCode` list | Whether hardcoding `OPR` is correct | Query the `VoyageStatus` resource |
+| A4 | **Whether the Vessel Report module is enabled** | **The branch that can halve Phase 2** | Query `VesselReport` |
+| A5 | Support for date-range filter operators (`LT`/`GT`) | Without them, filter client-side | Try the calls directly |
+| A6 | The timezone of the date fields (UTC or local) | **Get this wrong and every ETA comparison is meaningless** | Compare against known values |
+| A7 | `PortCall`'s ATA/ATD field names and whether they are used | The premise of rule R-007 | Check sample responses |
+| A8 | Whether port coordinates are provided | If not, the UN/LOCODE dataset is required | Query the `Port` resource |
+| A9 | Support for incremental queries ("voyages changed since") | Sync efficiency | Check the accounting integration guide |
+| A10 | API rate limits | Determines the polling interval | Documentation / measurement |
 
-**A6이 가장 위험합니다.** 시간대를 잘못 가정하면 규칙 엔진이 조용히
-전부 틀린 결과를 냅니다. 알려진 실제 항차의 날짜와 대조해 반드시 확정합니다.
+**A6 is the most dangerous.** Guess the timezone wrong and the rule engine quietly produces
+entirely wrong results. Settle it by comparing against the dates of a known real voyage.
 
-## B. VMware / Outlook 환경
+## B. VMware / Outlook environment
 
-| # | 항목 | 왜 중요한가 |
+| # | Item | Why it matters |
 |---|---|---|
-| B1 | VMware 형태 (Horizon VDI / Workstation / vSphere) | 파일 공유·클립보드 정책이 Transport 방식을 결정 |
-| B2 | Outlook 프로그램 액세스(COM) 허용 여부, 보안 프롬프트 | **허용되지 않으면 v1 기본 경로가 막힘** |
-| B3 | VM에서 `graph.microsoft.com` 아웃바운드 허용 여부 | Graph 어댑터 가능성 |
-| B4 | Entra ID 앱 등록 + `Mail.Read` 동의 가능성·소요 기간 | 장기 경로 선택 |
-| B5 | VM OS 로캘 | COM `Restrict` 날짜 포맷 |
-| B6 | Python 설치 가능 여부, 버전 | 그 자체로 차단 요인이 될 수 있음 |
-| B7 | VM↔외부 파일 이동 경로 (공유 폴더 / 마운트 / 기타) | Transport 구현 |
-| B8 | 메일 보존 기간 | 과거 데이터 소급 가능 범위 |
+| B1 | VMware form (Horizon VDI / Workstation / vSphere) | File sharing and clipboard policy decide the Transport method |
+| B2 | Whether programmatic Outlook access (COM) is permitted, and security prompts | **If not, the v1 default path is blocked** |
+| B3 | Whether outbound `graph.microsoft.com` is allowed from the VM | Whether the Graph adapter is viable |
+| B4 | Whether an Entra ID app registration with `Mail.Read` consent is possible, and how long it takes | The long-term path |
+| B5 | The VM OS locale | The COM `Restrict` date format |
+| B6 | Whether Python can be installed, and which version | On its own, a potential blocker |
+| B7 | The VM-to-outside file transfer path (shared folder / mount / other) | The Transport implementation |
+| B8 | Mail retention period | How far back historical data can go |
 
-**B2와 B6이 막히면 설계 전면 재검토가 필요합니다.** Phase 0 최우선 확인 항목입니다.
+**If B2 and B6 are blocked, the design needs a full rethink.** They are the top Phase 0 items.
 
-## C. 업무 데이터
+## C. Business data
 
-| # | 항목 | 왜 중요한가 |
+| # | Item | Why it matters |
 |---|---|---|
-| C1 | 대상 선대 규모 (척수) | 성능·UI 밀도 설계 |
-| C2 | 리포트 메일이 들어오는 폴더 구조, 규칙 존재 여부 | 수집 범위 |
-| C3 | 발신 주체 (본선 직접 / 선박관리사 / 에이전트 경유) | 발신자 기반 템플릿 매칭 가능 여부 |
-| C4 | 리포트 포맷 종류 수 | 템플릿 개수 추정 |
-| C5 | 본문형 vs 첨부형(xlsx/pdf) 비율 | 첨부 파서 우선순위 |
-| C6 | 리포트 언어 (영어 단일 / 혼용) | 파서 라벨 사전 |
-| C7 | Noon report 기준 시각 (선박 현지시 정오 / UTC 정오) | 시간대 처리 |
-| C8 | 사용자 수, 권한 구분 필요 여부 | 인증 필요 여부 |
+| C1 | Fleet size (number of vessels) | Performance and UI density |
+| C2 | The folder structure reports arrive in, and whether rules exist | Collection scope |
+| C3 | Who sends them (the vessel directly / the ship manager / via an agent) | Whether sender-based template matching is viable |
+| C4 | How many report formats there are | Estimating the number of templates |
+| C5 | The ratio of in-body to attached (xlsx/pdf) reports | Attachment parser priority |
+| C6 | Report language (English only / mixed) | The parser label dictionary |
+| C7 | The noon report reference time (ship's local noon / UTC noon) | Timezone handling |
+| C8 | Number of users, and whether permission separation is needed | Whether authentication is required |
 
-**C5를 모르면 Phase 2 일정을 추정할 수 없습니다.**
-Phase 0의 샘플 수집에서 함께 계측합니다.
+**Without C5, the Phase 2 schedule cannot be estimated.**
+Measure it alongside the Phase 0 sample collection.
 
-## D. 배포·운영
+## D. Deployment and operations
 
-| # | 항목 |
+| # | Item |
 |---|---|
-| D1 | 대시보드 호스팅 위치 (개인 PC / 사내 서버) |
-| D2 | 외부 지도 타일 접근 허용 여부 — 막히면 자체 호스팅 필요 |
-| D3 | 자격증명 보관 방식 (환경변수 / OS 자격증명 저장소 / 사내 Vault) |
-| D4 | 일일 동기화를 사람이 돌리는가 스케줄러가 돌리는가 |
-| D5 | 사내 정보보안 검토 필요 여부 — 메일 데이터를 다루므로 사전 확인 권장 |
+| D1 | Where the dashboard is hosted (personal PC / in-house server) |
+| D2 | Whether external map tiles are reachable — if not, self-hosting is required |
+| D3 | How credentials are stored (environment variables / OS credential store / corporate vault) |
+| D4 | Whether the daily sync is run by a person or a scheduler |
+| D5 | Whether an internal information-security review is required — this handles mail data, so checking in advance is advisable |
 
-**D5는 기술 문제가 아니라 절차 문제이지만, 착수 전에 확인하는 편이 안전합니다.**
-사내 메일을 프로그램으로 읽고 외부로 내보내는 구조이므로,
-정보보안 정책상 사전 승인이 필요한 조직이 많습니다.
+**D5 is a process question rather than a technical one, but it is safer to confirm before starting.**
+This reads corporate mail programmatically and exports it, and many organisations require
+prior approval for that under their information-security policy.
 
-## E. 설계상 의도적으로 보류한 결정
+## E. Decisions deliberately deferred
 
-| 항목 | 보류 이유 | 재검토 시점 |
+| Item | Why deferred | When to revisit |
 |---|---|---|
-| AIS 실시간 위치 연동 | 유료이며 일일 목적에는 불필요 | 분 단위 추적이 요구될 때 |
-| PostgreSQL 전환 | SQLite로 충분한 규모 | 동시 사용자 또는 데이터량 증가 시 |
-| 웹훅 수신 | 인바운드 엔드포인트 확보 어려움 | 사내 서버 배포가 확정될 때 |
-| `searoute-py` 정확 항로거리 | v1은 근사로 충분, 의존성 추가 비용 | Phase 5 |
-| PDF 첨부 파싱 | 발생 빈도 미확인 | C5 계측 결과에 따라 |
-| 사용자 인증 | 사용자 수·환경 미확정 | C8 확인 후 |
+| Live AIS position feed | Paid, and unnecessary for a daily purpose | When minute-level tracking is required |
+| Move to PostgreSQL | SQLite is sufficient at this scale | When concurrent users or data volume grow |
+| Receiving webhooks | Hard to obtain an inbound endpoint | When an in-house server deployment is settled |
+| Accurate route distance via `searoute-py` | An approximation is enough for v1; the dependency has a cost | Phase 5 |
+| PDF attachment parsing | Frequency unknown | Depending on the C5 measurement |
+| User authentication | User count and environment undecided | After C8 is confirmed |

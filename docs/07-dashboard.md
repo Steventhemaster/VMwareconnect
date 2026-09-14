@@ -1,130 +1,130 @@
-# 07. 대시보드 설계
+# 07. Dashboard design
 
-> **초기 설계 이력 — 현재 구현 기준 아님.** 이 문서는 v2 이전 초안입니다. 현재 기준은 [재설계 v2](ARCHITECTURE-V2.ko.md)이며, 충돌하는 내용은 v2가 우선합니다. [검토 결과](REVIEW-CLAUDE-DESIGN.ko.md)와 [Phase 0 확인 기록](PHASE-0-DESIGN.ko.md)을 함께 확인하세요.
+> **Draft history — not the current implementation baseline.** This document predates v2. The current baseline is [Architecture v2](ARCHITECTURE-V2.md), and v2 wins wherever they conflict. See also [the design review](REVIEW-CLAUDE-DESIGN.md) and [the Phase 0 verification record](PHASE-0-DESIGN.md).
 
-## 1. 설계 목표
+## 1. Design goal
 
-> 매일 아침 **5분 안에** 선대 전체 상황을 파악한다.
+> Understand the whole fleet **in under 5 minutes** every morning.
 
-이 목표에서 화면 구성이 도출됩니다.
+The screen layout follows from that goal.
 
-- **이상(異常)이 먼저 보여야 합니다.** 정상인 배는 스크롤해서 확인하면 됩니다.
-- **지도는 위치 파악용이지 진입점이 아닙니다.** 조치가 필요한 항목은 목록이 더 빠릅니다.
-- **한 번의 클릭으로 근거까지** 도달해야 합니다. "왜 이렇게 나왔지?"에 답하지 못하면 쓰이지 않습니다.
+- **Anomalies must be visible first.** A normal vessel can be found by scrolling.
+- **The map is for locating, not for entering.** For items needing action, a list is faster.
+- **One click to the evidence.** If it cannot answer "why does it say that?", it will not be used.
 
-## 2. 화면 구성
+## 2. Screen layout
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│  선대 현황          2026-09-14 07:00 KST      [새로고침] [일일브리핑] │
+│  Fleet status       2026-09-14 07:00 KST      [Refresh] [Daily brief] │
 ├──────────────────────────────────────────────────────────────────────┤
 │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐                        │
-│  │ 운항중 │ │ 리포트 │ │CRITICAL│ │ 미파싱 │      ← KPI 4개          │
-│  │  24척  │ │지연 3척│ │  5건   │ │  2건   │                        │
+│  │Operating│ │ Late   │ │CRITICAL│ │Unparsed│      ← 4 KPIs          │
+│  │   24    │ │reports3│ │   5    │ │   2    │                        │
 │  └────────┘ └────────┘ └────────┘ └────────┘                        │
 ├───────────────────────────────────┬──────────────────────────────────┤
-│                                   │  ⚠ 조치 필요                     │
+│                                   │  ⚠ Needs action                  │
 │                                   │  ─────────────────────────────   │
-│           지 도                   │  🔴 PACIFIC GLORY                │
-│      (MapLibre GL)                │     Dataloy 이벤트 3건 누락      │
+│           M A P                   │  🔴 PACIFIC GLORY                │
+│      (MapLibre GL)                │     3 Dataloy events missing     │
 │                                   │  🔴 ATLANTIC DAWN                │
-│   ▲ 선박 마커 (선수방위 회전)      │     리포트 52h 미수신            │
-│   ·─·─· 최근 7일 항적             │  🟡 NORDIC STAR                  │
-│   ┄┄▶ 다음 기항지 방향선          │     ETA 계획 대비 +18h           │
-│   ⚓ 기항 예정 항구               │  ─────────────────────────────   │
-│                                   │  선박 목록 (24)     [상태▾][정렬▾]│
+│   ▲ vessel marker (rotated to     │     no report for 52h            │
+│     heading)                      │  🟡 NORDIC STAR                  │
+│   ·─·─· track, last 7 days        │     ETA +18h vs plan             │
+│   ┄┄▶ bearing to next port        │  ─────────────────────────────   │
+│   ⚓ scheduled port calls         │  Vessel list (24)  [Status▾][Sort▾]│
 │                                   │  ┌───────────────────────────┐  │
 │                                   │  │ PACIFIC GLORY       🔴     │  │
-│                                   │  │ 항해중(적하) · 3h 전       │  │
+│                                   │  │ at sea (laden) · 3h ago    │  │
 │                                   │  │ → SINGAPORE  09-16 08:00Z  │  │
-│                                   │  │   계획 대비 +14h           │  │
+│                                   │  │   +14h vs plan             │  │
 │                                   │  └───────────────────────────┘  │
 │                                   │  ┌───────────────────────────┐  │
 │                                   │  │ NORDIC STAR         🟡     │  │
-│                                   │  │ 하역중 62% · 1h 전         │  │
+│                                   │  │ discharging 62% · 1h ago   │  │
 │                                   │  └───────────────────────────┘  │
 └───────────────────────────────────┴──────────────────────────────────┘
 ```
 
-### 왜 "조치 필요"를 목록 맨 위에 두는가
+### Why "Needs action" sits at the top of the list
 
-사용자가 대시보드를 여는 이유는 **무엇을 해야 하는지 알기 위해서**입니다.
-지도를 훑어보며 이상을 찾게 만들면 5분 목표를 달성할 수 없습니다.
+Users open the dashboard **to find out what they have to do**.
+Making them scan a map for anomalies defeats the five-minute goal.
 
-## 3. 지도
+## 3. The map
 
-- **라이브러리**: MapLibre GL JS (오픈소스, API 키 불필요). 타일은 사내 네트워크 정책에 따라 선택 — 외부 타일 서버 접근이 막히면 자체 호스팅 또는 단순 GeoJSON 세계지도 배경으로 폴백합니다.
-- **선박 마커**: 삼각형, `course_deg`만큼 회전. 색상 = 최악 심각도 (정상 회색 / WARN 황색 / CRITICAL 적색).
-- **신선도 표현**: `STALE`은 반투명, `MISSING`은 점선 외곽선 + 마지막 알려진 위치임을 명시. **오래된 위치를 현재 위치처럼 보여주는 것이 가장 위험한 오해입니다.**
-- **항적**: 최근 7일 noon 위치를 선으로 연결. 대권 보간 없이 직선 연결(하루 간격이므로 충분).
-- **방향선**: 현재 위치 → 다음 기항지 점선. 근사임을 범례에 명시.
-- **클러스터링**: 선박 수가 많아지면 줌 아웃 시 클러스터. v1에서는 수십 척 규모이므로 불필요.
+- **Library**: MapLibre GL JS (open source, no API key). The tile source depends on the corporate network policy — if external tile servers are blocked, fall back to self-hosting or a plain GeoJSON world background.
+- **Vessel markers**: a triangle, rotated by `course_deg`. Colour = worst severity (normal grey / WARN amber / CRITICAL red).
+- **Freshness**: `STALE` renders semi-transparent; `MISSING` gets a dashed outline and an explicit note that this is the last known position. **Showing an old position as if it were current is the most dangerous misreading.**
+- **Track**: connect the last 7 days of noon positions with a line. No great-circle interpolation — daily intervals make straight segments fine.
+- **Bearing line**: a dashed line from the current position to the next port. The legend states that it is approximate.
+- **Clustering**: cluster on zoom-out once there are many vessels. Not needed at the v1 scale of a few dozen.
 
-### 좌표계 주의
+### Coordinate system caveats
 
-- 날짜변경선(경도 ±180)을 넘는 항적은 지도에서 세계를 가로지르는 선으로 그려집니다. 인접 점의 경도 차가 180을 넘으면 항적을 분할합니다.
-- 위치가 없는 선박은 지도에서 제외하되, **목록에는 "위치 미상"으로 반드시 표시**합니다. 지도에만 의존하면 조용히 사라집니다.
+- A track crossing the date line (longitude ±180) draws as a line straight across the world. Split the track where the longitude difference between adjacent points exceeds 180.
+- Vessels with no position are excluded from the map but **must still appear in the list as "position unknown"**. Relying on the map alone makes them disappear silently.
 
-## 4. 선박 상세
+## 4. Vessel detail
 
-카드 클릭 시 우측 패널 또는 전체 화면으로 전환.
+Clicking a card switches to a right-hand panel or full screen.
 
 ```
 PACIFIC GLORY (IMO 9123456)          Voyage 2026-014  [OPR]
-항해 중 (적하)  ·  최신 보고 3시간 전
-근거: NOON 2026-09-14 04:00Z, 속력 12.4kn, 항만 이벤트 없음
+At sea (laden)  ·  last report 3 hours ago
+Basis: NOON 2026-09-14 04:00Z, speed 12.4kn, no port event
 ───────────────────────────────────────────────────────────
-[ 타임라인 ]  [ 포지션 ]  [ 연료 ]  [ 원문 ]
+[ Timeline ]  [ Position ]  [ Fuel ]  [ Source ]
 ───────────────────────────────────────────────────────────
-  실적 (본선 보고)              │ 계획 (Dataloy)        │ 일치
+  Actual (vessel report)        │ Plan (Dataloy)       │ Match
   ─────────────────────────────┼──────────────────────┼─────
-  09-12 06:20Z ARRIVAL SIN 묘박 │ ATA 09-12 06:00Z     │  ✓
+  09-12 06:20Z ARRIVAL SIN anch │ ATA 09-12 06:00Z     │  ✓
   09-12 14:05Z NOR TENDERED     │ —                    │  ✗ R-002
   09-13 02:30Z ALL FAST Berth12 │ —                    │  ✗ R-002
   09-13 04:00Z COMMENCED CARGO  │ —                    │  ✗ R-002
-  —                             │ ETD 09-14 18:00Z     │  ⚠ 미입력
+  —                             │ ETD 09-14 18:00Z     │  ⚠ not entered
   09-14 09:00Z WORKING 62%      │ —                    │  —
 ```
 
-**왼쪽=실적, 오른쪽=계획, 오른쪽 끝=일치 여부.**
-이 3열 구조가 사용자가 요청한 "매칭 여부를 검토"의 직접적 구현입니다.
+**Left = actual, right = plan, far right = match.**
+This three-column structure is the direct implementation of the "check whether they line up" requirement.
 
-각 행은 클릭 가능하며, 클릭하면 근거 메일을 조회합니다.
-원문은 VM에 있으므로 대시보드는 `message_id`만 표시하고,
-필요 시 사용자가 VM 쪽 Claude에게 `outlook_get_message`로 조회하도록 안내합니다.
-(VM↔외부 실시간 연결이 가능한 환경이면 직접 링크로 대체)
+Each row is clickable and opens the source mail.
+The raw content lives in the VM, so the dashboard shows only the `message_id` and,
+where needed, directs the user to fetch it through the VM-side Claude with `outlook_get_message`.
+(In an environment with a live VM-to-outside connection, this becomes a direct link.)
 
-### 탭
+### Tabs
 
-| 탭 | 내용 |
+| Tab | Content |
 |---|---|
-| 타임라인 | 위 3열 대조표 |
-| 포지션 | 항적 확대 지도 + noon 위치 표 (일자, 좌표, 속력, 항주거리, DTG) |
-| 연료 | ROB 추이 선그래프 (유종별), 소모량 막대 |
-| 원문 | 이 항차에 귀속된 메일 목록 (제목, 수신시각, 파싱 방법, 확신도) |
+| Timeline | The three-column comparison above |
+| Position | A zoomed track map plus a table of noon positions (date, coordinate, speed, distance run, DTG) |
+| Fuel | A ROB trend line chart per grade, with consumption bars |
+| Source | The mail attributed to this voyage (subject, received time, parse method, confidence) |
 
-"원문" 탭에 `parse_method`와 `parse_confidence`를 노출하는 이유:
-LLM이 추출한 값과 템플릿이 추출한 값을 사용자가 구분할 수 있어야 하기 때문입니다.
+`parse_method` and `parse_confidence` appear on the Source tab because
+the user has to be able to tell an LLM-extracted value from a template-extracted one.
 
-## 5. API 설계
+## 5. API design
 
-FastAPI가 아래를 제공하고, 정적 프론트엔드가 소비합니다.
+FastAPI serves the following, consumed by a static frontend.
 
 ```
-GET  /api/summary                       KPI 4종
-GET  /api/vessels?status=&freshness=    선박 목록 (카드용 요약)
-GET  /api/vessels/{vessel_id}           VoyageState 전체
-GET  /api/vessels/{vessel_id}/timeline  3열 대조 타임라인
+GET  /api/summary                       The 4 KPIs
+GET  /api/vessels?status=&freshness=    Vessel list (card summaries)
+GET  /api/vessels/{vessel_id}           The full VoyageState
+GET  /api/vessels/{vessel_id}/timeline  The three-column comparison timeline
 GET  /api/vessels/{vessel_id}/track?days=7
 GET  /api/positions                     GeoJSON FeatureCollection
 GET  /api/discrepancies?severity=&status=
-PATCH /api/discrepancies/{id}           status / note 갱신
-POST /api/refresh                       dataloy_sync + reconcile 실행
-GET  /api/brief?date=                   일일 브리핑 (마크다운)
+PATCH /api/discrepancies/{id}           Update status / note
+POST /api/refresh                       Run dataloy_sync + reconcile
+GET  /api/brief?date=                   The daily brief (markdown)
 ```
 
-MCP 도구와 HTTP API가 **같은 서비스 계층**(`fleet/service.py`)을 호출합니다.
-로직을 두 번 구현하지 않습니다.
+The MCP tools and the HTTP API call **the same service layer** (`fleet/service.py`).
+The logic is never implemented twice.
 
 ```
           ┌──────────────┐
@@ -134,21 +134,21 @@ MCP 도구와 HTTP API가 **같은 서비스 계층**(`fleet/service.py`)을 호
           └──────────────┘
 ```
 
-## 6. 표현 규칙
+## 6. Presentation rules
 
-| 항목 | 규칙 |
+| Item | Rule |
 |---|---|
-| 시각 | 기본 UTC(`Z` 접미), 사용자 설정으로 KST 전환 가능. **혼용 금지 — 항상 접미사 표시** |
-| 좌표 | `12°34.5'N 123°45.6'E` (도-분 표기, 해운 관행) |
-| 속력 | `12.4 kn` |
-| 거리 | `1,240 nm` |
-| 편차 | 항상 부호 포함 (`+14h`, `-3h`). 지연이 양수 |
-| 추정값 | 이탤릭 또는 `~` 접두 + 툴팁으로 근거 표시 |
-| 결측 | 빈칸이 아니라 `—`. 빈칸은 "0"으로 오해됩니다 |
+| Times | UTC by default (with a `Z` suffix), switchable to KST in settings. **Never mixed — always suffixed** |
+| Coordinates | `12°34.5'N 123°45.6'E` (degrees-minutes, the shipping convention) |
+| Speed | `12.4 kn` |
+| Distance | `1,240 nm` |
+| Deviation | Always signed (`+14h`, `-3h`). Late is positive |
+| Estimated values | Italic or a `~` prefix, with the basis in a tooltip |
+| Missing | `—`, never a blank. A blank reads as "0" |
 
-## 7. 접근성과 환경
+## 7. Accessibility and environment
 
-- 심각도를 **색으로만** 표현하지 않습니다. 아이콘(🔴🟡)과 텍스트 라벨을 함께 씁니다.
-- 라이트/다크 테마 모두 대응합니다.
-- 대시보드는 사내 서버 또는 로컬에서 실행되므로 **외부 CDN 의존을 최소화**합니다. MapLibre와 타일 정책은 배포 환경 확인 후 확정합니다 (미확인 항목).
-- 자동 새로고침은 기본 끔. 사용자가 읽는 중에 화면이 바뀌면 방해가 됩니다. 대신 "새 데이터 있음" 배너를 띄웁니다.
+- Severity is never conveyed **by colour alone**. Icons (🔴🟡) and text labels go with it.
+- Both light and dark themes are supported.
+- The dashboard runs on an in-house server or locally, so **external CDN dependencies are minimised**. MapLibre and the tile policy are settled after the deployment environment is confirmed (an open item).
+- Auto-refresh is off by default. A screen that changes while someone is reading it is an interruption. A "new data available" banner is shown instead.

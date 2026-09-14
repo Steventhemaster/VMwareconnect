@@ -1,25 +1,25 @@
-# 05. 매칭과 불일치 검출
+# 05. Matching and discrepancy detection
 
-> **초기 설계 이력 — 현재 구현 기준 아님.** 이 문서는 v2 이전 초안입니다. 현재 기준은 [재설계 v2](ARCHITECTURE-V2.ko.md)이며, 충돌하는 내용은 v2가 우선합니다. [검토 결과](REVIEW-CLAUDE-DESIGN.ko.md)와 [Phase 0 확인 기록](PHASE-0-DESIGN.ko.md)을 함께 확인하세요.
+> **Draft history — not the current implementation baseline.** This document predates v2. The current baseline is [Architecture v2](ARCHITECTURE-V2.md), and v2 wins wherever they conflict. See also [the design review](REVIEW-CLAUDE-DESIGN.md) and [the Phase 0 verification record](PHASE-0-DESIGN.md).
 
-이 문서가 **시스템의 핵심 가치**를 정의합니다.
-지도와 카드는 보기 좋은 껍데기이고, 실제로 일을 줄여주는 것은 여기입니다.
+This document defines **the core value of the system**.
+The map and the cards are the attractive shell; this is what actually saves work.
 
-## 1. 선박 동일성 판정
+## 1. Vessel identity
 
-메일에 적힌 선박명을 Dataloy의 선박 마스터에 연결해야 합니다.
+The vessel name written in a mail has to be connected to the Dataloy vessel master.
 
-### 단계별 판정
+### Stages
 
 ```
-1. IMO 번호가 본문/제목에 있으면 → 즉시 확정 (confidence 1.0)
-2. 선박명 정규화 후 완전 일치  → 확정 (confidence 0.95)
-3. alias 테이블 조회           → 확정 (confidence 0.95)
-4. 퍼지 매칭 (rapidfuzz)       → 임계값 이상이면 후보 (confidence = score)
-5. 실패                        → unmatched 큐
+1. A valid IMO in the subject or body  → settled immediately (confidence 1.0)
+2. Exact match after name normalisation → settled (confidence 0.95)
+3. A hit in the alias table             → settled (confidence 0.95)
+4. Fuzzy match (rapidfuzz)              → a candidate above the threshold (confidence = score)
+5. No match                             → the unmatched queue
 ```
 
-### 정규화 규칙
+### Normalisation rules
 
 ```python
 def normalize_vessel_name(raw: str) -> str:
@@ -27,70 +27,70 @@ def normalize_vessel_name(raw: str) -> str:
     "M/V  Pacific-Glory " → "PACIFIC GLORY"
     """
     s = raw.upper()
-    s = re.sub(r"^(M[./]?[VSTV]|MT|MS|SS)\s*[.:-]?\s*", "", s)   # 접두 선급 표기 제거
-    s = re.sub(r"[^A-Z0-9]+", " ", s)                            # 특수문자 → 공백
+    s = re.sub(r"^(M[./]?[VSTV]|MT|MS|SS)\s*[.:-]?\s*", "", s)   # strip the prefix
+    s = re.sub(r"[^A-Z0-9]+", " ", s)                            # punctuation → space
     return " ".join(s.split())
 ```
 
-주의할 실패 사례:
-- **선대에 유사 이름이 있으면 퍼지 매칭이 위험합니다.** `PACIFIC GLORY`와 `PACIFIC GLORY II`는 편집거리가 가깝습니다.
-- 대응: 퍼지 매칭은 **1위와 2위의 점수 차가 충분할 때만** 채택합니다(`top1 - top2 >= 0.15`). 그렇지 않으면 unmatched로 보냅니다.
-- 잘못 매칭된 리포트는 다른 배의 지도 위치를 틀리게 만듭니다. **매칭 실패보다 오매칭이 훨씬 나쁩니다.** 보수적으로 갑니다.
+Failure modes to watch:
+- **Fuzzy matching is dangerous when the fleet contains similar names.** `PACIFIC GLORY` and `PACIFIC GLORY II` are close in edit distance.
+- Mitigation: accept a fuzzy match **only when the gap between first and second place is large enough** (`top1 - top2 >= 0.15`). Otherwise send it to unmatched.
+- A mis-matched report puts the wrong position on another vessel's map. **A wrong match is far worse than no match.** Be conservative.
 
-### alias 축적
+### Accumulating aliases
 
-사람이 unmatched 항목을 해소하면 그 표기를 `vessels.aliases_json`에 추가합니다.
-같은 표기가 다시 오면 3단계에서 바로 잡힙니다.
+When a human resolves an unmatched item, that spelling is added to `vessels.aliases_json`.
+The same spelling is then caught at stage 3 next time.
 
-## 2. 항차 귀속
+## 2. Voyage attribution
 
-선박이 정해지면 어느 항차인지 결정합니다.
-
-```
-1. 메일에 항차번호가 있고 Dataloy voyage_no와 일치 → 확정
-2. reported_at_utc가 어느 OPR 항차의 기간에 포함  → 확정
-3. OPR 항차가 정확히 1개                          → 그 항차로 귀속
-4. 경계 시점(항차 전환 전후 24h)                   → 위치 근접도로 판정
-5. 실패                                           → 선박에만 귀속, 항차 미정
-```
-
-5번도 유효한 결과입니다. 항차를 몰라도 **위치와 상태는 지도에 표시할 수 있습니다.**
-불일치 검출만 건너뜁니다.
-
-## 3. 기항지 귀속
-
-Port event 리포트(도착/접안/출항)는 어느 `PortCall`에 속하는지 정해야 합니다.
+Once the vessel is settled, decide which voyage.
 
 ```
-1. 메일의 항구명 ↔ PortCall.port_name 정규화 비교
-2. 동일 항구에 기항이 여러 번이면 시각 근접도로 선택
-3. 항구명이 UN/LOCODE면 코드로 직접 매칭
-4. 실패 시 위치 좌표와 PortCall 좌표의 거리로 추정 (50nm 이내)
+1. The mail carries a voyage number matching a Dataloy voyage_no → settled
+2. reported_at_utc falls inside an OPR voyage's period             → settled
+3. Exactly one OPR voyage                                          → attribute to it
+4. A boundary time (±24h around a voyage transition)               → decide by position proximity
+5. No match                                                        → vessel only, voyage undetermined
 ```
 
-## 4. 파생 상태 판정
+Case 5 is a valid outcome too. Even without a voyage, **the position and state can still be shown on the map.**
+Only the discrepancy checks are skipped.
 
-`VesselStatus`는 **최신 이벤트 + Dataloy 기항지 상태**를 조합해 결정합니다.
+## 3. Port call attribution
 
-| 조건 | 판정 |
+A port event report (arrival / berthing / departure) has to be assigned to a `PortCall`.
+
+```
+1. Compare the mail's port name against PortCall.port_name, normalised
+2. Where a port is called more than once, choose by time proximity
+3. If the port name is a UN/LOCODE, match on the code directly
+4. On failure, estimate from the distance between the reported coordinate and the PortCall coordinate (within 50nm)
+```
+
+## 4. Deriving the status
+
+`VesselStatus` is decided from **the latest event combined with the Dataloy port call state**.
+
+| Condition | Verdict |
 |---|---|
-| 최신 이벤트가 `COMMENCED_CARGO`이고 `COMPLETED_CARGO` 없음 | `IN_PORT_WORKING` |
-| `ALL_FAST` 있고 하역 개시 없음 | `IN_PORT_IDLE` |
-| `ANCHORED` 있고 이후 `ALL_FAST` 없음 | `AT_ANCHOR`, 다음 기항지가 확정이면 `WAITING_BERTH` |
-| `DEPARTURE`/`COSP` 이후 최신 NOON 존재, 속력 > 3kn | `AT_SEA_*` (화물 유무로 LADEN/BALLAST) |
-| 최신 NOON 속력 < 1kn, 항만 이벤트 없음 | `DRIFTING` |
-| `BUNKERING` 진행 중 | `BUNKERING` |
-| 판정 근거 없음 | `UNKNOWN` |
+| Latest event is `COMMENCED_CARGO` with no `COMPLETED_CARGO` | `IN_PORT_WORKING` |
+| `ALL_FAST` present, no cargo start | `IN_PORT_IDLE` |
+| `ANCHORED` present with no later `ALL_FAST` | `AT_ANCHOR`; `WAITING_BERTH` if the next port call is confirmed |
+| After `DEPARTURE`/`COSP`, a later NOON exists with speed > 3kn | `AT_SEA_*` (LADEN/BALLAST by cargo) |
+| Latest NOON speed < 1kn, no port event | `DRIFTING` |
+| Bunkering in progress | `BUNKERING` |
+| No basis for a verdict | `UNKNOWN` |
 
-LADEN/BALLAST 구분은 Dataloy의 `reasonForCall`(L=Loading, D=Discharging)과
-최근 하역 이벤트로 판정합니다.
+LADEN/BALLAST is decided from Dataloy's `reasonForCall` (L = Loading, D = Discharging)
+together with the most recent cargo events.
 
-**모든 판정은 `status_reason` 문자열을 함께 생성합니다.** 근거를 말할 수 없는 상태 표시는
-사용자에게 신뢰받지 못하고, 결국 아무도 보지 않게 됩니다.
+**Every verdict also produces a `status_reason` string.** A status display whose basis cannot be
+stated is not trusted by users, and ends up being ignored.
 
-## 5. ETA 자체 계산
+## 5. Computing our own ETA
 
-Dataloy ETA, 본선 신고 ETA 외에 **세 번째 값**을 계산해 교차 검증합니다.
+Beyond the Dataloy ETA and the vessel-declared ETA, compute **a third value** for cross-checking.
 
 ```python
 def compute_eta(last: VesselReport, dest: PortCall) -> datetime | None:
@@ -99,55 +99,55 @@ def compute_eta(last: VesselReport, dest: PortCall) -> datetime | None:
     dist_nm = route_distance(last.position, (dest.port_lat, dest.port_lon))
     speed   = last.speed_kn or planned_speed(voyage)
     if speed < 1.0:
-        return None                       # 정지 중이면 계산 무의미
+        return None                       # pointless while stopped
     hours = dist_nm / speed
     return last.reported_at_utc + timedelta(hours=hours)
 ```
 
-### 거리 계산
+### Distance calculation
 
-- **v1: 대권거리(haversine) × 보정계수 1.15** — 단순하지만 육지를 통과합니다. 수에즈/파나마/말라카가 낀 구간은 크게 틀립니다.
-- **v2: `searoute-py`** — 실제 항로 그래프 기반. 정확하지만 의존성이 늘어납니다.
+- **v1: great-circle (haversine) × a 1.15 correction factor** — simple, but it cuts across land. Legs involving Suez, Panama or Malacca are badly wrong.
+- **v2: `searoute-py`** — based on a real route graph. Accurate, at the cost of another dependency.
 
-v1에서는 계산 ETA에 **"근사"라는 표시를 UI에 명시**하고, 불일치 규칙에서는
-보조 근거로만 씁니다(단독으로 CRITICAL을 내지 않음). 부정확한 계산으로 오탐을 내면
-규칙 엔진 전체의 신뢰를 잃습니다.
+In v1 the computed ETA is **explicitly labelled as approximate in the UI** and is used only as
+supporting evidence in the rules (never raising a CRITICAL on its own). A false positive from an
+inaccurate calculation loses trust in the entire rule engine.
 
-## 6. 불일치 규칙
+## 6. Discrepancy rules
 
-### 설계 원칙
+### Design principle
 
-> **조용하게 시작해서 점진적으로 민감하게.**
+> **Start quiet, get more sensitive gradually.**
 
-초기에는 확실한 것만 잡습니다. 오탐이 쌓이면 사용자는 대시보드를 닫습니다.
-각 규칙은 `enabled`와 임계값을 설정 파일로 빼서 운영 중 조정 가능하게 합니다.
+At the start, catch only what is certain. Once false positives accumulate, the user closes the dashboard.
+Each rule's `enabled` flag and thresholds live in configuration so they can be tuned in operation.
 
-### 규칙 목록
+### Rule list
 
-| ID | 규칙 | 조건 | 심각도 | v1 |
+| ID | Rule | Condition | Severity | v1 |
 |---|---|---|---|---|
-| **R-001** | ETA 차이 | 본선 신고 ETA와 Dataloy ETA 차이 ≥ 12h | WARN (≥24h: CRITICAL) | ✅ |
-| **R-002** | 이벤트 누락 | 본선이 항만 이벤트를 보고했으나 Dataloy `eventLogs`에 대응 이벤트 없음 (12h 경과) | CRITICAL | ✅ |
-| **R-003** | 리포트 미수신 | OPR 항차인데 최신 리포트가 30h 초과 | WARN (48h: CRITICAL) | ✅ |
-| **R-004** | ROB 불일치 | 본선 보고 ROB와 Dataloy EventLog ROB 차이 > 5% | WARN | ✅ |
-| **R-005** | 기항 순서 불일치 | 실제 기항 순서가 Dataloy `portCallSequence`와 다름 | CRITICAL | ✅ |
-| **R-006** | 리포트 전무 | OPR 항차인데 해당 기간 리포트 0건 | CRITICAL | ✅ |
-| **R-007** | ATA/ATD 미입력 | 본선 도착/출항 보고 후 24h 경과했으나 Dataloy `ata`/`atd` 공란 | WARN | ✅ |
-| **R-008** | ETA 계산 괴리 | 자체 계산 ETA와 Dataloy ETA 차이 ≥ 24h | INFO | ✅ |
-| **R-009** | 미파싱 리포트 | `parse_confidence` < 0.5 또는 미파싱 큐에 적체 | INFO | ✅ |
-| **R-010** | 항차 미귀속 | 선박은 매칭됐으나 항차 귀속 실패 | INFO | ✅ |
-| **R-011** | 속력 이상 | 계획 속력 대비 ±30% 이탈이 3일 연속 | INFO | v2 |
-| **R-012** | 항로 이탈 | 위치가 다음 기항지 방향에서 벗어남 | INFO | v2 |
-| **R-013** | 체선 장기화 | `WAITING_BERTH` 상태 72h 초과 | WARN | v2 |
-| **R-014** | 하역 후 미출항 | `COMPLETED_CARGO` 후 24h 경과, 출항 보고 없음 | INFO | v2 |
+| **R-001** | ETA difference | Vessel-declared ETA vs Dataloy ETA ≥ 12h apart | WARN (≥24h: CRITICAL) | ✅ |
+| **R-002** | Missing event | The vessel reported a port event but `eventLogs` has no matching entry (12h elapsed) | CRITICAL | ✅ |
+| **R-003** | No report received | An OPR voyage whose latest report is more than 30h old | WARN (48h: CRITICAL) | ✅ |
+| **R-004** | ROB mismatch | Vessel-reported ROB differs from the Dataloy EventLog ROB by more than 5% | WARN | ✅ |
+| **R-005** | Port call order mismatch | The actual call order differs from `portCallSequence` | CRITICAL | ✅ |
+| **R-006** | No reports at all | An OPR voyage with zero reports in the period | CRITICAL | ✅ |
+| **R-007** | ATA/ATD not entered | 24h after an arrival/departure report, Dataloy's `ata`/`atd` is still empty | WARN | ✅ |
+| **R-008** | Computed ETA divergence | Our computed ETA differs from the Dataloy ETA by ≥ 24h | INFO | ✅ |
+| **R-009** | Unparsed reports | `parse_confidence` < 0.5, or a backlog in the unparsed queue | INFO | ✅ |
+| **R-010** | Voyage unattributed | The vessel matched but voyage attribution failed | INFO | ✅ |
+| **R-011** | Speed anomaly | ±30% deviation from planned speed for 3 consecutive days | INFO | v2 |
+| **R-012** | Off-route | Position moving away from the next port call | INFO | v2 |
+| **R-013** | Prolonged waiting | `WAITING_BERTH` for more than 72h | WARN | v2 |
+| **R-014** | No departure after cargo | 24h after `COMPLETED_CARGO` with no departure report | INFO | v2 |
 
-### 규칙 구현 형태
+### Rule implementation shape
 
 ```python
 @dataclass
 class RuleContext:
     voyage_state: VoyageState
-    reports: list[VesselReport]        # 해당 항차의 리포트 (시간 역순)
+    reports: list[VesselReport]        # that voyage's reports, newest first
     port_calls: list[PortCall]
     event_logs: list[EventLog]
     config: RuleConfig
@@ -158,36 +158,36 @@ class Rule(Protocol):
     def evaluate(self, ctx: RuleContext) -> list[Discrepancy]: ...
 ```
 
-규칙은 각각 독립 함수이고, 하나가 예외를 던져도 **다른 규칙 평가를 막지 않습니다.**
-실패한 규칙은 로그와 `R-000` 내부 오류 항목으로 기록합니다.
+Each rule is an independent function, and one raising an exception **does not block the others**.
+A failed rule is logged and recorded as an `R-000` internal error item.
 
-### 오탐 억제 장치
+### False-positive suppression
 
-| 장치 | 목적 |
+| Device | Purpose |
 |---|---|
-| `parse_confidence` 게이트 | 확신도 0.7 미만 값으로는 CRITICAL을 내지 않음 |
-| `fingerprint` 중복 제거 | 같은 문제가 매일 새 항목으로 쌓이지 않음 |
-| `status='ignored'` 유지 | 사용자가 무시한 항목은 재검출해도 다시 뜨지 않음 |
-| grace period | 각 규칙에 유예 시간(기본 12h). 입력 지연을 정상으로 인정 |
-| 시간대 미확정 값 제외 | `reported_at_utc`가 `None`이면 시간 관련 규칙을 건너뜀 |
+| `parse_confidence` gate | A value below 0.7 confidence never raises a CRITICAL |
+| `fingerprint` deduplication | The same problem does not pile up as a new item every day |
+| `status='ignored'` persistence | An item the user dismissed does not come back on re-detection |
+| Grace period | Each rule has one (default 12h). Entry lag is accepted as normal |
+| Exclude unresolved timezones | If `reported_at_utc` is `None`, time-related rules are skipped |
 
-마지막 장치가 특히 중요합니다. `03-outlook-adapter.md` 2.5에서 설명한 대로,
-시간대를 모르면 UTC로 가정하지 않고 **비교 자체를 하지 않습니다.**
+That last device matters especially. As explained in [03-outlook-adapter.md](03-outlook-adapter.md) §2.5,
+when the timezone is unknown we do not assume UTC — **we do not compare at all**.
 
-## 7. 일일 브리핑 생성
+## 7. Generating the daily brief
 
-`fleet_daily_brief(date)`가 반환할 구조:
+The structure `fleet_daily_brief(date)` returns:
 
 ```
-1. 헤드라인
-   - 운항 중 N척 / 리포트 지연 M척 / CRITICAL 불일치 K건
-2. 즉시 조치 필요 (CRITICAL)
-   - 선박별로 무엇이, 왜, 근거 메일은 무엇인지
-3. 확인 권장 (WARN)
-4. 선박별 한 줄 요약
-   - "PACIFIC GLORY | 항해 중(적하) | 12.5N 123.7E | 싱가포르 ETA 09-16 08:00Z (계획 대비 +14h) | 리포트 3h 전"
-5. 파싱 실패 / 미귀속 항목
+1. Headline
+   - N vessels operating / M with late reports / K CRITICAL discrepancies
+2. Immediate action (CRITICAL)
+   - Per vessel: what, why, and which mail is the evidence
+3. Worth checking (WARN)
+4. One-line summary per vessel
+   - "PACIFIC GLORY | at sea (laden) | 12.5N 123.7E | Singapore ETA 09-16 08:00Z (+14h vs plan) | reported 3h ago"
+5. Parse failures and unattributed items
 ```
 
-4번의 한 줄 요약이 사용자가 실제로 매일 읽을 유일한 부분일 가능성이 높습니다.
-**계획 대비 편차를 괄호 안에 넣는 것**이 이 줄의 핵심입니다.
+Item 4 is most likely the only part the user actually reads every day.
+**Putting the deviation from plan in the parentheses** is the heart of that line.
