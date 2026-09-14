@@ -1,5 +1,7 @@
 # 04. Dataloy VMS API 연동
 
+> **초기 설계 이력 — 현재 구현 기준 아님.** 이 문서는 v2 이전 초안입니다. 현재 기준은 [재설계 v2](ARCHITECTURE-V2.ko.md)이며, 충돌하는 내용은 v2가 우선합니다. [검토 결과](REVIEW-CLAUDE-DESIGN.ko.md)와 [Phase 0 확인 기록](PHASE-0-DESIGN.ko.md)을 함께 확인하세요.
+
 > 아래 내용은 공개된 Dataloy VMS API 문서(https://api.dataloy.com)를 근거로 작성했습니다.
 > 다만 **테넌트마다 base URL, API 버전, 활성화된 모듈, 상태 코드값이 다를 수 있습니다.**
 > Phase 0에서 실제 테넌트로 검증하기 전까지는 모두 가설로 취급합니다.

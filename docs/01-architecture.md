@@ -1,5 +1,7 @@
 # 01. 아키텍처
 
+> **초기 설계 이력 — 현재 구현 기준 아님.** 이 문서는 v2 이전 초안입니다. 현재 기준은 [재설계 v2](ARCHITECTURE-V2.ko.md)이며, 충돌하는 내용은 v2가 우선합니다. [검토 결과](REVIEW-CLAUDE-DESIGN.ko.md)와 [Phase 0 확인 기록](PHASE-0-DESIGN.ko.md)을 함께 확인하세요.
+
 ## 1. 배포 토폴로지
 
 VMware VM은 사내 메일에 접근할 수 있지만 외부망이 제한되고,

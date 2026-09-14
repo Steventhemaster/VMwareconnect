@@ -1,16 +1,35 @@
 # VMwareconnect — Fleet Operations MCP Dashboard
 
-VMware 내부 Outlook의 본선 보고(noon report / port report / working report)와
-Dataloy VMS의 Operational 항차 데이터를 대조하여,
-**운항 중인 선박의 일정·포지션·상태**를 매일 한 화면에서 확인하고
-**Dataloy 입력 누락 및 계획-실적 차이**를 자동 검출하는 시스템입니다.
+Dataloy Operational 항차를 기준으로 Outlook의 본선 보고를 수집하고,
+선박의 **최신 보고 위치·일정·업무 상태·Dataloy 반영 차이**를 근거와 함께 확인하는 시스템입니다.
 
 ## 현재 상태
 
-**설계 단계 (Phase 0 이전).** 코드는 아직 없으며, `docs/` 아래 설계 문서만 존재합니다.
-구현 착수 전에 `docs/09-open-questions.md`의 미확인 항목을 먼저 해소해야 합니다.
+**재설계 v2 / Phase 0 환경 검증 전.** 실행 코드는 아직 없으며, 초기 설계는 Codex가 담당합니다.
+현재 기준 문서는 [ARCHITECTURE-V2.ko.md](docs/ARCHITECTURE-V2.ko.md)입니다.
+실제 VMware·Outlook·Dataloy의 연결 및 필드 의미는 아직 검증하지 않았습니다.
 
-## 문서
+## 현재 설계 문서
+
+| 문서 | 내용 |
+|---|---|
+| [재설계 v2](docs/ARCHITECTURE-V2.ko.md) | 구조, 데이터 모델, 수집·대조, 화면, API/MCP, 운영 및 검증 기준 |
+| [기존 설계 검토](docs/REVIEW-CLAUDE-DESIGN.ko.md) | 원본 문서별 문제와 수정 근거 |
+| [Phase 0 초기 설계](docs/PHASE-0-DESIGN.ko.md) | 담당 범위, 실제 환경 확인 기록, 상세 명세 산출물 및 완료 조건 |
+| [Claude 구현 전달 지침](docs/CLAUDE-HANDOFF.ko.md) | 추후 Claude Code에 구현을 맡길 때 사용하는 지침 |
+
+## 핵심 결정
+
+- 자동 수집과 규칙 대조는 스케줄러/worker가 실행하고 MCP와 웹은 공통 서비스에 접근합니다.
+- 본선 보고, Dataloy 계획·예측, Dataloy 등록 실적을 각각 보존하고 비교합니다.
+- 보고 정정·중복·지연·SOF 다중 이벤트와 필드별 원문 근거를 보존합니다.
+- 시간대·항차·기항이 불명확하면 검토를 보류하고, 수집 장애를 본선 미보고로 판단하지 않습니다.
+- 지도에는 기준시각이 있는 마지막 보고 위치를 표시하며 Dataloy는 읽기 전용입니다.
+
+## 기존 초안 이력
+
+아래 00~09 문서는 초기 설계의 맥락을 보존하는 참고 문서입니다.
+v2와 충돌하는 결정은 v2가 우선하며, 초기 가정을 실제 환경 검증 결과로 취급하지 않습니다.
 
 | 문서 | 내용 |
 |---|---|
@@ -24,8 +43,3 @@ Dataloy VMS의 Operational 항차 데이터를 대조하여,
 | [07-dashboard.md](docs/07-dashboard.md) | 대시보드 UI/UX 설계 |
 | [08-roadmap.md](docs/08-roadmap.md) | 단계별 구현 계획 |
 | [09-open-questions.md](docs/09-open-questions.md) | 미확인 사항 및 검증 필요 항목 |
-
-## 핵심 아이디어 한 줄
-
-> Dataloy는 *계획된 진실*, 본선 이메일은 *현장의 진실*.
-> 이 시스템의 가치는 둘을 나란히 놓고 **차이를 먼저 보여주는 것**에 있습니다.
