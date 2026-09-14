@@ -2,6 +2,21 @@
 
 > 현재 초기 설계는 Codex가 담당한다. 이 문서는 추후 Claude Code에 구현을 맡길 경우 사용하는 전달용 지침이며 자동으로 작업을 위임하지 않는다.
 
+## VMware 접근 검증을 맡길 경우
+
+사용자는 Claude가 VMware에 접속한 이력이 있다고 확인했다. Codex가 접근할 수 없는 경우 아래의 제한된 작업을 Claude가 담당한다. 사이트/API/worker는 DigitalOcean App Platform이며 Codex가 전체 설계와 클라우드 영역을 계속 담당한다.
+
+- 실제 접속 방식, Classic/New Outlook, mailbox/폴더 구조와 읽기 가능한 범위를 확인한다.
+- Graph 또는 COM으로 보고 수집이 가능한지 검증한다. UI에 접속할 수 있다는 사실과 프로그램으로 지속 수집할 수 있다는 사실을 구분한다.
+- 로그오프·재접속·VM 초기화 후 수집과 spool 복구 조건을 확인한다.
+- VM에서 지정된 App Platform ingestion URL로 HTTPS 업로드가 가능한지 확인한다. URL은 배포 후 제공하며 지금 임의로 만들지 않는다.
+- 익명화한 noon/port/working/SOF 표본과 필드별 시각·단위·이벤트 의미를 기록한다.
+- 결과는 성공/실패·재현 절차·남은 제약을 포함해 전달한다. 실제 메일 원문·자격증명은 GitHub에 올리지 않는다.
+
+전송 계약은 [DigitalOcean 배포 설계](DEPLOYMENT-DIGITALOCEAN.ko.md)를 따른다. 이 절은 조건 충족 시 전달할 작업 범위이며, 이미 Claude에게 요청했다는 뜻은 아니다.
+
+## 전체 구현을 전달할 경우
+
 아래 지침과 `ARCHITECTURE-V2.ko.md`, `REVIEW-CLAUDE-DESIGN.ko.md`를 함께 전달한다.
 
 ---

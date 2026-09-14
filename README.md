@@ -7,7 +7,11 @@ Dataloy Operational 항차를 기준으로 Outlook의 본선 보고를 수집하
 
 **재설계 v2 / Phase 0 환경 검증 전.** 실행 코드는 아직 없으며, 초기 설계는 Codex가 담당합니다.
 현재 기준 문서는 [ARCHITECTURE-V2.ko.md](docs/ARCHITECTURE-V2.ko.md)입니다.
-실제 VMware·Outlook·Dataloy의 연결 및 필드 의미는 아직 검증하지 않았습니다.
+프로그램 기반 Outlook 수집 및 Dataloy API 연결·필드 의미는 아직 검증하지 않았습니다.
+
+배포 대상은 **DigitalOcean App Platform**으로 확정했습니다. Codex가 설계·클라우드 backend·대시보드를 담당하며, Codex의 VMware 접근이 불가능하면 Claude가 VM 내부 수집 검증을 맡는 조건부 역할 분담입니다. 사용자는 Claude의 VMware 접근 성공 이력을 확인했습니다.
+
+2026-09-14: Codex도 실행 중인 VMware Horizon 데스크톱 세션과 Outlook 화면의 접근·열람을 확인했습니다. Graph/COM 기반 지속 자동 수집과 클라우드 전송은 별도 검증 대상입니다.
 
 ## 현재 설계 문서
 
@@ -16,6 +20,7 @@ Dataloy Operational 항차를 기준으로 Outlook의 본선 보고를 수집하
 | [재설계 v2](docs/ARCHITECTURE-V2.ko.md) | 구조, 데이터 모델, 수집·대조, 화면, API/MCP, 운영 및 검증 기준 |
 | [기존 설계 검토](docs/REVIEW-CLAUDE-DESIGN.ko.md) | 원본 문서별 문제와 수정 근거 |
 | [Phase 0 초기 설계](docs/PHASE-0-DESIGN.ko.md) | 담당 범위, 실제 환경 확인 기록, 상세 명세 산출물 및 완료 조건 |
+| [DigitalOcean 배포 설계](docs/DEPLOYMENT-DIGITALOCEAN.ko.md) | App Platform 구성, VM 수집 연결, 영속 저장소, 비밀값 및 배포 조건 |
 | [Claude 구현 전달 지침](docs/CLAUDE-HANDOFF.ko.md) | 추후 Claude Code에 구현을 맡길 때 사용하는 지침 |
 
 ## 핵심 결정

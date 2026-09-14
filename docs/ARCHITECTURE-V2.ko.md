@@ -19,7 +19,7 @@ MCP는 이 데이터에 자연어로 접근하는 인터페이스다. 매일 수
 
 ### 사실과 미확인 전제
 
-확인한 것은 GitHub 설계와 공개 제품 문서다. 실제 VMware 종류, Outlook 종류, Exchange Online/on-premises 여부, VM의 지속성, 네트워크 경로, 메일 권한, Dataloy 스키마, 선대 규모는 아직 확인하지 않았다. 아래 기술 선택·주기·허용오차·성능 수치는 **초기 제안값**이며 실측 후 확정한다.
+GitHub 설계와 공개 제품 문서를 검토했고, 후속으로 실행 중인 VMware Horizon 데스크톱 세션 및 Outlook 화면을 확인했다. Outlook의 정확한 종류, Exchange Online/on-premises 여부, VM의 지속성, 수집용 네트워크 경로, API 메일 권한, Dataloy 스키마, 선대 규모는 아직 확인하지 않았다. 아래 기술 선택·주기·허용오차·성능 수치는 **초기 제안값**이며 실측 후 확정한다.
 
 ‘VMware 내부 Outlook’은 접근 환경을 뜻한다. 메일 원본이 반드시 VM 안에만 존재한다는 의미로 단정하지 않는다. Graph 이용 가능성이 있더라도 해당 메일함의 승인된 접근 경로여야 한다.
 
@@ -49,12 +49,16 @@ flowchart TB
 
 ### 배포 프로파일
 
+2026-09-14 사용자 결정: 사이트/API/worker 배포 대상은 **DigitalOcean App Platform**이다. 구체적인 컴포넌트와 VM 연결 계약은 [DigitalOcean 배포 설계](DEPLOYMENT-DIGITALOCEAN.ko.md)를 따른다. Codex가 설계와 클라우드 영역을 담당하며, VMware 접근 불가 시 Claude가 내부 수집 검증을 담당한다. Claude의 기존 접속 성공은 사용자 확인 사항이며, Codex의 화면 접근도 후속 확인했다. 무인 수집 가능 여부는 아직 검증하지 않았다.
+
+후속 확인: Codex가 실행 중인 Horizon 데스크톱 세션을 선택·활성화하고 Outlook 화면을 읽었다. 아래 수집 방식 선택은 화면 접근 성공만으로 확정하지 않으며 API/COM 및 무인 실행 검증은 여전히 필요하다.
+
 | 조건 | 배포 |
 |---|---|
-| 사내 서버가 승인된 Graph와 Dataloy 모두 접근 가능 | 사내 서버에서 수집·파싱·대조·UI 실행. 가장 단순한 권장 경로. |
-| Outlook COM만 사용 가능하고 VM에서 Dataloy도 접근 가능 | VM 사용자 세션 수집기 + 승인된 사내 backend. 단일 사용자 PoC는 VM 로컬 실행도 가능. |
-| 메일망과 Dataloy 접근망이 분리 | VM 수집·원문·필요한 파싱 → 승인된 정규화 데이터 전달 → 분석 backend. 두 영역의 원문 접근 권한을 분리. |
-| API·COM 모두 불가능 | 승인된 EML/MSG/파일 내보내기로 파서·대조 기능 검증. 지속 자동 수집 요구는 미충족으로 명시. |
+| App Platform에서 승인된 Graph와 Dataloy 모두 접근 가능 | App Platform worker에서 수집·대조, service에서 UI/API/MCP 제공. 원문 저장 위치는 별도 정책 확인. |
+| Outlook COM 또는 VM 내부 접근이 필요 | VM 사용자 세션 수집기 → 인증된 HTTPS 배치 업로드 → App Platform service/worker. 원문은 VM에 보존. |
+| VM에서 App Platform 업로드 불가 | 승인된 전달 경로로 배치를 반입하여 처리. 자동 전달 경로 확보 전 실시간 자동 갱신은 미충족. |
+| API·COM 모두 불가능 | 승인된 EML/MSG/파일 내보내기로 파서·대조 기능 검증. App Platform 배포 결정은 유지하고 지속 자동 수집 요구는 미충족으로 명시. |
 
 Graph 경로는 Exchange 배치, 앱 권한 및 네트워크 검증 후 선택한다. COM은 Classic Outlook 설치·프로필·사용자 세션·보안 프롬프트·캐시 범위·VDI 재접속을 검증해야 한다. 로그오프 또는 비영구 VM 초기화 시 수집이 중단될 수 있으므로 이를 가용성 지표로 노출한다. COM을 비대화형 Windows Service로 배포하지 않는다. [Microsoft Outlook API](https://learn.microsoft.com/en-us/office/client-developer/outlook/selecting-an-api-or-technology-for-developing-solutions-for-outlook)
 
@@ -272,6 +276,8 @@ HTTP와 MCP는 공통 Application Service, 권한 검사, audit, DTO를 사용�
 ## 12. 저장소·보안·운영
 
 개인 PoC는 SQLite를 사용할 수 있다. 파일은 로컬 디스크에 두고 VM 간 살아 있는 DB 파일을 공유·복사하지 않는다. 다중 사용자 운영 기본 제안은 PostgreSQL이며 transaction, job lease, 권한, 이력 조회 요구를 고려한 선택이다. 저장소 교체는 단순 드라이버 변경으로 가정하지 않는다.
+
+배포 대상 확정에 따라 App Platform 운영 저장소는 PostgreSQL을 사용한다. App Platform 컨테이너 로컬 파일은 영속 저장소로 사용하지 않는다. VM 수집기의 로컬 spool은 별도이며 비영구 VDI이면 지속 저장 경로를 검증해야 한다.
 
 원문/첨부는 승인된 영역의 암호화 파일 또는 object storage에, 정규화·메타데이터는 DB에 둔다. 원문 보존기간·브리핑 보존기간·삭제 전파·백업 보존은 조직 정책으로 확정한다. 새 정정 이력을 보존하는 것과 원문 무기한 보존은 다른 결정이다.
 
