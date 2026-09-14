@@ -1,55 +1,52 @@
 # VMwareconnect — Fleet Operations MCP Dashboard
 
-A system that builds the fleet from Dataloy Operational voyages, collects vessel reports from
-Outlook, and shows each vessel's **latest reported position, schedule, working state and the
-differences against Dataloy** — always with the evidence attached.
+Dataloy Operational 항차를 기준으로 Outlook의 본선 보고를 수집하고,
+선박의 **최신 보고 위치·일정·업무 상태·Dataloy 반영 차이**를 근거와 함께 확인하는 시스템입니다.
 
-## Current status
+## 현재 상태
 
-[Open the review dashboard](https://fleet-operations-review-beg9z.ondigitalocean.app/) — a **synthetic-data demo** deployed to DigitalOcean App Platform.
+[검토용 대시보드 열기](https://fleet-operations-review-beg9z.ondigitalocean.app/) — DigitalOcean App Platform에 배포한 **실제 Dataloy 항차 공개 스냅샷**입니다.
 
-**Architecture v2 and a review web dashboard are in place.** Codex owns the initial design and the web implementation. Run it with `npm ci` then `npm run dev`; verify with `npm test` and `npm run build`. [The review site scope](docs/REVIEW-SITE.md) records the screens and what remains before live data.
-The current baseline document is [ARCHITECTURE-V2.md](docs/ARCHITECTURE-V2.md).
-Programmatic Outlook collection and the Dataloy API connection and field semantics are not yet verified.
+**재설계 v2 및 검토용 웹 대시보드 구현.** 초기 설계와 웹 구현은 Codex가 담당합니다. `npm ci` 후 `npm run dev`로 실행하며, `npm test`와 `npm run build`로 검증합니다. [검토용 사이트 구현 범위](docs/REVIEW-SITE.ko.md)에 화면과 실데이터 전환 전 남은 작업을 정리했습니다.
+현재 기준 문서는 [ARCHITECTURE-V2.ko.md](docs/ARCHITECTURE-V2.ko.md)입니다.
+Dataloy OAuth 및 Operational 항차 읽기를 검증했습니다. 사용자의 공개 반영 요청에 따라 실제 항차 스냅샷을 게시합니다. 자동 갱신, 본선 위치 및 Outlook 수집·대조는 아직 미연결입니다. [공개 스냅샷 범위](docs/PUBLIC-SNAPSHOT.ko.md)를 참고하세요.
 
-The deployment target is confirmed as **DigitalOcean App Platform**. Codex owns the design, the cloud backend and the dashboard; if Codex cannot reach VMware, Claude takes on in-VM collection verification. The user confirmed Claude's prior successful VMware access.
+배포 대상은 **DigitalOcean App Platform**으로 확정했습니다. Codex가 설계·클라우드 backend·대시보드를 담당하며, Codex의 VMware 접근이 불가능하면 Claude가 VM 내부 수집 검증을 맡는 조건부 역할 분담입니다. 사용자는 Claude의 VMware 접근 성공 이력을 확인했습니다.
 
-2026-09-14: Codex also confirmed access to a running VMware Horizon desktop session and the Outlook screen. Continuous automated collection over Graph/COM, and cloud delivery, remain separate verification items.
+2026-09-14: Codex도 실행 중인 VMware Horizon 데스크톱 세션과 Outlook 화면의 접근·열람을 확인했습니다. Graph/COM 기반 지속 자동 수집과 클라우드 전송은 별도 검증 대상입니다.
 
-All repository content is written in English. Earlier Korean versions of these documents remain in the git history.
+## 현재 설계 문서
 
-## Current design documents
-
-| Document | Contents |
+| 문서 | 내용 |
 |---|---|
-| [Architecture v2](docs/ARCHITECTURE-V2.md) | Structure, data model, collection and comparison, screens, API/MCP, operations and exit criteria |
-| [Design review](docs/REVIEW-CLAUDE-DESIGN.md) | Problems found per original document, with the rationale for each fix |
-| [Phase 0 initial design](docs/PHASE-0-DESIGN.md) | Scope, real-environment verification record, detailed deliverables and done criteria |
-| [DigitalOcean deployment design](docs/DEPLOYMENT-DIGITALOCEAN.md) | App Platform components, VM collection link, durable storage, secrets and deployment criteria |
-| [Claude implementation brief](docs/CLAUDE-HANDOFF.md) | The brief to use if implementation is later handed to Claude Code |
+| [재설계 v2](docs/ARCHITECTURE-V2.ko.md) | 구조, 데이터 모델, 수집·대조, 화면, API/MCP, 운영 및 검증 기준 |
+| [기존 설계 검토](docs/REVIEW-CLAUDE-DESIGN.ko.md) | 원본 문서별 문제와 수정 근거 |
+| [Phase 0 초기 설계](docs/PHASE-0-DESIGN.ko.md) | 담당 범위, 실제 환경 확인 기록, 상세 명세 산출물 및 완료 조건 |
+| [DigitalOcean 배포 설계](docs/DEPLOYMENT-DIGITALOCEAN.ko.md) | App Platform 구성, VM 수집 연결, 영속 저장소, 비밀값 및 배포 조건 |
+| [Claude 구현 전달 지침](docs/CLAUDE-HANDOFF.ko.md) | 추후 Claude Code에 구현을 맡길 때 사용하는 지침 |
 
-## Key decisions
+## 핵심 결정
 
-- Automatic collection and rule comparison run from a scheduler/worker; MCP and the web share one service.
-- Vessel reports, Dataloy plan/forecast and Dataloy recorded actuals are each kept and compared separately.
-- Report corrections, duplicates, delays, multiple SOF events and per-field source evidence are preserved.
-- Where the timezone, voyage or port call is unclear, the review is held, and a collection failure is never judged as a vessel failing to report.
-- The map shows the last reported position with its as-of time, and Dataloy stays read-only.
+- 자동 수집과 규칙 대조는 스케줄러/worker가 실행하고 MCP와 웹은 공통 서비스에 접근합니다.
+- 본선 보고, Dataloy 계획·예측, Dataloy 등록 실적을 각각 보존하고 비교합니다.
+- 보고 정정·중복·지연·SOF 다중 이벤트와 필드별 원문 근거를 보존합니다.
+- 시간대·항차·기항이 불명확하면 검토를 보류하고, 수집 장애를 본선 미보고로 판단하지 않습니다.
+- 지도에는 기준시각이 있는 마지막 보고 위치를 표시하며 Dataloy는 읽기 전용입니다.
 
-## Earlier draft history
+## 기존 초안 이력
 
-Documents 00–09 below preserve the context of the initial design.
-Where they conflict with v2, v2 wins, and the original assumptions are not treated as verified environment results.
+아래 00~09 문서는 초기 설계의 맥락을 보존하는 참고 문서입니다.
+v2와 충돌하는 결정은 v2가 우선하며, 초기 가정을 실제 환경 검증 결과로 취급하지 않습니다.
 
-| Document | Contents |
+| 문서 | 내용 |
 |---|---|
-| [00-overview.md](docs/00-overview.md) | Problem definition, scope, vocabulary, success criteria |
-| [01-architecture.md](docs/01-architecture.md) | Overall architecture, deployment topology, trust boundary |
-| [02-data-model.md](docs/02-data-model.md) | Normalised schema, storage schema |
-| [03-outlook-adapter.md](docs/03-outlook-adapter.md) | Outlook access methods, report parsing strategy |
-| [04-dataloy-api.md](docs/04-dataloy-api.md) | Dataloy REST API integration |
-| [05-reconciliation.md](docs/05-reconciliation.md) | Vessel and voyage matching, discrepancy detection rules |
-| [06-mcp-tools.md](docs/06-mcp-tools.md) | MCP servers and tool specification |
-| [07-dashboard.md](docs/07-dashboard.md) | Dashboard UI/UX design |
-| [08-roadmap.md](docs/08-roadmap.md) | Phased implementation plan |
-| [09-open-questions.md](docs/09-open-questions.md) | Open questions and items requiring verification |
+| [00-overview.md](docs/00-overview.md) | 문제 정의, 범위, 용어, 성공 기준 |
+| [01-architecture.md](docs/01-architecture.md) | 전체 아키텍처, 배포 토폴로지, 신뢰 경계 |
+| [02-data-model.md](docs/02-data-model.md) | 정규화 스키마, 저장소 스키마 |
+| [03-outlook-adapter.md](docs/03-outlook-adapter.md) | Outlook 접근 방식, 리포트 파싱 전략 |
+| [04-dataloy-api.md](docs/04-dataloy-api.md) | Dataloy REST API 연동 |
+| [05-reconciliation.md](docs/05-reconciliation.md) | 선박·항차 매칭, 불일치 검출 규칙 |
+| [06-mcp-tools.md](docs/06-mcp-tools.md) | MCP 서버 및 도구 명세 |
+| [07-dashboard.md](docs/07-dashboard.md) | 대시보드 UI/UX 설계 |
+| [08-roadmap.md](docs/08-roadmap.md) | 단계별 구현 계획 |
+| [09-open-questions.md](docs/09-open-questions.md) | 미확인 사항 및 검증 필요 항목 |
