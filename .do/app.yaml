@@ -1,6 +1,6 @@
 name: fleet-operations-review
 static_sites:
-  - name: dashboard
+  - name: vmwareconnect
     github:
       repo: Steventhemaster/VMwareconnect
       branch: claude/eager-goodall-zoaen3

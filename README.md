@@ -5,6 +5,8 @@ Dataloy Operational 항차를 기준으로 Outlook의 본선 보고를 수집하
 
 ## 현재 상태
 
+[검토용 대시보드 열기](https://fleet-operations-review-beg9z.ondigitalocean.app/) — DigitalOcean App Platform에 배포한 **가상 데이터 데모**입니다.
+
 **재설계 v2 및 검토용 웹 대시보드 구현.** 초기 설계와 웹 구현은 Codex가 담당합니다. `npm ci` 후 `npm run dev`로 실행하며, `npm test`와 `npm run build`로 검증합니다. [검토용 사이트 구현 범위](docs/REVIEW-SITE.ko.md)에 화면과 실데이터 전환 전 남은 작업을 정리했습니다.
 현재 기준 문서는 [ARCHITECTURE-V2.ko.md](docs/ARCHITECTURE-V2.ko.md)입니다.
 프로그램 기반 Outlook 수집 및 Dataloy API 연결·필드 의미는 아직 검증하지 않았습니다.

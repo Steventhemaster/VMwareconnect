@@ -2,6 +2,12 @@
 
 가상 데이터로 화면과 업무 흐름을 검토하는 첫 배포 버전이다. 실데이터 운영 backend는 아직 포함하지 않는다.
 
+공개 주소: https://fleet-operations-review-beg9z.ondigitalocean.app/
+
+2026-09-14 DigitalOcean App Platform `fleet-operations-review` 앱의 Static Site 배포가 Healthy로 전환됨을 확인했다. 생성 화면의 기본 비용은 월 $0.00이며, 계정의 무료 정적 앱 범위를 사용했다. GitHub `claude/eager-goodall-zoaen3` 브랜치 자동 배포를 켰다. 실데이터 backend 비용은 별도다.
+
+검증: 단위 테스트 5개 통과, production build 성공, production preview에서 지도 7개 마커·검토 확인/취소·연결 상태 표시를 확인했다. 데스크톱 검색 및 선박 대조/근거 탭을 확인했다. 390px 뷰포트 검증 중 발견한 표 접근성 라벨의 가로 넘침을 수정했으며 문서 scrollWidth와 clientWidth가 일치함을 확인했다. 모바일 메뉴를 확인했고 지도는 선대 위치 범위에 맞춰 확대 수준을 자동 조정한다. 지도 라이브러리 번들 크기 경고는 남아 있어 후속 성능 최적화 대상이다.
+
 ## 실행
 
 Node.js 22 이상에서 `npm ci`, `npm run dev`로 실행한다. 검증은 `npm test`, 배포 빌드는 `npm run build`다. App Platform의 Static Site에서 build command `npm ci && npm run build`, output directory `dist`로 배포한다. 예시 설정은 `.do/app.yaml`이다.
