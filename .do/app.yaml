@@ -1,0 +1,13 @@
+name: fleet-operations-review
+static_sites:
+  - name: dashboard
+    github:
+      repo: Steventhemaster/VMwareconnect
+      branch: claude/eager-goodall-zoaen3
+      deploy_on_push: true
+    source_dir: /
+    environment_slug: node-js
+    build_command: npm ci && npm run build
+    output_dir: dist
+    index_document: index.html
+    catchall_document: index.html
