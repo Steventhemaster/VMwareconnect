@@ -34,7 +34,11 @@ export function createFleetMap(container, vessels, onSelect){
    el.className=`pin sev-${v.severity}${ageHours(v)>30?' stale':''}${v.position[0]>92?' flip':''}`;
    el.dataset.vessel=v.id;
    el.setAttribute('aria-label',`${v.name} — ${v.status}, ${v.severity==='ok'?'aligned':'needs review'}. Open detail.`);
-   el.innerHTML=`<span class="pin-heading" style="transform:rotate(${v.course}deg)" aria-hidden="true"></span><span class="pin-code">${v.short}</span><span class="pin-label" aria-hidden="true">${v.name}</span>`;
+   /* A berthed or anchored vessel has no heading to show — the dataset's course
+      is filler at 0.0 kn, and drawing it would present an unverified value as
+      fact. The arrowhead is rendered only for a vessel actually making way. */
+   const heading=v.speed>0?`<span class="pin-heading" style="transform:rotate(${v.course}deg)" aria-hidden="true"></span>`:'';
+   el.innerHTML=`${heading}<span class="pin-code">${v.short}</span><span class="pin-label" aria-hidden="true">${v.name}</span>`;
    el.addEventListener('click',()=>onSelect(v.id));
    byId.set(v.id,el);
    markers.push(new maplibregl.Marker({element:el,anchor:'bottom',offset:[0,-4]}).setLngLat(v.position).addTo(map));

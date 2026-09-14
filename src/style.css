@@ -160,7 +160,10 @@ main{flex:1;padding:16px 22px 26px;max-width:1560px;width:100%}
 .board-read i{font-style:normal;color:var(--rule-2);margin:0 6px}
 .board-tiles{display:flex;align-items:center;gap:3px}
 /* one tile per ship, ordered by severity: the ratio reads as a shape */
-.tile{display:grid;place-items:center;min-width:27px;height:21px;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.03em;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--rule);border-bottom:2px solid var(--sv);border-radius:2px}
+.tile{display:flex;align-items:center;justify-content:center;gap:3px;min-width:34px;height:21px;padding:0 4px;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.03em;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--rule);border-bottom:2px solid var(--sv);border-radius:2px}
+/* the same shape token the list uses, so a tile never leans on hue alone */
+.tile i{font-style:normal;font-size:7px;line-height:1;color:var(--sv)}
+.tile.sev-ok i{color:var(--ink-3)}
 .tile.sev-ok{border-bottom-color:var(--rule-2);color:var(--ink-3)}
 .tile:hover{background:#fff;border-color:var(--ink-3);border-bottom-color:var(--sv)}
 .tile-gap{width:1px;height:17px;background:var(--rule-2);margin:0 5px}
@@ -252,18 +255,22 @@ main{flex:1;padding:16px 22px 26px;max-width:1560px;width:100%}
 /* --- map furniture ------------------------------------------------------- */
 /* Permanent vessel names are gone. Pins carry the two-letter code; the full
    name appears only on hover, focus or selection, flipped away from the edge. */
-.pin{position:relative;display:grid;place-items:center;width:23px;height:19px;background:var(--surface);border:1px solid var(--sv);border-radius:3px;box-shadow:0 1px 2px #12313d26;z-index:5}
+.pin{position:relative;display:flex;align-items:center;justify-content:center;gap:2px;min-width:23px;height:19px;padding:0 4px;background:var(--surface);border:1px solid var(--sv);border-radius:3px;box-shadow:0 1px 2px #12313d26;z-index:5}
 .pin-code{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.02em;color:var(--sv);line-height:1}
 .pin.sev-ok{border-color:#8fa1a4}
 .pin.sev-ok .pin-code{color:var(--ink-2)}
 .pin.sev-critical,.pin.sev-warn{background:var(--sv);border-color:var(--sv)}
 .pin.sev-critical .pin-code,.pin.sev-warn .pin-code{color:#fff}
+.pin.sev-critical .pin-heading::before,.pin.sev-warn .pin-heading::before{border-bottom-color:#fff}
 .pin.sev-unknown{border-style:dashed}
 .pin.stale{border-style:dotted;border-width:1.5px}
-/* heading flag: a small wedge on the pin's rim, rotated to course */
-.pin-heading{position:absolute;inset:0;pointer-events:none}
-.pin-heading::before{content:'';position:absolute;left:50%;top:-5px;width:0;height:0;margin-left:-3px;border:3px solid transparent;border-bottom:5px solid var(--sv)}
-.pin.sev-ok .pin-heading::before{border-bottom-color:#8fa1a4}
+/* Heading sits INSIDE the pin, beside the code. A filled wedge on the outside
+   of a rounded rect reads as a callout tail at 180 and 270 degrees no matter
+   how much clearance it is given; enclosed, it can only read as a direction.
+   Rendered at all only when the vessel is making way (see map.js). */
+.pin-heading{position:relative;width:10px;height:10px;flex:none;pointer-events:none}
+.pin-heading::before{content:'';position:absolute;left:50%;top:2.5px;width:0;height:0;margin-left:-3px;border:3px solid transparent;border-bottom:5px solid var(--sv)}
+.pin.sev-ok .pin-heading::before{border-bottom-color:#6d7f84}
 .pin-label{position:absolute;left:calc(100% + 5px);top:50%;transform:translateY(-50%);display:none;padding:2px 6px;font-size:9.5px;font-weight:600;letter-spacing:.05em;white-space:nowrap;color:var(--surface);background:#1b3a45;border-radius:2px}
 .pin.flip .pin-label{left:auto;right:calc(100% + 5px)}
 .pin:hover,.pin:focus-visible,.pin.lit,.pin.selected{z-index:9}
@@ -524,6 +531,19 @@ main{flex:1;padding:16px 22px 26px;max-width:1560px;width:100%}
   .brief h2{font-size:18px}
   .drawer{width:100%}
   .compare dl{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .brief-table{display:block}
+  .brief-table thead{display:none}
+  .brief-table tbody{display:block}
+  .brief-table tbody tr{display:grid;grid-template-columns:1fr 1fr auto;grid-template-areas:'name name verdict' 'state leg eta';gap:2px 8px;padding:7px 0 8px 9px;border-bottom:1px solid var(--rule)}
+  .brief-table td{display:block;border:0;padding:0;min-width:0}
+  .brief-table td:nth-child(1){grid-area:name;padding-left:0}
+  .brief-table td:nth-child(2){grid-area:state}
+  .brief-table td:nth-child(3){grid-area:leg}
+  .brief-table td:nth-child(4){grid-area:eta;text-align:right}
+  .brief-table td:nth-child(5){grid-area:verdict;text-align:right}
+  .brief-table tbody tr td:first-child::before{height:100%}
 }
 @media(max-width:560px){
   .cargo{display:none}
