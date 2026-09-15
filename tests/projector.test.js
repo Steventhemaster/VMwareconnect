@@ -99,3 +99,10 @@ test('public projection keeps staff names and invoice summary only',()=>{
  assert.deepEqual(snapshot.voyages[0].freightInvoice,{status:'invoiced',invoiceCount:1,pendingLineCount:0,statusCodes:['POS']});
  assert.ok(!JSON.stringify(snapshot).includes('PRIVATE'));
 });
+
+test('contract type comes from isTc; missing data never defaults to Voyage',()=>{
+ const tc={...voyage([]),isTc:true};
+ const vc={...voyage([]),isTc:false};
+ const {snapshot}=run([tc,vc,voyage([])]);
+ assert.deepEqual(snapshot.voyages.map(v=>v.contractType),['TC Out','Voyage','Not verified']);
+});

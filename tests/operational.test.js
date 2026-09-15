@@ -17,7 +17,7 @@ test('public artifact has only approved display fields and stable snapshot dates
  assert.ok(s.voyages.length>0);
  for(const v of s.voyages){
   const required=['id','dataloyId','name','voyage','reference','status','start','end','ports'];
-  const optional=['charterer','operator','commercial','freightInvoice'];
+  const optional=['charterer','operator','commercial','freightInvoice','contractType'];
   for(const k of required)assert.ok(k in v,`missing ${k}`);
   for(const k of Object.keys(v))assert.ok(required.includes(k)||optional.includes(k),`unapproved field ${k}`);
   assert.match(v.dataloyId,/^\d+$/);

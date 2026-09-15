@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-15T15:19:40.305Z",
+  "fetchedAt": "2026-09-15T15:24:53.310Z",
   "source": "Dataloy",
   "mode": "published-snapshot",
   "scheduledRefresh": true,
@@ -11,6 +11,7 @@
       "voyage": "2026 / 1",
       "reference": "WLLADOGA0001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -60,6 +61,7 @@
       "voyage": "2026 / 2",
       "reference": "CRSTS002",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -110,6 +112,7 @@
       "voyage": "2026 / 1",
       "reference": "MARCO001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -160,6 +163,7 @@
       "voyage": "2026 / 1",
       "reference": "DANNY001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": "Laila Ibrahim",
       "freightInvoice": {
@@ -254,6 +258,7 @@
       "voyage": "2026 / 1",
       "reference": "PTLS001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -303,6 +308,7 @@
       "voyage": "2026 / 1",
       "reference": "ANEMOS001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mohneesh Bhutani",
       "operator": "Laila Ibrahim",
       "freightInvoice": {
@@ -388,6 +394,7 @@
       "voyage": "2026 / 1",
       "reference": "STARVIRGINIA001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
@@ -446,6 +453,7 @@
       "voyage": "2026 / 1",
       "reference": "AMIRANORA001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Sadek Abdoon",
       "operator": null,
       "freightInvoice": {
@@ -495,6 +503,7 @@
       "voyage": "2026 / 1",
       "reference": "LSKR001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -545,6 +554,7 @@
       "voyage": "2026 / 3",
       "reference": "JIA YUE003",
       "status": "OPR",
+      "contractType": "TC Out",
       "charterer": "Mathias Pedersen",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -601,6 +611,7 @@
       "voyage": "2026 / 1",
       "reference": "JINXING001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Aditya Gupta",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -660,6 +671,7 @@
       "voyage": "2026 / 1",
       "reference": "AFRWARBLER001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
@@ -709,6 +721,7 @@
       "voyage": "2026 / 1",
       "reference": "KACEY0001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
@@ -776,6 +789,7 @@
       "voyage": "2026 / 7",
       "reference": "NOUR007",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -844,6 +858,7 @@
       "voyage": "2026 / 1",
       "reference": "PICTOR001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Laila Ibrahim",
       "freightInvoice": {
@@ -911,6 +926,7 @@
       "voyage": "2026 / 1",
       "reference": "DOKOS001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -1006,6 +1022,7 @@
       "voyage": "2026 / 6",
       "reference": "JFSN006",
       "status": "OPR",
+      "contractType": "TC Out",
       "charterer": "Daegun Kim",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -1080,6 +1097,7 @@
       "voyage": "2026 / 1",
       "reference": "SLADYIII001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -1175,6 +1193,7 @@
       "voyage": "2026 / 1",
       "reference": "KSUKRET0001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -1233,6 +1252,7 @@
       "voyage": "2026 / 2",
       "reference": "TUOFU8002",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -1318,6 +1338,7 @@
       "voyage": "2026 / 2",
       "reference": "KMXEVDOKIA002",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -1377,6 +1398,7 @@
       "voyage": "2026 / 1",
       "reference": "LMZARL0001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -1471,6 +1493,7 @@
       "voyage": "2026 / 8",
       "reference": "BAORUN008",
       "status": "OPR",
+      "contractType": "TC Out",
       "charterer": "Dae Hee Won",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -1527,6 +1550,7 @@
       "voyage": "2026 / 23",
       "reference": "SAFA023",
       "status": "OPR",
+      "contractType": "TC Out",
       "charterer": "Daegun Kim",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -1574,6 +1598,7 @@
       "voyage": "2026 / 3",
       "reference": "MARIGOULA003",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Aditya Gupta",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
@@ -1614,6 +1639,7 @@
       "voyage": "2026 / 3",
       "reference": "SAFNSR003",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Dae Hee Won",
       "operator": "Laila Ibrahim",
       "freightInvoice": {
@@ -1754,6 +1780,7 @@
       "voyage": "2026 / 1",
       "reference": "JIADA001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
@@ -1866,6 +1893,7 @@
       "voyage": "2026 / 7",
       "reference": "ALND007",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -1925,6 +1953,7 @@
       "voyage": "2026 / 1",
       "reference": "KRMX001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Dae Hee Won",
       "operator": "Amit Ashar",
       "freightInvoice": {
@@ -1993,6 +2022,7 @@
       "voyage": "2026 / 1",
       "reference": "WDALRB001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Deepak Nair",
       "operator": "Anishkar Bhaskaran",
       "freightInvoice": {
@@ -2105,6 +2135,7 @@
       "voyage": "2026 / 1",
       "reference": "YEDIT001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Sadek Abdoon",
       "operator": "Laila Ibrahim",
       "freightInvoice": {
@@ -2163,6 +2194,7 @@
       "voyage": "2026 / 1",
       "reference": "FAHD001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -2237,6 +2269,7 @@
       "voyage": "2026 / 1",
       "reference": "WAEEL001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
@@ -2314,6 +2347,7 @@
       "voyage": "2026 / 5",
       "reference": "ALLULU005",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Aditya Gupta",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -2373,6 +2407,7 @@
       "voyage": "2026 / 4",
       "reference": "ALDANAH004",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Aditya Gupta",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -2477,6 +2512,7 @@
       "voyage": "2026 / 1",
       "reference": "DNTL001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
@@ -2571,6 +2607,7 @@
       "voyage": "2026 / 27",
       "reference": "AMAN027",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Daegun Kim",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -2639,6 +2676,7 @@
       "voyage": "2026 / 7",
       "reference": "ALMAQAM007",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mohneesh Bhutani",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -2698,6 +2736,7 @@
       "voyage": "2026 / 28",
       "reference": "AMAL028",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Dae Hee Won",
       "operator": "Laila Ibrahim",
       "freightInvoice": {
@@ -2783,6 +2822,7 @@
       "voyage": "2026 / 6",
       "reference": "ALWATHBA006",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Aditya Gupta",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -2850,6 +2890,7 @@
       "voyage": "2026 / 10",
       "reference": "ALSAAD010",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mohneesh Bhutani",
       "operator": "Sachin Taneja",
       "freightInvoice": {
@@ -2917,6 +2958,7 @@
       "voyage": "2026 / 1",
       "reference": "VTRE0001001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Mathias Pedersen",
       "operator": null,
       "freightInvoice": {
@@ -2966,6 +3008,7 @@
       "voyage": "2026 / 1",
       "reference": "CHLS001",
       "status": "OPR",
+      "contractType": "Voyage",
       "charterer": "Dae Hee Won",
       "operator": "Bahumin Abdul Sukkur",
       "freightInvoice": {
