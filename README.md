@@ -1,52 +1,90 @@
-# VMwareconnect — Fleet Operations MCP Dashboard
+# VMwareconnect — Fleet Operations
 
-Dataloy Operational 항차를 기준으로 Outlook의 본선 보고를 수집하고,
-선박의 **최신 보고 위치·일정·업무 상태·Dataloy 반영 차이**를 근거와 함께 확인하는 시스템입니다.
+Collect vessel reports from Outlook against Dataloy Operational voyages, and show each
+vessel's **latest reported position, schedule, working state and the differences against
+Dataloy** — with the evidence attached.
 
-## 현재 상태
+All repository content is in English.
 
-[검토용 대시보드 열기](https://fleet-operations-review-beg9z.ondigitalocean.app/) — DigitalOcean App Platform에 배포한 **실제 Dataloy 항차 공개 스냅샷**입니다.
+## Current status
 
-**재설계 v2 및 검토용 웹 대시보드 구현.** 초기 설계와 웹 구현은 Codex가 담당합니다. `npm ci` 후 `npm run dev`로 실행하며, `npm test`와 `npm run build`로 검증합니다. [검토용 사이트 구현 범위](docs/REVIEW-SITE.ko.md)에 화면과 실데이터 전환 전 남은 작업을 정리했습니다.
-현재 기준 문서는 [ARCHITECTURE-V2.ko.md](docs/ARCHITECTURE-V2.ko.md)입니다.
-Dataloy OAuth 및 Operational 항차 읽기를 검증했습니다. 사용자의 공개 반영 요청에 따라 실제 항차 스냅샷을 게시합니다. 자동 갱신, 본선 위치 및 Outlook 수집·대조는 아직 미연결입니다. [공개 스냅샷 범위](docs/PUBLIC-SNAPSHOT.ko.md)를 참고하세요.
+[Open the site](https://fleet-operations-review-beg9z.ondigitalocean.app/) — a **published
+snapshot of real Dataloy Operational voyages** on DigitalOcean App Platform.
 
-배포 대상은 **DigitalOcean App Platform**으로 확정했습니다. Codex가 설계·클라우드 backend·대시보드를 담당하며, Codex의 VMware 접근이 불가능하면 Claude가 VM 내부 수집 검증을 맡는 조건부 역할 분담입니다. 사용자는 Claude의 VMware 접근 성공 이력을 확인했습니다.
+Dataloy OAuth and the Operational voyage read are verified, and the result is published as
+a fixed extract. **Outlook collection is not connected, no vessel position is held, and no
+report comparison is performed** — so the site is currently a voyage register rather than
+the comparison product described below. Every screen states this.
 
-2026-09-14: Codex도 실행 중인 VMware Horizon 데스크톱 세션과 Outlook 화면의 접근·열람을 확인했습니다. Graph/COM 기반 지속 자동 수집과 클라우드 전송은 별도 검증 대상입니다.
-
-## 현재 설계 문서
-
-| 문서 | 내용 |
+| Capability | State |
 |---|---|
-| [재설계 v2](docs/ARCHITECTURE-V2.ko.md) | 구조, 데이터 모델, 수집·대조, 화면, API/MCP, 운영 및 검증 기준 |
-| [기존 설계 검토](docs/REVIEW-CLAUDE-DESIGN.ko.md) | 원본 문서별 문제와 수정 근거 |
-| [Phase 0 초기 설계](docs/PHASE-0-DESIGN.ko.md) | 담당 범위, 실제 환경 확인 기록, 상세 명세 산출물 및 완료 조건 |
-| [DigitalOcean 배포 설계](docs/DEPLOYMENT-DIGITALOCEAN.ko.md) | App Platform 구성, VM 수집 연결, 영속 저장소, 비밀값 및 배포 조건 |
-| [Claude 구현 전달 지침](docs/CLAUDE-HANDOFF.ko.md) | 추후 Claude Code에 구현을 맡길 때 사용하는 지침 |
+| Dataloy OAuth + Operational voyage read | verified |
+| Published snapshot — 47 voyages / 43 vessels / 243 port calls, with call purpose and fixed-date flags | published, no auto-refresh |
+| Outlook vessel report collection | not connected |
+| Vessel position / map | none held — nothing plotted |
+| Report ↔ Dataloy comparison | not performed |
+| Sign-in and fleet-scoped permissions | not implemented — see the open question below |
 
-## 핵심 결정
+Deployment target is **DigitalOcean App Platform**, deploying automatically from the
+`claude/eager-goodall-zoaen3` branch.
 
-- 자동 수집과 규칙 대조는 스케줄러/worker가 실행하고 MCP와 웹은 공통 서비스에 접근합니다.
-- 본선 보고, Dataloy 계획·예측, Dataloy 등록 실적을 각각 보존하고 비교합니다.
-- 보고 정정·중복·지연·SOF 다중 이벤트와 필드별 원문 근거를 보존합니다.
-- 시간대·항차·기항이 불명확하면 검토를 보류하고, 수집 장애를 본선 미보고로 판단하지 않습니다.
-- 지도에는 기준시각이 있는 마지막 보고 위치를 표시하며 Dataloy는 읽기 전용입니다.
+## Running it
 
-## 기존 초안 이력
+Node.js 22 or later. The site is a dependency-free static build.
 
-아래 00~09 문서는 초기 설계의 맥락을 보존하는 참고 문서입니다.
-v2와 충돌하는 결정은 v2가 우선하며, 초기 가정을 실제 환경 검증 결과로 취급하지 않습니다.
+```sh
+npm ci
+npm run dev      # local
+npm test         # unit tests
+npm run build    # production build into dist/
+```
 
-| 문서 | 내용 |
+Connection verification against a real tenant is server-side only and never part of the
+bundle:
+
+```sh
+node --env-file=.env.local scripts/dataloy-probe.mjs      # connectivity and auth
+node scripts/fetch-operational.mjs                        # full Operational pull into data/
+node scripts/prepare-public-snapshot.mjs                  # project to approved public fields
+```
+
+## Documents
+
+| Document | Contents |
 |---|---|
-| [00-overview.md](docs/00-overview.md) | 문제 정의, 범위, 용어, 성공 기준 |
-| [01-architecture.md](docs/01-architecture.md) | 전체 아키텍처, 배포 토폴로지, 신뢰 경계 |
-| [02-data-model.md](docs/02-data-model.md) | 정규화 스키마, 저장소 스키마 |
-| [03-outlook-adapter.md](docs/03-outlook-adapter.md) | Outlook 접근 방식, 리포트 파싱 전략 |
-| [04-dataloy-api.md](docs/04-dataloy-api.md) | Dataloy REST API 연동 |
-| [05-reconciliation.md](docs/05-reconciliation.md) | 선박·항차 매칭, 불일치 검출 규칙 |
-| [06-mcp-tools.md](docs/06-mcp-tools.md) | MCP 서버 및 도구 명세 |
-| [07-dashboard.md](docs/07-dashboard.md) | 대시보드 UI/UX 설계 |
-| [08-roadmap.md](docs/08-roadmap.md) | 단계별 구현 계획 |
-| [09-open-questions.md](docs/09-open-questions.md) | 미확인 사항 및 검증 필요 항목 |
+| [Architecture v2](docs/ARCHITECTURE-V2.md) | Structure, data model, collection and comparison, screens, API/MCP, operations and exit criteria |
+| [Design review](docs/REVIEW-CLAUDE-DESIGN.md) | Problems found in the original design, with the rationale for each fix |
+| [Phase 0](docs/PHASE-0-DESIGN.md) | Scope, real-environment verification record, deliverables and done criteria |
+| [DigitalOcean deployment](docs/DEPLOYMENT-DIGITALOCEAN.md) | App Platform components, VM collection link, durable storage, secrets |
+| [Dataloy connection verification](docs/DATALOY-CONNECTION-CHECK.md) | What was proven, how the probe is hardened, how to run it |
+| [Published snapshot](docs/PUBLIC-SNAPSHOT.md) | What is published, what is excluded, and what the site does not claim |
+| [Visual design](docs/DESIGN-ENGLISH.md) | Palette measured from the Dataloy VMS product, and the information hierarchy |
+| [Site scope](docs/REVIEW-SITE.md) | Screens built, what is verified, and what remains |
+| [Claude implementation brief](docs/CLAUDE-HANDOFF.md) | Brief to use if implementation is handed to Claude Code |
+
+## Key decisions
+
+- Automatic collection and rule comparison run from a scheduler/worker; MCP and the web share one service.
+- Vessel reports, Dataloy plan/forecast and Dataloy recorded actuals are kept and compared separately.
+- Report corrections, duplicates, delays, multiple SOF events and per-field evidence are preserved.
+- Where the timezone, voyage or port call is unclear the review is held, and a collection failure is never judged as a vessel failing to report.
+- **OPR is a registered status, not proof a vessel is sailing** — established from the real tenant, where 15 of 47 Operational voyages sit past their own registered end.
+- Nothing is plotted as a position without an observation time and a source. Dataloy stays read-only.
+
+## Open question
+
+The published site has no authentication, which conflicts with Architecture v2 §12
+(verified sign-in and fleet-scoped permissions for any shared deployment). The extract is a
+commercial fleet's forward schedule and port rotation. The intended audience should be
+settled before the next snapshot is published.
+
+## Earlier draft history
+
+Documents 00–09 preserve the context of the initial design. Where they conflict with v2,
+v2 wins, and the original assumptions are not treated as verified environment results.
+
+[00 Overview](docs/00-overview.md) · [01 Architecture](docs/01-architecture.md) ·
+[02 Data model](docs/02-data-model.md) · [03 Outlook adapter](docs/03-outlook-adapter.md) ·
+[04 Dataloy API](docs/04-dataloy-api.md) · [05 Reconciliation](docs/05-reconciliation.md) ·
+[06 MCP tools](docs/06-mcp-tools.md) · [07 Dashboard](docs/07-dashboard.md) ·
+[08 Roadmap](docs/08-roadmap.md) · [09 Open questions](docs/09-open-questions.md)
