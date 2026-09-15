@@ -1,0 +1,42 @@
+name: Daily Dataloy refresh
+on:
+  schedule:
+    - cron: '0 5 * * *' # 09:00 Asia/Dubai (UTC+4)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: dataloy-snapshot
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Read complete operational and freight data
+        run: node scripts/fetch-operational.mjs
+        env:
+          DATALOY_BASE_URL: ${{ secrets.DATALOY_BASE_URL }}
+          DATALOY_CLIENT_ID: ${{ secrets.DATALOY_CLIENT_ID }}
+          DATALOY_CLIENT_SECRET: ${{ secrets.DATALOY_CLIENT_SECRET }}
+          DATALOY_TOKEN_URL: ${{ secrets.DATALOY_TOKEN_URL }}
+          DATALOY_AUDIENCE: ${{ secrets.DATALOY_AUDIENCE }}
+      - name: Publish display fields only
+        run: node scripts/prepare-public-snapshot.mjs
+        env:
+          DATALOY_SCHEDULED_REFRESH: 'true'
+      - run: npm run build
+      - name: Commit validated snapshot for DigitalOcean deployment
+        run: |
+          git add src/operational-snapshot.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refresh daily Dataloy operational snapshot'
+          git push origin HEAD

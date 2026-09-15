@@ -87,3 +87,15 @@ test('an incomplete or non-Operational pull is still refused',()=>{
  writeFileSync(join(dir,'data/operational-voyages.json'),JSON.stringify({fetchedAt:'x',complete:true,reportedTotal:1,count:1,rows:[nonOpr]}));
  assert.throws(()=>execFileSync(process.execPath,[script],{cwd:dir,stdio:'pipe'}));
 });
+
+test('public projection keeps staff names and invoice summary only',()=>{
+ const v=voyage([]);
+ v.voyageHeader.operator={userName:'Test Operator',clientSecret:'PRIVATE'};
+ v.voyageHeader.charteringResponsible={userName:'Test Charterer',email:'PRIVATE'};
+ v.freightInvoice={status:'invoiced',invoiceCount:1,pendingLineCount:0,statusCodes:['POS'],documents:['PRIVATE'],amount:12345};
+ const {snapshot}=run([v]);
+ assert.equal(snapshot.voyages[0].operator,'Test Operator');
+ assert.equal(snapshot.voyages[0].charterer,'Test Charterer');
+ assert.deepEqual(snapshot.voyages[0].freightInvoice,{status:'invoiced',invoiceCount:1,pendingLineCount:0,statusCodes:['POS']});
+ assert.ok(!JSON.stringify(snapshot).includes('PRIVATE'));
+});

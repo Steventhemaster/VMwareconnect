@@ -11,14 +11,14 @@ const callTime=value=>{
  return /(?:Z|[+-]\d{2}:\d{2})$/i.test(value)?new Date(value).toISOString():value;
 };
 const seen={calls:0,withArrival:0,withDeparture:0,codes:{}};
-const snapshot={fetchedAt:source.fetchedAt,source:'Dataloy',mode:'published-snapshot',voyages:source.rows.map((r,i)=>{
+const snapshot={fetchedAt:source.fetchedAt,source:'Dataloy',mode:'published-snapshot',scheduledRefresh:process.env.DATALOY_SCHEDULED_REFRESH==='true',voyages:source.rows.map((r,i)=>{
  if(r.voyageHeader?.voyageStatus?.statusTypeCode!=='OPR')throw new Error('UNEXPECTED_STATUS');
  const purpose=p=>({L:'Loading',D:'Discharging',C:'Canal passage',E:'Extra port',DD:'Dry dock',DEL:'Delivery',RED:'Redelivery',B:'Bunkering',R:'Repair',CL:'Tank / hold cleaning',STS:'Ship to ship',W:'Waiting',CC:'Customs clearance'}[p.reasonForCall?.reasonForCall]||p.reasonForCall?.reasonForCallDesc||'Port call');
  // Requested on screen: the rotation shows when each call is scheduled, not only the voyage window.
  const eventDate=(p,code)=>{const events=(p.eventLogs||[]).filter(e=>e.event?.eventCode===code&&e.eventLogDate);if(events.length>1)throw Error('AMBIGUOUS_CALL_DATE');return events.length?callTime(events[0].eventLogDate):null;};
  const census=p=>{seen.calls++;for(const e of p.eventLogs||[]){const c=e.event?.eventCode;if(c)seen.codes[c]=(seen.codes[c]||0)+1;}};
  const fixed=(p,code)=>Boolean(p[code==='ARR'?'arrivalFixed':'departureFixed']||p.eventLogs?.some(e=>e.event?.eventCode===code&&e.isDateFixed));
- return {id:`voyage-${i+1}`,dataloyId:String(r.key),name:r.vessel?.vesselName||'Vessel unavailable',voyage:`${r.voyageHeader?.voyageStartYear??'?'} / ${r.voyageHeader?.voyageNo??'?'}`,reference:String(r.voyageHeader?.referenceNo??''),status:'OPR',start:utc(r.voyageStartDateGMT),end:utc(r.voyageEndDateGMT),ports:(r.portCalls||[]).slice().sort((a,b)=>(a.portCallSequence??Infinity)-(b.portCallSequence??Infinity)).map(p=>(census(p),{name:p.port?.portName||'Port unavailable',sequence:p.portCallSequence??null,purpose:purpose(p),arrival:eventDate(p,'ARR'),departure:eventDate(p,'DEP'),arrivalFixed:fixed(p,'ARR'),departureFixed:fixed(p,'DEP')}))};
+ return {id:`voyage-${i+1}`,dataloyId:String(r.key),name:r.vessel?.vesselName||'Vessel unavailable',voyage:`${r.voyageHeader?.voyageStartYear??'?'} / ${r.voyageHeader?.voyageNo??'?'}`,reference:String(r.voyageHeader?.referenceNo??''),status:'OPR',charterer:r.voyageHeader?.charteringResponsible?.userName||null,operator:r.voyageHeader?.operator?.userName||null,freightInvoice:r.freightInvoice?{status:r.freightInvoice.status,invoiceCount:r.freightInvoice.invoiceCount,pendingLineCount:r.freightInvoice.pendingLineCount,statusCodes:r.freightInvoice.statusCodes}:null,start:utc(r.voyageStartDateGMT),end:utc(r.voyageEndDateGMT),ports:(r.portCalls||[]).slice().sort((a,b)=>(a.portCallSequence??Infinity)-(b.portCallSequence??Infinity)).map(p=>(census(p),{name:p.port?.portName||'Port unavailable',sequence:p.portCallSequence??null,purpose:purpose(p),arrival:eventDate(p,'ARR'),departure:eventDate(p,'DEP'),arrivalFixed:fixed(p,'ARR'),departureFixed:fixed(p,'DEP')}))};
 })};
 for(const v of snapshot.voyages)for(const p of v.ports){if(p.arrival)seen.withArrival++;if(p.departure)seen.withDeparture++;}
 const logged=Object.values(seen.codes).reduce((a,b)=>a+b,0);

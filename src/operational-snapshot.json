@@ -1,7 +1,8 @@
 {
-  "fetchedAt": "2026-09-15T14:49:32.205Z",
+  "fetchedAt": "2026-09-15T15:11:46.112Z",
   "source": "Dataloy",
   "mode": "published-snapshot",
+  "scheduledRefresh": false,
   "voyages": [
     {
       "id": "voyage-1",
@@ -10,6 +11,16 @@
       "voyage": "2026 / 1",
       "reference": "WLLADOGA0001001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-07-03T22:01:00Z",
       "end": "2026-09-12T07:30:00Z",
       "ports": [
@@ -49,6 +60,17 @@
       "voyage": "2026 / 2",
       "reference": "CRSTS002",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-04-29T14:36:00Z",
       "end": "2026-07-14T11:57:09Z",
       "ports": [
@@ -88,6 +110,17 @@
       "voyage": "2026 / 1",
       "reference": "MARCO001",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-05-20T13:00:00Z",
       "end": "2026-09-04T03:29:24Z",
       "ports": [
@@ -127,6 +160,16 @@
       "voyage": "2026 / 1",
       "reference": "DANNY001001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Laila Ibrahim",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-03-11T21:00:00Z",
       "end": "2026-07-09T11:00:00Z",
       "ports": [
@@ -211,6 +254,16 @@
       "voyage": "2026 / 1",
       "reference": "PTLS001",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-05-27T13:00:00Z",
       "end": "2026-09-08T23:08:12Z",
       "ports": [
@@ -250,6 +303,16 @@
       "voyage": "2026 / 1",
       "reference": "ANEMOS001",
       "status": "OPR",
+      "charterer": "Mohneesh Bhutani",
+      "operator": "Laila Ibrahim",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-05-01T02:33:00Z",
       "end": "2026-06-05T12:50:00Z",
       "ports": [
@@ -325,6 +388,16 @@
       "voyage": "2026 / 1",
       "reference": "STARVIRGINIA001",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "not-invoiced",
+        "invoiceCount": 0,
+        "pendingLineCount": 2,
+        "statusCodes": [
+          "PEN"
+        ]
+      },
       "start": "2026-06-30T00:36:00Z",
       "end": "2026-09-30T23:18:17Z",
       "ports": [
@@ -373,6 +446,16 @@
       "voyage": "2026 / 1",
       "reference": "AMIRANORA001001",
       "status": "OPR",
+      "charterer": "Sadek Abdoon",
+      "operator": null,
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-06-29T10:10:00Z",
       "end": "2026-08-27T13:50:00Z",
       "ports": [
@@ -412,6 +495,17 @@
       "voyage": "2026 / 1",
       "reference": "LSKR001",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-06-15T21:01:00Z",
       "end": "2026-08-17T22:30:00Z",
       "ports": [
@@ -451,6 +545,14 @@
       "voyage": "2026 / 3",
       "reference": "JIA YUE003",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "not-registered",
+        "invoiceCount": 0,
+        "pendingLineCount": 0,
+        "statusCodes": []
+      },
       "start": "2026-06-18T15:00:00Z",
       "end": "2026-09-23T08:00:00Z",
       "ports": [
@@ -499,6 +601,17 @@
       "voyage": "2026 / 1",
       "reference": "JINXING001",
       "status": "OPR",
+      "charterer": "Aditya Gupta",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-07-30T00:00:00Z",
       "end": "2026-09-23T04:05:00Z",
       "ports": [
@@ -547,6 +660,16 @@
       "voyage": "2026 / 1",
       "reference": "AFRWARBLER001001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-07-24T10:00:00Z",
       "end": "2026-09-16T14:00:00Z",
       "ports": [
@@ -586,6 +709,16 @@
       "voyage": "2026 / 1",
       "reference": "KACEY0001001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-08-23T11:42:00Z",
       "end": "2026-09-30T07:42:02Z",
       "ports": [
@@ -643,6 +776,17 @@
       "voyage": "2026 / 7",
       "reference": "NOUR007",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-07-21T08:20:00Z",
       "end": "2026-09-17T19:54:00Z",
       "ports": [
@@ -700,6 +844,16 @@
       "voyage": "2026 / 1",
       "reference": "PICTOR001",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Laila Ibrahim",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-06-25T21:01:00Z",
       "end": "2026-07-18T21:40:40Z",
       "ports": [
@@ -757,6 +911,17 @@
       "voyage": "2026 / 1",
       "reference": "DOKOS001",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "assembled",
+        "invoiceCount": 0,
+        "pendingLineCount": 2,
+        "statusCodes": [
+          "INV",
+          "PEN"
+        ]
+      },
       "start": "2026-07-19T16:54:00Z",
       "end": "2026-10-14T13:21:14Z",
       "ports": [
@@ -841,6 +1006,14 @@
       "voyage": "2026 / 6",
       "reference": "JFSN006",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "not-registered",
+        "invoiceCount": 0,
+        "pendingLineCount": 0,
+        "statusCodes": []
+      },
       "start": "2026-06-16T23:30:00Z",
       "end": "2026-09-26T14:34:59Z",
       "ports": [
@@ -907,6 +1080,17 @@
       "voyage": "2026 / 1",
       "reference": "SLADYIII001",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-07-09T21:01:00Z",
       "end": "2026-10-01T20:30:23Z",
       "ports": [
@@ -991,6 +1175,16 @@
       "voyage": "2026 / 1",
       "reference": "KSUKRET0001001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-08-22T22:00:00Z",
       "end": "2026-10-07T03:29:40Z",
       "ports": [
@@ -1039,6 +1233,16 @@
       "voyage": "2026 / 2",
       "reference": "TUOFU8002",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-08-23T16:00:00Z",
       "end": "2026-10-21T15:10:43Z",
       "ports": [
@@ -1114,6 +1318,17 @@
       "voyage": "2026 / 2",
       "reference": "KMXEVDOKIA002",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "assembled",
+        "invoiceCount": 0,
+        "pendingLineCount": 2,
+        "statusCodes": [
+          "INV",
+          "PEN"
+        ]
+      },
       "start": "2026-08-19T01:42:00Z",
       "end": "2026-09-22T12:48:33Z",
       "ports": [
@@ -1162,6 +1377,16 @@
       "voyage": "2026 / 1",
       "reference": "LMZARL0001001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "not-invoiced",
+        "invoiceCount": 0,
+        "pendingLineCount": 3,
+        "statusCodes": [
+          "PEN"
+        ]
+      },
       "start": "2026-08-26T22:06:00Z",
       "end": "2026-11-17T10:52:17Z",
       "ports": [
@@ -1246,6 +1471,14 @@
       "voyage": "2026 / 8",
       "reference": "BAORUN008",
       "status": "OPR",
+      "charterer": "Dae Hee Won",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "not-registered",
+        "invoiceCount": 0,
+        "pendingLineCount": 0,
+        "statusCodes": []
+      },
       "start": "2026-08-25T00:48:00Z",
       "end": "2026-10-14T14:29:59Z",
       "ports": [
@@ -1294,6 +1527,14 @@
       "voyage": "2026 / 23",
       "reference": "SAFA023",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "not-registered",
+        "invoiceCount": 0,
+        "pendingLineCount": 0,
+        "statusCodes": []
+      },
       "start": "2026-08-27T09:40:00Z",
       "end": "2026-10-11T09:40:00Z",
       "ports": [
@@ -1333,6 +1574,16 @@
       "voyage": "2026 / 3",
       "reference": "MARIGOULA003",
       "status": "OPR",
+      "charterer": "Aditya Gupta",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "not-invoiced",
+        "invoiceCount": 0,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN"
+        ]
+      },
       "start": "2026-09-08T06:00:00Z",
       "end": "2026-10-22T01:04:00Z",
       "ports": [
@@ -1363,6 +1614,17 @@
       "voyage": "2026 / 3",
       "reference": "SAFNSR003",
       "status": "OPR",
+      "charterer": "Dae Hee Won",
+      "operator": "Laila Ibrahim",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-07-06T04:00:00Z",
       "end": "2026-10-02T21:00:00Z",
       "ports": [
@@ -1492,6 +1754,16 @@
       "voyage": "2026 / 1",
       "reference": "JIADA001",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 2,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-07-07T23:06:00Z",
       "end": "2026-10-28T23:05:15Z",
       "ports": [
@@ -1594,6 +1866,17 @@
       "voyage": "2026 / 7",
       "reference": "ALND007",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 2,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-07-27T01:00:00Z",
       "end": "2026-10-09T08:06:04Z",
       "ports": [
@@ -1642,6 +1925,17 @@
       "voyage": "2026 / 1",
       "reference": "KRMX001",
       "status": "OPR",
+      "charterer": "Dae Hee Won",
+      "operator": "Amit Ashar",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 3,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-07-16T14:36:00Z",
       "end": "2026-10-24T23:55:15Z",
       "ports": [
@@ -1699,6 +1993,16 @@
       "voyage": "2026 / 1",
       "reference": "WDALRB001",
       "status": "OPR",
+      "charterer": "Deepak Nair",
+      "operator": "Anishkar Bhaskaran",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-08-11T13:15:00Z",
       "end": "2026-09-18T02:07:04Z",
       "ports": [
@@ -1801,6 +2105,16 @@
       "voyage": "2026 / 1",
       "reference": "YEDIT001",
       "status": "OPR",
+      "charterer": "Sadek Abdoon",
+      "operator": "Laila Ibrahim",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-08-06T02:53:00Z",
       "end": "2026-08-24T09:00:00Z",
       "ports": [
@@ -1849,6 +2163,14 @@
       "voyage": "2026 / 1",
       "reference": "FAHD001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "not-registered",
+        "invoiceCount": 0,
+        "pendingLineCount": 0,
+        "statusCodes": []
+      },
       "start": "2026-08-04T18:00:00Z",
       "end": "2026-09-01T04:28:02Z",
       "ports": [
@@ -1915,6 +2237,17 @@
       "voyage": "2026 / 1",
       "reference": "WAEEL001",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "assembled",
+        "invoiceCount": 0,
+        "pendingLineCount": 2,
+        "statusCodes": [
+          "INV",
+          "PEN"
+        ]
+      },
       "start": "2026-09-02T05:30:00Z",
       "end": "2026-10-18T05:05:23Z",
       "ports": [
@@ -1981,6 +2314,17 @@
       "voyage": "2026 / 5",
       "reference": "ALLULU005",
       "status": "OPR",
+      "charterer": "Aditya Gupta",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-08-08T20:00:00Z",
       "end": "2026-09-19T15:33:36Z",
       "ports": [
@@ -2029,6 +2373,17 @@
       "voyage": "2026 / 4",
       "reference": "ALDANAH004",
       "status": "OPR",
+      "charterer": "Aditya Gupta",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-08-10T21:06:00Z",
       "end": "2026-10-12T05:51:24Z",
       "ports": [
@@ -2122,6 +2477,16 @@
       "voyage": "2026 / 1",
       "reference": "DNTL001",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-08-23T12:42:00Z",
       "end": "2026-10-28T02:37:32Z",
       "ports": [
@@ -2206,6 +2571,17 @@
       "voyage": "2026 / 27",
       "reference": "AMAN027",
       "status": "OPR",
+      "charterer": "Daegun Kim",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 2,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-08-05T17:00:00Z",
       "end": "2026-10-09T20:09:40Z",
       "ports": [
@@ -2263,6 +2639,17 @@
       "voyage": "2026 / 7",
       "reference": "ALMAQAM007",
       "status": "OPR",
+      "charterer": "Mohneesh Bhutani",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "partial",
+        "invoiceCount": 1,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN",
+          "POS"
+        ]
+      },
       "start": "2026-08-28T12:06:00Z",
       "end": "2026-09-30T06:00:18Z",
       "ports": [
@@ -2311,6 +2698,16 @@
       "voyage": "2026 / 28",
       "reference": "AMAL028",
       "status": "OPR",
+      "charterer": "Dae Hee Won",
+      "operator": "Laila Ibrahim",
+      "freightInvoice": {
+        "status": "not-invoiced",
+        "invoiceCount": 0,
+        "pendingLineCount": 3,
+        "statusCodes": [
+          "PEN"
+        ]
+      },
       "start": "2026-09-02T14:12:00Z",
       "end": "2026-11-18T19:05:31Z",
       "ports": [
@@ -2386,6 +2783,16 @@
       "voyage": "2026 / 6",
       "reference": "ALWATHBA006",
       "status": "OPR",
+      "charterer": "Aditya Gupta",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "assembled",
+        "invoiceCount": 0,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "INV"
+        ]
+      },
       "start": "2026-09-01T11:30:00Z",
       "end": "2026-10-20T10:33:20Z",
       "ports": [
@@ -2443,6 +2850,16 @@
       "voyage": "2026 / 10",
       "reference": "ALSAAD010",
       "status": "OPR",
+      "charterer": "Mohneesh Bhutani",
+      "operator": "Sachin Taneja",
+      "freightInvoice": {
+        "status": "not-invoiced",
+        "invoiceCount": 0,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN"
+        ]
+      },
       "start": "2026-09-15T02:30:00Z",
       "end": "2026-10-30T11:32:00Z",
       "ports": [
@@ -2500,6 +2917,16 @@
       "voyage": "2026 / 1",
       "reference": "VTRE0001001",
       "status": "OPR",
+      "charterer": "Mathias Pedersen",
+      "operator": null,
+      "freightInvoice": {
+        "status": "invoiced",
+        "invoiceCount": 1,
+        "pendingLineCount": 0,
+        "statusCodes": [
+          "POS"
+        ]
+      },
       "start": "2026-04-27T22:00:00Z",
       "end": "2026-10-01T22:18:32Z",
       "ports": [
@@ -2539,6 +2966,16 @@
       "voyage": "2026 / 1",
       "reference": "CHLS001",
       "status": "OPR",
+      "charterer": "Dae Hee Won",
+      "operator": "Bahumin Abdul Sukkur",
+      "freightInvoice": {
+        "status": "not-invoiced",
+        "invoiceCount": 0,
+        "pendingLineCount": 1,
+        "statusCodes": [
+          "PEN"
+        ]
+      },
       "start": "2026-09-06T10:30:00Z",
       "end": "2026-11-27T23:08:27Z",
       "ports": [

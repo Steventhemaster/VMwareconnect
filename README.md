@@ -19,12 +19,13 @@ the comparison product described below. Every screen states this.
 | Capability | State |
 |---|---|
 | Dataloy OAuth + Operational voyage read | verified |
-| Published snapshot — 43 voyages / 43 vessels / 229 port calls, with call purpose and fixed-date flags | published, no auto-refresh |
+| Published snapshot — 43 voyages / 43 vessels / 229 port calls, with call purpose and fixed-date flags | published; daily 09:00 Dubai workflow prepared (activation shown on site) |
 | Outlook vessel report collection | not connected |
 | Vessel position / map | none held — nothing plotted |
 | Search, sort, charterer / operator filter | built |
 | Port call dates in the rotation | published with local arrival/departure dates and fixed/planned labels |
-| Voyage parties, cargo laycan, freight, port costs, invoicing, laytime — amounts and charterer names included | screens built against the agreed contract; collection pending |
+| Responsible charterer, operator and freight invoice status | collected and published; no invoice amounts exposed |
+| Cargo laycan, freight amounts, port costs and laytime | optional screens; collection pending |
 | Report ↔ Dataloy comparison | not performed |
 | Sign-in and fleet-scoped permissions | not implemented — see the open question below |
 
@@ -115,3 +116,5 @@ v2 wins, and the original assumptions are not treated as verified environment re
 [04 Dataloy API](docs/04-dataloy-api.md) · [05 Reconciliation](docs/05-reconciliation.md) ·
 [06 MCP tools](docs/06-mcp-tools.md) · [07 Dashboard](docs/07-dashboard.md) ·
 [08 Roadmap](docs/08-roadmap.md) · [09 Open questions](docs/09-open-questions.md)
+
+Daily refresh setup and field definitions: [Daily refresh](docs/DAILY-REFRESH.md).

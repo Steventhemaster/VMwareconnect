@@ -64,8 +64,8 @@ export function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'
 export function snapshotCsv(rows,asOf){
  const cell=v=>'"'+String(v??'').replace(/^[=+@-]/,"'$&").replaceAll('"','""')+'"';
  const parties=rows.some(v=>v.charterer||v.operator),cargo=rows.some(v=>v.commercial?.cargo),hasLaycan=rows.some(v=>laycan(v));
- const head=['Vessel','Voyage','Reference','Status',...parties?['Charterer','Operator']:[],...cargo?['Cargo']:[],...hasLaycan?['Laycan from','Laycan to']:[],'Ports in sequence','Registered start UTC','Registered end UTC'];
- const line=v=>{const l=laycan(v);return [v.name,v.voyage,v.reference,v.status,...parties?[v.charterer,v.operator]:[],...cargo?[v.commercial?.cargo?.description]:[],...hasLaycan?[l?.from,l?.to]:[],v.ports.map(p=>p.name).join(' → '),v.start,v.end];};
+ const head=['Vessel','Voyage','Reference','Status',...parties?['Responsible Charterer','Operator']:[],...cargo?['Cargo']:[],...hasLaycan?['Laycan from','Laycan to']:[],'Freight invoice status','Ports in sequence','Registered start UTC','Registered end UTC'];
+ const line=v=>{const l=laycan(v);return [v.name,v.voyage,v.reference,v.status,...parties?[v.charterer,v.operator]:[],...cargo?[v.commercial?.cargo?.description]:[],...hasLaycan?[l?.from,l?.to]:[],v.freightInvoice?.status||'unknown',v.ports.map(p=>p.name).join(' → '),v.start,v.end];};
  return '﻿'+[['DATALOY SNAPSHOT',asOf],head,...rows.map(line)].map(r=>r.map(cell).join(',')).join('\r\n');
 }
 

@@ -25,3 +25,5 @@
 /* Port-local dates stay beside their call, with completion distinct from a next stop. */
 .route-context .route-date{grid-column:1/-1;display:block;color:#56677d;font-size:10px;line-height:1.5;white-space:normal;margin-top:3px}
 .route-context li{padding-bottom:12px}.rotation-completed{margin:0 0 12px 26px}.port-sequence+.subtle-note{line-height:1.8}
+
+.staff-cell{min-width:120px;max-width:165px;white-space:normal;line-height:1.6}.invoice-cell{min-width:148px}.invoice-cell small{display:block;margin-top:7px;color:#65758a}.freight-detail{padding:16px;background:#f5f7fa;border-radius:6px}.freight-detail p{font-size:12px;line-height:1.7;color:#65758a}.demo-notice{flex-wrap:wrap}
