@@ -46,10 +46,30 @@ Connection verification against a real tenant is server-side only and never part
 bundle:
 
 ```sh
-node --env-file=.env.local scripts/dataloy-probe.mjs      # connectivity and auth
-node scripts/fetch-operational.mjs                        # full Operational pull into data/
-node scripts/prepare-public-snapshot.mjs                  # project to approved public fields
+node --env-file=.env.local scripts/dataloy-probe.mjs        # connectivity and auth
+node --env-file=.env.local scripts/fetch-operational.mjs    # full Operational pull into data/
+node scripts/prepare-public-snapshot.mjs                    # project to approved public fields
 ```
+
+The pull reads its credentials from the environment, so it needs `--env-file` exactly
+as the probe does. Only the projector runs without it: it reads `data/` and writes
+`src/operational-snapshot.json`, and never touches the network.
+
+### Refreshing the snapshot
+
+The projector prints a one-line report. Read it before committing — it is the only
+thing that tells you whether the port call dates landed:
+
+```jsonc
+{"voyages":47,"vessels":43,"portCalls":243,"eventLogs":410,
+ "withArrival":181,"withDeparture":144,"eventCodes":{"ARR":181,"DEP":144}}
+```
+
+`withArrival` and `withDeparture` at zero while `eventLogs` is not means this tenant
+names its events something other than `ARR` and `DEP`. The projector says so on stderr
+and names the codes it actually saw; put those codes into `eventDate` in
+`scripts/prepare-public-snapshot.mjs` and run it again. Committing a snapshot in that
+state publishes a rotation with no dates and no error.
 
 ## Documents
 

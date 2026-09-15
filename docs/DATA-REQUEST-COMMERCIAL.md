@@ -189,11 +189,30 @@ of it; it now projects the first `ARR` and `DEP` event date per call as `arrival
 and `departure`, and the rotation renders them on its existing label line, so the
 table shows when each call is scheduled rather than only the voyage window.
 
-**This needs no new API call and no field-path research — only a re-run.** Run the
-existing pull and projector against the tenant and the dates appear. Note that it
-does widen what is published, from a voyage window to a dated rotation; the user
-asked for it directly, which settles the scope question for these dates but not for
-the amounts or the counterparty names above.
+**This needs no new API call and no field-path research — only a re-run**, with one
+check afterwards. Note that it does widen what is published, from a voyage window to
+a dated rotation; the user asked for it directly, which settles the scope question
+for these dates.
+
+The one thing that is *not* verified is the event codes. `ARR` and `DEP` are an
+assumption: the fixed-date flags in the published snapshot can be satisfied by
+`portCall.arrivalFixed` on its own, so the `eventLogs` branch may never have run
+against this tenant's data. If the codes differ, the projector emits nulls and the
+rotation simply shows no dates — a silent failure.
+
+So the projector now counts what it sees and prints it, and writes `NO_CALL_DATES`
+to stderr naming the codes it actually found when none of them match. Run it, read
+the one-line report, and only then commit:
+
+```sh
+node --env-file=.env.local scripts/fetch-operational.mjs
+node scripts/prepare-public-snapshot.mjs
+```
+
+`tests/projector.test.js` covers this end to end against fixtures shaped like the
+real pull — the dates, the untouched meaning of the fixed-date flags, the
+unrecognised-code warning, and the existing refusals on an incomplete or
+non-Operational pull.
 
 ## Sources consulted
 
