@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {dateState,selectVoyages,sortVoyages,partyOptions,laycan,laycanLabel,escapeHtml,snapshotCsv} from '../src/operational.js';
+import {dateState,selectVoyages,sortVoyages,partyOptions,laycan,laycanLabel,money,amountLabel,escapeHtml,snapshotCsv} from '../src/operational.js';
 const asOf='2026-09-14T12:00:00Z';
 const row={id:'a',name:'TEST SHIP',voyage:'2026 / 1',reference:'42',status:'OPR',start:'2026-09-01T00:00:00Z',end:'2026-09-13T00:00:00Z',ports:[{name:'TEST PORT',sequence:1}]};
 test('OPR remains distinct from dates; missing dates never imply active sailing',()=>{
@@ -70,4 +70,18 @@ test('laycan labels drop the repeated month and year but never the differing one
  assert.equal(laycanLabel(win('2026-12-28T00:00:00Z','2027-01-04T00:00:00Z')),'28 Dec 2026 – 04 Jan 2027');
  assert.equal(laycanLabel(win('2026-07-24T00:00:00Z',null)),'24 Jul 2026');
  assert.equal(laycanLabel(row),null);
+});
+test('money formats the registered currency and survives a bad currency code',()=>{
+ assert.equal(money(1250000,'USD'),'USD 1,250,000');
+ assert.equal(money(12.75,'EUR'),'EUR 12.75');
+ assert.equal(money(4200,'NOTACODE'),'NOTACODE 4,200');
+ assert.equal(money(4200,null),'USD 4,200');
+ for(const bad of [null,undefined,'1000',NaN,Infinity])assert.equal(money(bad,'USD'),null,`${bad} must not format`);
+});
+test('an absent figure, an unregistered one and an uncollected amount never read alike',()=>{
+ assert.equal(amountLabel(undefined),'Not collected');
+ assert.equal(amountLabel({registered:false}),'Not registered');
+ assert.equal(amountLabel({registered:true,currency:'USD',amount:null}),'Registered · amount not collected');
+ assert.equal(amountLabel({registered:null}),'Not determined');
+ assert.equal(amountLabel({registered:true,currency:'USD',amount:0}),'USD 0');
 });

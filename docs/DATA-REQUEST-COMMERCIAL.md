@@ -4,6 +4,9 @@ This is a request to the collection side. Requested by the user on 2026-09-15:
 invoice status for laden voyages and whether demurrage / despatch has been
 registered; then, in a second pass the same day, the responsible charterer and
 operator, the cargo laycan, and freight and port costs on a voyage detail card.
+Asked a third time, on the same day, to include the **amounts** and the
+**charterer names** in full — see [Publishing scope](#publishing-scope), which
+records that decision and what was said before it.
 
 **The screens are built and waiting.** Every field below already has a place in the
 UI, and every one of them degrades on its own: a field that is absent draws no
@@ -18,7 +21,7 @@ Where each field appears:
 | `charterer`, `operator` | Filter beside the search box, a sort option, free-text search, and two cells in the voyage card |
 | `commercial.cargo.laycanFrom` / `laycanTo` | Under the voyage number in the Voyages table, and in the voyage card |
 | `commercial.cargo.description`, `count`, `laden` | Free-text search, and the voyage card |
-| `commercial.freight`, `portCosts`, `invoices`, `laytime` | The Voyage commercials block of the voyage card |
+| `commercial.freight`, `portCosts`, `invoices`, `laytime`, with amounts | The Voyage commercials block of the voyage card |
 | `ports[].arrival` / `departure` | On the port rotation's own label line, and against each call in the card |
 
 ## Why it cannot be derived from what is published
@@ -37,29 +40,33 @@ exactly the inference this product refuses everywhere else.
 The one exception is the port call dates, which are already pulled and simply
 dropped — see [Already pulled](#already-pulled) below.
 
-## Publishing scope — read this before adding amounts or counterparties
+<a id="publishing-scope"></a>
 
-**Do not publish monetary values.** Freight, port costs, invoice amounts and
-demurrage / despatch amounts are commercial figures, and the site is currently
-served without authentication. The contract below carries `registered`, `currency`
-and `count` for each of them, and leaves `amount` as `null`. The screens already
-render that honestly: a freight with no amount reads *Registered · amount not
-published*, which is different from *Not registered* and different again from
-*Not collected*.
+## Publishing scope — decided
 
-**Charterer names are a second, separate decision.** The request was for a
-charterer and operator filter, and the screens support it. But a charterer name
-identifies a counterparty, which is arguably more sensitive than the schedule
-already published — and unlike the amounts, it has no half-measure: the filter
-either carries the real name or it does not exist. Publishing `operator` (an
-internal name) without `charterer` is a usable middle position, and the collection
-side should confirm which of the two is wanted before the first pull that includes
-either.
+**Pull and publish the amounts and the charterer names in full.** Freight, port
+costs, invoice totals and the demurrage / despatch amount all carry a real
+`amount`, and `charterer` carries the counterparty's real name.
 
-Both of these come back to the same unresolved question: the site has no sign-in.
-`ARCHITECTURE-V2.md` §12 already requires verified sign-in and fleet-scoped
-permissions for any shared deployment, and until that exists, amounts stay out and
-counterparty names need an explicit decision.
+An earlier revision of this document withheld both. The reason it gave still holds
+as a fact about the deployment, so it is recorded here rather than deleted: the
+site is served from a public URL with **no sign-in**, so every figure and every
+counterparty name in the snapshot is readable by anyone who has the link, and
+stays readable in caches and search indexes after a later snapshot removes it.
+`ARCHITECTURE-V2.md` §12 requires verified sign-in and fleet-scoped permissions
+for any shared deployment, and that is still not built.
+
+The user was told this and asked for the amounts and the names anyway, which is
+their call to make about their own commercial data. So the contract below carries
+them, and the screens render them. What follows from that, for whoever runs the
+pull:
+
+- Treat `src/operational-snapshot.json` as a commercial document from the first
+  pull that includes these fields. It is committed to the repository and served
+  publicly, so a wrong pull is not quietly fixable by a later one.
+- Sign-in is the one change that would retire this whole section. Until it exists,
+  every snapshot published is a full disclosure of freight, port costs and
+  counterparties for 47 live voyages.
 
 ## Contract
 
@@ -97,17 +104,19 @@ negative finding.
     },
     "freight": {
       "registered": true,      // true | false | null
-      "currency": "USD",       // or null
-      "amount": null           // stays null while the site is unauthenticated
+      "currency": "USD",       // ISO 4217 code, or null for the tenant default
+      "amount": 1250000        // number as registered, or null if not collected
     },
     "portCosts": {
       "registered": true,
       "currency": "USD",
-      "amount": null,          // stays null while the site is unauthenticated
+      "amount": 318400,
       "count": 3               // number of port call cost entries, or null
     },
     "invoices": {
       "count": 3,
+      "currency": "USD",
+      "total": 84500,          // sum as registered, or null
       "statuses": [            // the tenant's own codes, not ours
         {"code": "RFP",  "label": "Ready for posting", "count": 2},
         {"code": "POST", "label": "Posted",            "count": 1}
@@ -115,7 +124,9 @@ negative finding.
     },
     "laytime": {
       "registered": true,      // true | false | null
-      "outcome": "demurrage"   // "demurrage" | "despatch" | "none" | null
+      "outcome": "demurrage",  // "demurrage" | "despatch" | "none" | null
+      "currency": "USD",
+      "amount": 42000          // the calculated amount, or null
     }
   }
 }
@@ -138,10 +149,17 @@ Rules for whoever builds the screens:
   read "Not collected" in the card and fall to the end of a party sort.
 - A laycan with only one side registered is shown as that one date, not as an
   open-ended range. Send whichever side exists and `null` for the other.
-- `freight.amount` and `portCosts.amount` stay `null` until the site has sign-in.
-  Send `registered` and `currency` regardless — the screens say "Registered ·
-  amount not published", which is the honest reading and is already distinct from
-  "Not registered".
+- Send every amount as a **number**, never a pre-formatted string, and put the
+  currency in its own `currency` field. The screens format it. A figure arriving as
+  `"USD 1,250,000"` will not format and will read as if no amount were collected.
+- Never compute an amount that the tenant does not state. If freight is registered
+  as a rate rather than a lump sum, send `amount: null` rather than multiplying it
+  out — the card then reads "Registered · amount not collected", which is true,
+  where a derived number would not be.
+- `amount: null` with `registered: true` is a normal state, not an error. It means
+  the figure exists in Dataloy but was not pulled, and reads differently from
+  `registered: false` ("Not registered") and from an absent group ("Not
+  collected").
 
 ## What to verify first
 

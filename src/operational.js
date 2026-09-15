@@ -42,6 +42,23 @@ export function laycanLabel(v,timeZone='UTC'){
  if(sameYear)return `${part(l.from,{day:'2-digit',month:'short'})} \u2013 ${full(l.to)}`;
  return `${full(l.from)} \u2013 ${full(l.to)}`;
 }
+// Money as registered in Dataloy. An unknown or malformed currency code must never
+// throw and take the whole card down with it, so the plain-code form is the fallback.
+export function money(value,currency){
+ if(typeof value!=='number'||!Number.isFinite(value))return null;
+ try{return new Intl.NumberFormat('en-GB',{style:'currency',currency:currency||'USD',currencyDisplay:'code',minimumFractionDigits:0,maximumFractionDigits:2}).format(value);}
+ catch{return `${currency?String(currency)+' ':''}${new Intl.NumberFormat('en-GB',{minimumFractionDigits:0,maximumFractionDigits:2}).format(value)}`;}
+}
+// One vocabulary for every figure on the card, so "none", "not yet pulled" and
+// "pulled, but the tenant has not registered it" never read the same.
+export function amountLabel(group){
+ if(!group)return 'Not collected';
+ const shown=money(group.amount,group.currency);
+ if(shown)return shown;
+ if(group.registered===false)return 'Not registered';
+ if(group.registered===true)return 'Registered \u00b7 amount not collected';
+ return 'Not determined';
+}
 export function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 export function snapshotCsv(rows,asOf){
  const cell=v=>'"'+String(v??'').replace(/^[=+@-]/,"'$&").replaceAll('"','""')+'"';

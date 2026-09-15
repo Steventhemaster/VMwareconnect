@@ -24,7 +24,7 @@ the comparison product described below. Every screen states this.
 | Vessel position / map | none held — nothing plotted |
 | Search, sort, charterer / operator filter | built |
 | Port call dates in the rotation | projected and rendered; needs one re-run of the pull to appear |
-| Voyage parties, cargo laycan, freight, port costs, invoicing, laytime | screens built against the agreed contract; collection pending |
+| Voyage parties, cargo laycan, freight, port costs, invoicing, laytime — amounts and charterer names included | screens built against the agreed contract; collection pending |
 | Report ↔ Dataloy comparison | not performed |
 | Sign-in and fleet-scoped permissions | not implemented — see the open question below |
 
@@ -82,11 +82,12 @@ The published site has no authentication, which conflicts with Architecture v2 �
 commercial fleet's forward schedule and port rotation. The intended audience should be
 settled before the next snapshot is published.
 
-This now blocks two specific fields rather than staying abstract. Freight and port cost
-**amounts** stay out of the snapshot until there is a sign-in, and **charterer names**
-identify counterparties and need an explicit decision of their own. Both are covered in
-the [data request](docs/DATA-REQUEST-COMMERCIAL.md); the screens for both are built and
-render honestly without them.
+This is no longer abstract. The next snapshot is agreed to carry **freight, port cost,
+invoice and demurrage amounts** and **charterer names** — the figures and counterparties
+for 47 live voyages, on a public URL, readable by anyone with the link and cached beyond
+any later removal. That was decided knowingly; the reasoning and what follows from it are
+recorded in the [data request](docs/DATA-REQUEST-COMMERCIAL.md). Sign-in is the single
+change that would close it.
 
 ## Earlier draft history
 
