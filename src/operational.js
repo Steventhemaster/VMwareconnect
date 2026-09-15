@@ -85,3 +85,59 @@ export function counts(rows,asOf){
   for(const v of rows){out[dateState(v,asOf)]++;out.calls+=(v.ports||[]).length;}
   return out;
 }
+
+/* ---------------------------------------------------------------------------
+   Cargo, invoicing and laytime.
+
+   The published snapshot does not carry these yet; the contract is written up in
+   docs/DATA-REQUEST-COMMERCIAL.md and the collection side is extending the pull.
+   Everything here reads an optional `commercial` object and degrades honestly:
+   a missing group is "not collected", an explicit null is "not determined", and
+   neither is ever shown as a zero or as a finding.
+   ------------------------------------------------------------------------ */
+
+const group=(g,shape)=>g&&typeof g==='object'?{present:true,...shape(g)}:{present:false};
+
+export function commercial(v){
+  const c=v&&typeof v.commercial==='object'?v.commercial:null;
+  return {
+    present:!!c,
+    cargo:group(c&&c.cargo,g=>({count:Number.isFinite(g.count)?g.count:null,
+                                laden:g.laden===true?true:g.laden===false?false:null})),
+    invoices:group(c&&c.invoices,g=>({count:Number.isFinite(g.count)?g.count:null,
+                                      statuses:Array.isArray(g.statuses)?g.statuses.filter(s=>s&&s.code):[]})),
+    laytime:group(c&&c.laytime,g=>({registered:g.registered===true?true:g.registered===false?false:null,
+                                    outcome:['demurrage','despatch','none'].includes(g.outcome)?g.outcome:null})),
+  };
+}
+
+/* The column only earns its place once at least one voyage carries the data.
+   A register of 47 rows all reading "not collected" is noise, so until then the
+   state is stated once, on the voyage drawer and on the connections page. */
+export function anyCommercial(rows){return rows.some(v=>v&&typeof v.commercial==='object');}
+
+export function ladenLabel(c){
+  if(!c.cargo.present)return {text:'not collected',tone:'none'};
+  if(c.cargo.laden===true)return {text:c.cargo.count?`Laden · ${c.cargo.count} cargo${c.cargo.count===1?'':'es'}`:'Laden',tone:'laden'};
+  if(c.cargo.laden===false)return {text:'Ballast',tone:'plain'};
+  return {text:'not determined',tone:'none'};
+}
+
+export function invoiceLabel(c){
+  if(!c.invoices.present)return {text:'not collected',tone:'none'};
+  const n=c.invoices.count, s=c.invoices.statuses;
+  if(n===0||(n===null&&!s.length))return {text:'No invoices',tone:'plain'};
+  const head=s.length?`${s[0].label||s[0].code} ${s[0].count??''}`.trim():null;
+  return {text:head?`${n??s.reduce((a,x)=>a+(x.count||0),0)} invoices · ${head}`:`${n} invoices`,tone:'plain',
+          detail:s.map(x=>`${x.label||x.code}: ${x.count??'—'}`).join(' · ')};
+}
+
+export function laytimeLabel(c){
+  if(!c.laytime.present)return {text:'not collected',tone:'none'};
+  if(c.laytime.registered===false)return {text:'Laytime not registered',tone:'open'};
+  if(c.laytime.registered===null)return {text:'not determined',tone:'none'};
+  if(c.laytime.outcome==='demurrage')return {text:'Demurrage registered',tone:'dem'};
+  if(c.laytime.outcome==='despatch')return {text:'Despatch registered',tone:'des'};
+  if(c.laytime.outcome==='none')return {text:'Registered · neither',tone:'plain'};
+  return {text:'Registered',tone:'plain'};
+}

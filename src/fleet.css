@@ -346,3 +346,27 @@ body.drawer-open{overflow:hidden}
   thead th{top:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ── cargo, invoicing and laytime ─────────────────────────────────────── */
+.cm{display:flex;flex-direction:column;gap:3px}
+.cm-chip{display:flex;align-items:baseline;gap:7px;font-size:12px;color:var(--ink);line-height:1.4}
+.cm-chip i{font-style:normal;font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);width:58px;flex:none}
+/* absent is quiet and italic: it is the absence of a reading, not a value */
+.cm-chip.t-none{color:var(--faint);font-style:italic}
+.cm-chip.t-plain{color:var(--muted)}
+.cm-chip.t-laden{color:var(--navy);font-weight:500}
+.cm-chip.t-dem{color:var(--flag);font-weight:500}
+.cm-chip.t-des{color:#1d7a4d;font-weight:500}
+.cm-chip.t-open{color:var(--hold)}
+.detail-grid strong.t-none{color:var(--faint);font-style:italic;font-weight:400}
+.detail-grid strong.t-dem{color:var(--flag)}
+.detail-grid strong.t-des{color:#1d7a4d}
+.detail-grid strong.t-laden{color:var(--navy)}
+@media (min-width:1201px){
+  /* five columns once the commercial data lands */
+  table.wide5 th:nth-child(1),table.wide5 td:nth-child(1){width:19%}
+  table.wide5 th:nth-child(2),table.wide5 td:nth-child(2){width:32%}
+  table.wide5 th:nth-child(3),table.wide5 td:nth-child(3){width:21%}
+  table.wide5 th:nth-child(4),table.wide5 td:nth-child(4){width:15%}
+  table.wide5 th:nth-child(5),table.wide5 td:nth-child(5){width:13%}
+}

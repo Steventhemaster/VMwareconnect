@@ -1,7 +1,8 @@
 import './fleet.css';
 import snapshot from './operational-snapshot.json';
 import {dateState,selectVoyages,escapeHtml as esc,snapshotCsv,
-        STATE_META,dayDelta,deltaShort,sortVoyages,focusIndex,callStage,counts} from './operational.js';
+        STATE_META,dayDelta,deltaShort,sortVoyages,focusIndex,callStage,counts,
+        commercial,anyCommercial,ladenLabel,invoiceLabel,laytimeLabel} from './operational.js';
 
 /* The snapshot carries registered voyage data only - vessel, voyage number,
    reference, OPR status, registered start/end and the ordered port calls with
@@ -12,6 +13,10 @@ const rows=snapshot.voyages, asOf=snapshot.fetchedAt;
 const c=counts(rows,asOf);
 const overdue=sortVoyages(rows.filter(v=>dateState(v,asOf)==='past'),asOf,'delta');
 const worst=overdue.length?dayDelta(overdue[0],asOf):0;
+/* The commercial column earns its place only once the data exists. Until
+   then the state is stated once, in the drawer and on Connections. */
+const showCommercial=anyCommercial(rows);
+const COLS=showCommercial?5:4;
 
 const DATALOY_VOYAGE='https://safeeninvictus.dataloy.com/#/voyages/voyage-drawer/';
 const st=v=>STATE_META[dateState(v,asOf)];
@@ -68,6 +73,14 @@ function route(v){
  <div class="rot-foot"><span class="num">${fmtDay(v.start)||'\u2014'} \u2192 ${fmtDay(v.end)||'\u2014'}</span><span>registered start to end \u00b7 ${p.length} calls in rotation</span></div>`;
 }
 
+/* Three registration states, each of which can be absent. Absent never reads as
+   zero and never as a finding. */
+function cmCell(v){
+ const c=commercial(v);
+ const bits=[['Cargo',ladenLabel(c)],['Invoicing',invoiceLabel(c)],['Laytime',laytimeLabel(c)]];
+ return `<span class="cm">${bits.map(([k,l])=>`<span class="cm-chip t-${l.tone}"${l.detail?` title="${esc(l.detail)}"`:''}><i>${k}</i>${esc(l.text)}</span>`).join('')}</span>`;
+}
+
 function fleet(){
  return heading('Voyages','Operational voyages as registered in Dataloy, with the registered rotation and schedule for each one.',
   `<button class="button" id="export">${icon('download')}Export CSV</button><button class="button primary" data-page="brief">Voyage briefing</button>`)
@@ -76,7 +89,7 @@ function fleet(){
  <section class="panel"><div class="panel-head"><div><h2>Voyage register <span id="result-count">${c.all}</span></h2><p>Registered end dates are not verified arrival times or completion records.</p></div>
  <div class="panel-tools"><label class="search">${icon('search')}<input id="fleet-search" aria-label="Search vessel, voyage, reference or port" placeholder="Vessel, voyage, reference or port" value="${esc(search)}"></label>
  <select id="sort" aria-label="Sort voyages"><option value="name">Vessel name</option><option value="end">Registered end date</option><option value="attention">Needs attention first</option><option value="delta">Days vs end date</option></select></div></div>
- <table><thead><tr><th>Vessel / voyage</th><th>Port rotation &amp; schedule</th><th>Open in Dataloy</th><th class="right">Against end</th></tr></thead>
+ <table class="${showCommercial?'wide5':''}"><thead><tr><th>Vessel / voyage</th><th>Port rotation &amp; schedule</th>${showCommercial?'<th>Cargo &amp; commercial</th>':''}<th>Open in Dataloy</th><th class="right">Against end</th></tr></thead>
  <tbody id="vessel-rows"></tbody></table>
  <div class="panel-foot"><span id="result-footer"></span><span>OPR is a workflow status, not a sailing status</span></div></section>`;
 }
@@ -89,10 +102,11 @@ function renderRows(){
   return `<tr class="${flagClass}">
   <td><button class="v-cell" data-voyage="${v.id}"><span class="mk" title="${s.label}"><span class="sr-only">${s.label}. </span><span aria-hidden="true">${s.mark}</span></span><span><strong>${esc(v.name)}</strong><small>${esc(v.voyage)} &middot; OPR</small></span></button></td>
   <td data-label="Port rotation">${route(v)}</td>
+  ${showCommercial?`<td data-label="Cargo and commercial">${cmCell(v)}</td>`:''}
   <td data-label="Open in Dataloy"><a class="dl-btn" href="${DATALOY_VOYAGE}${encodeURIComponent(v.dataloyId)}" target="_blank" rel="noopener noreferrer" aria-label="Open voyage ${esc(v.reference)} in Dataloy VMS">Open in Dataloy${icon('arrow')}<span class="ref">${esc(v.reference)}</span></a></td>
   <td class="cell-delta"><span class="delta ${d.tone}" title="${d.title}"><b>${d.text}</b><small>vs end date</small></span></td>
   <td class="cell-flag" data-label="Schedule review"><span class="flag ${flagClass}"><span class="mk" aria-hidden="true">${s.mark}</span>${s.label}</span></td></tr>`;
- }).join(''):`<tr><td colspan="4"><div class="empty-state"><strong>No voyages found</strong><p>Try another vessel, reference or port.</p><button class="button" id="clear">Clear search and filter</button></div></td></tr>`;
+ }).join(''):`<tr><td colspan="${COLS}"><div class="empty-state"><strong>No voyages found</strong><p>Try another vessel, reference or port.</p><button class="button" id="clear">Clear search and filter</button></div></td></tr>`;
  document.querySelector('#result-count').textContent=list.length;
  document.querySelector('#result-footer').textContent=`Showing ${list.length} of ${c.all} voyages`;
  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter));
@@ -141,7 +155,7 @@ function connections(){
  +`<div class="connection-grid">
  <article class="connection-card"><span class="connection-label">DATALOY</span><h2>Voyage snapshot available</h2><span class="flag ok"><span class="mk">✓</span>Read access verified</span>
  <p>All ${c.all} voyages were retrieved across every page. This workspace publishes approved vessel names, voyage references, port rotations with their purpose, and registered schedules.</p>
- <ul><li class="done">OAuth token exchange</li><li class="done">Operational voyage read &middot; all pages</li><li class="done">Snapshot ${stamp(asOf)}</li><li>Automatic refresh</li><li>Field semantics verified against business cases</li></ul></article>
+ <ul><li class="done">OAuth token exchange</li><li class="done">Operational voyage read &middot; all pages</li><li class="done">Snapshot ${stamp(asOf)}</li><li>Automatic refresh</li><li>Field semantics verified against business cases</li><li>${showCommercial?'Cargo, invoicing and laytime collected':'Cargo, invoicing and laytime &mdash; requested, see docs/DATA-REQUEST-COMMERCIAL.md'}</li></ul></article>
  <article class="connection-card"><span class="connection-label">OUTLOOK</span><h2>Vessel reports pending</h2><span class="flag past"><span class="mk">■</span>Not connected</span>
  <p>Outlook screen access through VMware Horizon is verified. Automated noon, port and working report collection - and the reconciliation this product exists to perform - are still pending.</p>
  <ul><li class="done">Horizon screen access</li><li>Graph or COM collection path</li><li>Authenticated upload from the VM</li><li>Report parsing with per-field evidence</li><li>Reconciliation against these registered dates</li></ul></article>
@@ -183,6 +197,13 @@ function open(id){
  <div><small>Report reconciliation</small><strong>Not performed</strong><span>Outlook collection not connected</span></div></div>
  <h3 class="ports-heading">Registered port rotation</h3>
  <ol class="port-sequence">${v.ports.map((p,i)=>`<li class="stage-${callStage(p)}${i===f?' focus':''}"><span class="i">${String(i+1).padStart(2,'0')}</span><span class="nm">${esc(p.name)}</span><span class="st">${esc(p.purpose)} &middot; ${p.departureFixed?'Completed call':p.arrivalFixed?'In port':'Scheduled'}</span></li>`).join('')||'<li><span class="i">-</span><span class="nm">No port calls recorded</span><span class="st"></span></li>'}</ol>
+ <h3 class="ports-heading">Cargo, invoicing and laytime</h3>
+ ${(()=>{const q=commercial(v),L=ladenLabel(q),I=invoiceLabel(q),T=laytimeLabel(q);return `<div class="detail-grid">
+ <div><small>Cargo</small><strong class="t-${L.tone}">${esc(L.text)}</strong><span>${q.cargo.present?'registered cargoes on this voyage':'not requested from Dataloy yet'}</span></div>
+ <div><small>Invoicing</small><strong class="t-${I.tone}">${esc(I.text)}</strong><span>${q.invoices.present?esc(I.detail||'tenant invoice status codes'):'not requested from Dataloy yet'}</span></div>
+ <div><small>Laytime</small><strong class="t-${T.tone}">${esc(T.text)}</strong><span>${q.laytime.present?'demurrage or despatch registration':'not requested from Dataloy yet'}</span></div></div>
+ ${q.present?'':'<p class="subtle-note">These three are not in the published snapshot and are not requested by the collection script, so there is nothing here to show. The contract the collection side is working to is in docs/DATA-REQUEST-COMMERCIAL.md. No monetary amount is included while the site is served without a sign-in.</p>'}
+ ${q.laytime.present&&q.laytime.registered===false?'<p class="subtle-note">No laytime calculation is registered. That is not the same as there being no claim.</p>':''}`;})()}
  <p class="subtle-note">“Current schedule” means the first port call without a fixed departure in Dataloy. It does not claim the vessel is physically at that port. Position confirmation and Outlook report reconciliation are pending.</p>
  </div><div class="drawer-footer">Snapshot &middot; ${stamp(asOf)}</div></section>`;
  document.body.classList.add('drawer-open');
