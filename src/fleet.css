@@ -21,3 +21,7 @@
 .port-sequence .call-dates{margin-top:3px;font-variant-numeric:tabular-nums}
 .table-controls select{max-width:190px;text-overflow:ellipsis}
 @media(max-width:640px){.table-controls{flex-wrap:wrap}.table-controls .search{flex:1 0 100%}.table-controls select{flex:1;max-width:none}}
+
+/* Port-local dates stay beside their call, with completion distinct from a next stop. */
+.route-context .route-date{grid-column:1/-1;display:block;color:#56677d;font-size:10px;line-height:1.5;white-space:normal;margin-top:3px}
+.route-context li{padding-bottom:12px}.rotation-completed{margin:0 0 12px 26px}.port-sequence+.subtle-note{line-height:1.8}

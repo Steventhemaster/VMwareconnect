@@ -19,11 +19,11 @@ the comparison product described below. Every screen states this.
 | Capability | State |
 |---|---|
 | Dataloy OAuth + Operational voyage read | verified |
-| Published snapshot — 47 voyages / 43 vessels / 243 port calls, with call purpose and fixed-date flags | published, no auto-refresh |
+| Published snapshot — 43 voyages / 43 vessels / 229 port calls, with call purpose and fixed-date flags | published, no auto-refresh |
 | Outlook vessel report collection | not connected |
 | Vessel position / map | none held — nothing plotted |
 | Search, sort, charterer / operator filter | built |
-| Port call dates in the rotation | projected and rendered; needs one re-run of the pull to appear |
+| Port call dates in the rotation | published with local arrival/departure dates and fixed/planned labels |
 | Voyage parties, cargo laycan, freight, port costs, invoicing, laytime — amounts and charterer names included | screens built against the agreed contract; collection pending |
 | Report ↔ Dataloy comparison | not performed |
 | Sign-in and fleet-scoped permissions | not implemented — see the open question below |
@@ -39,7 +39,7 @@ Node.js 22 or later. The site is a dependency-free static build.
 npm ci
 npm run dev      # local
 npm test         # unit tests
-npm run build    # production build into dist/
+npm run build    # tests, then production build into dist/
 ```
 
 Connection verification against a real tenant is server-side only and never part of the
@@ -57,19 +57,15 @@ as the probe does. Only the projector runs without it: it reads `data/` and writ
 
 ### Refreshing the snapshot
 
-The projector prints a one-line report. Read it before committing — it is the only
-thing that tells you whether the port call dates landed:
+The projector reports voyage, vessel, port-call and ARR/DEP coverage counts.
+The current snapshot was retrieved at **2026-09-15 14:49:32 UTC**: 43 voyages,
+43 vessels and 229 port calls, all with arrival and departure dates.
 
-```jsonc
-{"voyages":47,"vessels":43,"portCalls":243,"eventLogs":410,
- "withArrival":181,"withDeparture":144,"eventCodes":{"ARR":181,"DEP":144}}
-```
+Unzoned port EventLog dates are local clock times (LT), not UTC. Voyage GMT fields
+remain UTC. An entirely missing date feed, invalid dates or ambiguous ARR/DEP
+entries fail before the previous public snapshot is replaced.
 
-`withArrival` and `withDeparture` at zero while `eventLogs` is not means this tenant
-names its events something other than `ARR` and `DEP`. The projector says so on stderr
-and names the codes it actually saw; put those codes into `eventDate` in
-`scripts/prepare-public-snapshot.mjs` and run it again. Committing a snapshot in that
-state publishes a rotation with no dates and no error.
+See [release verification and remaining work](docs/RELEASE-2026-09-15.md).
 
 ## Documents
 

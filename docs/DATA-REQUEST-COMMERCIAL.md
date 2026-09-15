@@ -104,7 +104,7 @@ negative finding.
     },
     "freight": {
       "registered": true,      // true | false | null
-      "currency": "USD",       // ISO 4217 code, or null for the tenant default
+      "currency": "USD",       // ISO 4217 code; null is uncollected, never assumed USD
       "amount": 1250000        // number as registered, or null if not collected
     },
     "portCosts": {
@@ -181,7 +181,15 @@ guessing them in the `fields` parameter risks failing the whole 47-voyage pull. 
 
 <a id="already-pulled"></a>
 
-## Already pulled — port call dates
+## Port call dates — now published
+
+Updated 2026-09-15: ARR/DEP codes and local time semantics are verified against
+the tenant UI. The current snapshot includes both dates for all 229 port calls.
+Unzoned dates remain LT; only explicitly zoned values become UTC. Projection
+fails before replacing the snapshot for invalid/ambiguous dates or a fully
+missing feed. See [release verification](RELEASE-2026-09-15.md).
+
+### Earlier implementation notes (superseded)
 
 `fetch-operational.mjs` already requests `portCalls.eventLogs.eventLogDate`,
 `isDateFixed` and `event.eventCode`. `prepare-public-snapshot.mjs` used to drop all

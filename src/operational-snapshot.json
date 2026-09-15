@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-15T09:55:05.500Z",
+  "fetchedAt": "2026-09-15T14:49:32.205Z",
   "source": "Dataloy",
   "mode": "published-snapshot",
   "voyages": [
@@ -17,6 +17,8 @@
           "name": "KALININGRAD",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-07-04T00:01:00",
+          "departure": "2026-07-15T18:45:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -24,6 +26,8 @@
           "name": "SKAW",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-07-17T16:00:00",
+          "departure": "2026-07-17T22:15:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -31,6 +35,8 @@
           "name": "CASABLANCA",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-07-24T14:40:00",
+          "departure": "2026-09-12T08:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         }
@@ -38,53 +44,6 @@
     },
     {
       "id": "voyage-2",
-      "dataloyId": "31493898",
-      "name": "SAFEEN AL SAFA",
-      "voyage": "2026 / 21",
-      "reference": "SAFA021",
-      "status": "OPR",
-      "start": "2026-04-15T20:00:00Z",
-      "end": "2026-08-13T12:00:00Z",
-      "ports": [
-        {
-          "name": "RECALADA LIGHTSHIPS",
-          "sequence": 1,
-          "purpose": "Delivery",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "SANTOS",
-          "sequence": 2,
-          "purpose": "Bunkering",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "ALGECIRAS",
-          "sequence": 3,
-          "purpose": "Bunkering",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "SUEZ CANAL",
-          "sequence": 4,
-          "purpose": "Canal passage",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "KING ABDULLAH CITY",
-          "sequence": 5,
-          "purpose": "Redelivery",
-          "arrivalFixed": true,
-          "departureFixed": true
-        }
-      ]
-    },
-    {
-      "id": "voyage-3",
       "dataloyId": "32560096",
       "name": "CHRYSANTHI S",
       "voyage": "2026 / 2",
@@ -97,6 +56,8 @@
           "name": "UST LUGA",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-05-16T21:36:00",
+          "departure": "2026-05-20T08:00:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -104,6 +65,8 @@
           "name": "SUEZ CANAL",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-06-07T10:45:02",
+          "departure": "2026-06-08T10:45:02",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -111,13 +74,15 @@
           "name": "DJIBOUTI",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-06-14T05:06:00",
+          "departure": "2026-07-14T14:57:09",
           "arrivalFixed": true,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-4",
+      "id": "voyage-3",
       "dataloyId": "33023163",
       "name": "MARCO",
       "voyage": "2026 / 1",
@@ -130,6 +95,8 @@
           "name": "RIO GRANDE",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-06-24T21:25:24",
+          "departure": "2026-07-06T23:45:06",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -137,6 +104,8 @@
           "name": "SINGAPORE",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-08-11T22:10:30",
+          "departure": "2026-08-12T10:10:30",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -144,13 +113,15 @@
           "name": "QINGDAO",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-08-22T02:14:12",
+          "departure": "2026-09-04T11:29:24",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-5",
+      "id": "voyage-4",
       "dataloyId": "33598687",
       "name": "DANNY",
       "voyage": "2026 / 1",
@@ -163,6 +134,8 @@
           "name": "DARDANELLES",
           "sequence": 1,
           "purpose": "Canal passage",
+          "arrival": "2026-03-12T00:40:59",
+          "departure": "2026-03-12T12:40:59",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -170,6 +143,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-03-13T01:02:21",
+          "departure": "2026-03-13T13:02:21",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -177,6 +152,8 @@
           "name": "NOVOROSSIYSK",
           "sequence": 3,
           "purpose": "Loading",
+          "arrival": "2026-05-20T05:19:00",
+          "departure": "2026-05-23T10:35:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -184,6 +161,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 4,
           "purpose": "Canal passage",
+          "arrival": "2026-05-25T04:49:13",
+          "departure": "2026-05-25T16:49:13",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -191,6 +170,8 @@
           "name": "DARDANELLES",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-05-26T07:17:30",
+          "departure": "2026-05-26T19:17:30",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -198,6 +179,8 @@
           "name": "GIBRALTAR",
           "sequence": 6,
           "purpose": "Bunkering",
+          "arrival": "2026-06-02T07:55:58",
+          "departure": "2026-06-03T07:55:58",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -205,6 +188,8 @@
           "name": "POINTE NOIRE, CONGO",
           "sequence": 7,
           "purpose": "Discharging",
+          "arrival": "2026-06-18T15:55:00",
+          "departure": "2026-06-26T22:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -212,13 +197,15 @@
           "name": "DOUALA",
           "sequence": 8,
           "purpose": "Discharging",
+          "arrival": "2026-06-29T05:00:00",
+          "departure": "2026-07-09T12:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         }
       ]
     },
     {
-      "id": "voyage-6",
+      "id": "voyage-5",
       "dataloyId": "33710343",
       "name": "PETALAS",
       "voyage": "2026 / 1",
@@ -231,6 +218,8 @@
           "name": "PARANAGUA",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-06-26T15:00:00",
+          "departure": "2026-07-11T07:39:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -238,6 +227,8 @@
           "name": "SINGAPORE",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-08-15T21:36:36",
+          "departure": "2026-08-16T09:36:36",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -245,13 +236,15 @@
           "name": "QINGDAO",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-08-25T23:34:51",
+          "departure": "2026-09-09T07:08:12",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-7",
+      "id": "voyage-6",
       "dataloyId": "34267036",
       "name": "ANEMOS",
       "voyage": "2026 / 1",
@@ -264,6 +257,8 @@
           "name": "DARDANELLES",
           "sequence": 1,
           "purpose": "Canal passage",
+          "arrival": "2026-05-02T07:00:00",
+          "departure": "2026-05-02T09:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -271,6 +266,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-05-02T21:04:04",
+          "departure": "2026-05-03T09:04:04",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -278,6 +275,8 @@
           "name": "NOVOROSSIYSK",
           "sequence": 3,
           "purpose": "Loading",
+          "arrival": "2026-05-04T23:00:00",
+          "departure": "2026-05-20T15:22:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -285,6 +284,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 4,
           "purpose": "Canal passage",
+          "arrival": "2026-05-22T10:23:09",
+          "departure": "2026-05-22T22:23:09",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -292,6 +293,8 @@
           "name": "DARDANELLES",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-05-23T13:07:31",
+          "departure": "2026-05-24T01:07:31",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -299,6 +302,8 @@
           "name": "SUEZ CANAL",
           "sequence": 6,
           "purpose": "Canal passage",
+          "arrival": "2026-05-24T05:19:00",
+          "departure": "2026-05-24T05:19:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -306,13 +311,15 @@
           "name": "PORT SUDAN",
           "sequence": 7,
           "purpose": "Discharging",
+          "arrival": "2026-05-28T07:00:00",
+          "departure": "2026-06-05T14:50:00",
           "arrivalFixed": true,
           "departureFixed": true
         }
       ]
     },
     {
-      "id": "voyage-8",
+      "id": "voyage-7",
       "dataloyId": "35470318",
       "name": "STAR VIRGINIA",
       "voyage": "2026 / 1",
@@ -325,6 +332,8 @@
           "name": "NEWPORT NEWS, VA",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-07-12T03:00:00",
+          "departure": "2026-07-25T23:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -332,6 +341,8 @@
           "name": "COLOMBO",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-09-13T03:42:00",
+          "departure": "2026-09-14T18:06:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -339,6 +350,8 @@
           "name": "PARADIP",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-09-18T15:58:00",
+          "departure": "2026-09-24T18:00:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -346,13 +359,15 @@
           "name": "SINGAPORE",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-09-30T19:18:17",
+          "departure": "2026-10-01T07:18:17",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-9",
+      "id": "voyage-8",
       "dataloyId": "35539265",
       "name": "AMIRA NORA",
       "voyage": "2026 / 1",
@@ -365,6 +380,8 @@
           "name": "TARRAGONA",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-07-26T14:25:39",
+          "departure": "2026-07-10T14:30:00",
           "arrivalFixed": false,
           "departureFixed": true
         },
@@ -372,6 +389,8 @@
           "name": "SUEZ CANAL",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-07-22T07:08:00",
+          "departure": "2026-07-23T07:08:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -379,13 +398,15 @@
           "name": "YANBO",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-07-25T18:30:00",
+          "departure": "2026-08-27T16:50:00",
           "arrivalFixed": true,
           "departureFixed": true
         }
       ]
     },
     {
-      "id": "voyage-10",
+      "id": "voyage-9",
       "dataloyId": "35615452",
       "name": "LASKARO S",
       "voyage": "2026 / 1",
@@ -398,6 +419,8 @@
           "name": "UST LUGA",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-06-16T00:01:00",
+          "departure": "2026-06-30T00:45:00",
           "arrivalFixed": false,
           "departureFixed": true
         },
@@ -405,6 +428,8 @@
           "name": "SUEZ CANAL",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-07-15T08:29:00",
+          "departure": "2026-07-16T08:29:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -412,13 +437,15 @@
           "name": "DJIBOUTI",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-07-17T20:36:00",
+          "departure": "2026-08-18T01:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         }
       ]
     },
     {
-      "id": "voyage-11",
+      "id": "voyage-10",
       "dataloyId": "35721730",
       "name": "JIA YUE",
       "voyage": "2026 / 3",
@@ -431,6 +458,8 @@
           "name": "RECALADA LIGHTSHIPS",
           "sequence": 1,
           "purpose": "Delivery",
+          "arrival": "2026-06-19T09:36:00",
+          "departure": "2026-06-19T09:36:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -438,6 +467,8 @@
           "name": "BAHIA BLANCA",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-07-11T21:00:00",
+          "departure": "2026-07-22T04:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -445,6 +476,8 @@
           "name": "SINGAPORE",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-01T11:30:00",
+          "departure": "2026-09-02T10:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -452,13 +485,15 @@
           "name": "CEBU",
           "sequence": 4,
           "purpose": "Redelivery",
+          "arrival": "2026-09-07T13:30:00",
+          "departure": "2026-09-23T16:00:00",
           "arrivalFixed": true,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-12",
+      "id": "voyage-11",
       "dataloyId": "35728048",
       "name": "JIN XING",
       "voyage": "2026 / 1",
@@ -471,6 +506,8 @@
           "name": "LEKKI",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-07-30T10:00:00",
+          "departure": "2026-08-16T09:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -478,6 +515,8 @@
           "name": "WALVIS BAY",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-08-22T16:00:00",
+          "departure": "2026-08-23T18:18:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -485,6 +524,8 @@
           "name": "MORONI",
           "sequence": 3,
           "purpose": "Embarking / Disembarking Guards",
+          "arrival": "2026-09-03T17:00:00",
+          "departure": "2026-09-03T20:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -492,13 +533,15 @@
           "name": "DJIBOUTI",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-09-12T11:30:00",
+          "departure": "2026-09-23T07:05:00",
           "arrivalFixed": true,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-13",
+      "id": "voyage-12",
       "dataloyId": "36072666",
       "name": "AFRICAN WARBLER",
       "voyage": "2026 / 1",
@@ -511,6 +554,8 @@
           "name": "SKAW",
           "sequence": 1,
           "purpose": "Embarking / Disembarking Pilot",
+          "arrival": "2026-07-24T12:00:00",
+          "departure": "2026-07-24T22:36:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -518,6 +563,8 @@
           "name": "KLAIPEDA",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-07-26T12:48:00",
+          "departure": "2026-08-01T01:25:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -525,13 +572,15 @@
           "name": "PORT HARCOURT",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-08-20T19:00:00",
+          "departure": "2026-09-16T15:00:00",
           "arrivalFixed": true,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-14",
+      "id": "voyage-13",
       "dataloyId": "36546337",
       "name": "KACEY",
       "voyage": "2026 / 1",
@@ -544,6 +593,8 @@
           "name": "KLAIPEDA",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-25T04:30:00",
+          "departure": "2026-08-28T19:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -551,6 +602,8 @@
           "name": "SKAW",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-08-30T17:00:00",
+          "departure": "2026-08-31T05:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -558,6 +611,8 @@
           "name": "LAS PALMAS",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-07T13:30:00",
+          "departure": "2026-09-10T18:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -565,6 +620,8 @@
           "name": "LAGOS",
           "sequence": 4,
           "purpose": "Waiting",
+          "arrival": "2026-09-19T19:54:00",
+          "departure": "2026-09-20T05:53:54",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -572,13 +629,15 @@
           "name": "PORT HARCOURT",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-09-21T10:40:06",
+          "departure": "2026-09-30T08:42:02",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-15",
+      "id": "voyage-14",
       "dataloyId": "37555753",
       "name": "SAFEEN AL NOUR",
       "voyage": "2026 / 7",
@@ -591,6 +650,8 @@
           "name": "BATANGAS",
           "sequence": 1,
           "purpose": "Owners' matter",
+          "arrival": "2026-07-28T05:30:00",
+          "departure": "2026-07-30T19:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -598,6 +659,8 @@
           "name": "GOVE",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-08-07T08:00:00",
+          "departure": "2026-08-14T00:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -605,6 +668,8 @@
           "name": "SINGAPORE",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-08-22T08:00:00",
+          "departure": "2026-08-23T01:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -612,6 +677,8 @@
           "name": "KHOR AL FAKKAN",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-09-05T19:12:00",
+          "departure": "2026-09-09T19:12:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -619,67 +686,15 @@
           "name": "KHALIFA",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-09-10T19:54:00",
+          "departure": "2026-09-17T23:54:00",
           "arrivalFixed": true,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-16",
-      "dataloyId": "37718041",
-      "name": "AL SAAD",
-      "voyage": "2026 / 9",
-      "reference": "ALSAAD009",
-      "status": "OPR",
-      "start": "2026-06-24T13:00:00Z",
-      "end": "2026-09-14T16:29:00Z",
-      "ports": [
-        {
-          "name": "SINGAPORE",
-          "sequence": 1,
-          "purpose": "Tank / hold cleaning",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "BUNBURY",
-          "sequence": 2,
-          "purpose": "Loading",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "FUJAIRAH",
-          "sequence": 3,
-          "purpose": "Bunkering",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "SOHAR",
-          "sequence": 4,
-          "purpose": "Loading",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "KHOR AL FAKKAN",
-          "sequence": 5,
-          "purpose": "Bunkering",
-          "arrivalFixed": false,
-          "departureFixed": false
-        },
-        {
-          "name": "JEBEL ALI",
-          "sequence": 6,
-          "purpose": "Discharging",
-          "arrivalFixed": true,
-          "departureFixed": false
-        }
-      ]
-    },
-    {
-      "id": "voyage-17",
+      "id": "voyage-15",
       "dataloyId": "38096973",
       "name": "PICTOR",
       "voyage": "2026 / 1",
@@ -692,6 +707,8 @@
           "name": "NOVOROSSIYSK",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-06-26T00:01:00",
+          "departure": "2026-07-02T01:02:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -699,6 +716,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-07-02T14:00:07",
+          "departure": "2026-07-03T02:00:07",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -706,6 +725,8 @@
           "name": "DARDANELLES",
           "sequence": 3,
           "purpose": "Canal passage",
+          "arrival": "2026-07-03T03:31:12",
+          "departure": "2026-07-03T05:07:12",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -713,6 +734,8 @@
           "name": "SUEZ CANAL",
           "sequence": 4,
           "purpose": "Canal passage",
+          "arrival": "2026-07-06T00:40:53",
+          "departure": "2026-07-06T00:40:53",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -720,25 +743,29 @@
           "name": "PORT SUDAN",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-07-11T19:33:00",
+          "departure": "2026-07-18T23:40:40",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-18",
+      "id": "voyage-16",
       "dataloyId": "38615897",
       "name": "DOKOS",
       "voyage": "2026 / 1",
       "reference": "DOKOS001",
       "status": "OPR",
       "start": "2026-07-19T16:54:00Z",
-      "end": "2026-09-26T20:34:29Z",
+      "end": "2026-10-14T13:21:14Z",
       "ports": [
         {
           "name": "ARROYO SECO",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-07-27T22:48:00",
+          "departure": "2026-07-31T08:32:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -746,6 +773,8 @@
           "name": "ZONA COMUN",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-08-01T13:15:00",
+          "departure": "2026-08-05T16:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -753,6 +782,8 @@
           "name": "BAHIA BLANCA",
           "sequence": 3,
           "purpose": "Loading",
+          "arrival": "2026-08-07T09:00:00",
+          "departure": "2026-08-12T06:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -760,6 +791,8 @@
           "name": "GIBRALTAR",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-09-03T23:00:00",
+          "departure": "2026-09-06T01:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -767,20 +800,42 @@
           "name": "SUEZ CANAL",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-09-13T00:00:00",
+          "departure": "2026-09-14T18:00:00",
+          "arrivalFixed": true,
+          "departureFixed": true
+        },
+        {
+          "name": "AT SEA",
+          "sequence": 6,
+          "purpose": "Waiting",
+          "arrival": "2026-09-15T20:00:00",
+          "departure": "2026-09-29T20:00:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
         {
           "name": "YANBO",
-          "sequence": 6,
+          "sequence": 7,
           "purpose": "Discharging",
+          "arrival": "2026-09-30T06:06:41",
+          "departure": "2026-10-14T06:50:00",
+          "arrivalFixed": false,
+          "departureFixed": false
+        },
+        {
+          "name": "AT SEA",
+          "sequence": 8,
+          "purpose": "Redelivery",
+          "arrival": "2026-10-14T14:21:14",
+          "departure": "2026-10-14T14:21:14",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-19",
+      "id": "voyage-17",
       "dataloyId": "38726922",
       "name": "JIA FOISON",
       "voyage": "2026 / 6",
@@ -793,6 +848,8 @@
           "name": "DJIBOUTI",
           "sequence": 1,
           "purpose": "Delivery",
+          "arrival": "2026-06-17T02:30:00",
+          "departure": "2026-06-17T02:30:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -800,6 +857,8 @@
           "name": "RIO GRANDE",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-07-18T05:30:00",
+          "departure": "2026-07-26T15:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -807,6 +866,8 @@
           "name": "SINGAPORE",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-01T21:00:00",
+          "departure": "2026-09-02T16:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -814,6 +875,8 @@
           "name": "ZHOUSHAN PT",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-09-10T09:12:00",
+          "departure": "2026-09-11T12:00:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -821,6 +884,8 @@
           "name": "TAIZHOU",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-09-12T20:17:59",
+          "departure": "2026-09-16T08:17:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -828,13 +893,15 @@
           "name": "CHANGJIANGKOU",
           "sequence": 6,
           "purpose": "Redelivery",
+          "arrival": "2026-09-16T22:34:59",
+          "departure": "2026-09-26T22:34:59",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-20",
+      "id": "voyage-18",
       "dataloyId": "39980084",
       "name": "SWEET LADY III",
       "voyage": "2026 / 1",
@@ -847,6 +914,8 @@
           "name": "GIBRALTAR",
           "sequence": 1,
           "purpose": "Bunkering",
+          "arrival": "2026-07-17T02:30:00",
+          "departure": "2026-07-18T12:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -854,6 +923,8 @@
           "name": "ORESUND",
           "sequence": 2,
           "purpose": "Embarking / Disembarking Pilot",
+          "arrival": "2026-07-24T16:30:00",
+          "departure": "2026-07-25T05:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -861,6 +932,8 @@
           "name": "UST LUGA",
           "sequence": 3,
           "purpose": "Loading",
+          "arrival": "2026-07-27T06:42:00",
+          "departure": "2026-07-31T06:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -868,6 +941,8 @@
           "name": "SKAW",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-08-03T15:48:00",
+          "departure": "2026-08-04T13:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -875,6 +950,8 @@
           "name": "SUEZ CANAL",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-08-18T05:00:00",
+          "departure": "2026-08-19T16:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -882,6 +959,8 @@
           "name": "DJIBOUTI",
           "sequence": 6,
           "purpose": "Discharging",
+          "arrival": "2026-08-24T06:18:00",
+          "departure": "2026-09-25T23:03:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -889,6 +968,8 @@
           "name": "SUEZ CANAL",
           "sequence": 7,
           "purpose": "Canal passage",
+          "arrival": "2026-09-30T19:58:13",
+          "departure": "2026-10-01T19:58:13",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -896,13 +977,15 @@
           "name": "PORT SAID",
           "sequence": 8,
           "purpose": "Redelivery",
+          "arrival": "2026-10-01T23:30:23",
+          "departure": "2026-10-01T23:30:23",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-21",
+      "id": "voyage-19",
       "dataloyId": "43008147",
       "name": "K SUKRET",
       "voyage": "2026 / 1",
@@ -915,6 +998,8 @@
           "name": "GDANSK",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-25T01:24:33",
+          "departure": "2026-08-30T19:13:21",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -922,6 +1007,8 @@
           "name": "SKAW",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-09-01T22:46:47",
+          "departure": "2026-09-01T22:46:47",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -929,6 +1016,8 @@
           "name": "LAS PALMAS",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-10T14:24:29",
+          "departure": "2026-09-10T14:24:29",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -936,13 +1025,90 @@
           "name": "LUANDA",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-09-23T06:24:52",
+          "departure": "2026-10-07T04:29:40",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-22",
+      "id": "voyage-20",
+      "dataloyId": "43622252",
+      "name": "TUO FU 8",
+      "voyage": "2026 / 2",
+      "reference": "TUOFU8002",
+      "status": "OPR",
+      "start": "2026-08-23T16:00:00Z",
+      "end": "2026-10-21T15:10:43Z",
+      "ports": [
+        {
+          "name": "SKAW",
+          "sequence": 1,
+          "purpose": "Bunkering",
+          "arrival": "2026-08-25T13:00:00",
+          "departure": "2026-08-25T19:30:00",
+          "arrivalFixed": true,
+          "departureFixed": true
+        },
+        {
+          "name": "LIEPAJA",
+          "sequence": 2,
+          "purpose": "Loading",
+          "arrival": "2026-08-27T10:00:00",
+          "departure": "2026-09-06T21:00:00",
+          "arrivalFixed": true,
+          "departureFixed": true
+        },
+        {
+          "name": "SKAW",
+          "sequence": 3,
+          "purpose": "Embarking / Disembarking Pilot",
+          "arrival": "2026-09-08T12:00:00",
+          "departure": "2026-09-08T12:00:00",
+          "arrivalFixed": true,
+          "departureFixed": false
+        },
+        {
+          "name": "ALGECIRAS",
+          "sequence": 4,
+          "purpose": "Bunkering",
+          "arrival": "2026-09-15T12:06:52",
+          "departure": "2026-09-16T00:06:52",
+          "arrivalFixed": false,
+          "departureFixed": false
+        },
+        {
+          "name": "SUEZ CANAL",
+          "sequence": 5,
+          "purpose": "Canal passage",
+          "arrival": "2026-09-23T13:46:38",
+          "departure": "2026-09-24T13:46:38",
+          "arrivalFixed": false,
+          "departureFixed": false
+        },
+        {
+          "name": "FUJAIRAH",
+          "sequence": 6,
+          "purpose": "Bunkering",
+          "arrival": "2026-10-05T03:01:56",
+          "departure": "2026-10-08T03:01:56",
+          "arrivalFixed": false,
+          "departureFixed": false
+        },
+        {
+          "name": "MINA ZAYED",
+          "sequence": 7,
+          "purpose": "Discharging",
+          "arrival": "2026-10-09T03:46:12",
+          "departure": "2026-10-21T19:10:43",
+          "arrivalFixed": false,
+          "departureFixed": false
+        }
+      ]
+    },
+    {
+      "id": "voyage-21",
       "dataloyId": "44451840",
       "name": "KMAX EVDOKIA",
       "voyage": "2026 / 2",
@@ -955,6 +1121,8 @@
           "name": "SOHAR",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-22T10:00:00",
+          "departure": "2026-09-12T08:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -962,6 +1130,8 @@
           "name": "KHOR AL FAKKAN",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-09-12T13:00:00",
+          "departure": "2026-09-13T01:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -969,6 +1139,8 @@
           "name": "KHALIFA",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-09-13T19:00:00",
+          "departure": "2026-09-19T00:36:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -976,13 +1148,15 @@
           "name": "JEBEL ALI",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-09-19T03:27:55",
+          "departure": "2026-09-22T16:48:33",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-23",
+      "id": "voyage-22",
       "dataloyId": "45027380",
       "name": "LMZ ARIEL",
       "voyage": "2026 / 1",
@@ -995,6 +1169,8 @@
           "name": "ROTTERDAM",
           "sequence": 1,
           "purpose": "Bunkering",
+          "arrival": "2026-08-27T00:06:00",
+          "departure": "2026-08-26T09:22:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1002,6 +1178,8 @@
           "name": "UST LUGA",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-08-31T09:00:00",
+          "departure": "2026-09-17T16:12:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -1009,6 +1187,8 @@
           "name": "TALLINN",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-18T06:16:41",
+          "departure": "2026-09-18T18:16:41",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1016,6 +1196,8 @@
           "name": "LAS PALMAS",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-09-30T05:52:22",
+          "departure": "2026-09-30T17:52:22",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1023,6 +1205,8 @@
           "name": "NACALA",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-10-24T23:17:48",
+          "departure": "2026-10-28T17:17:48",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1030,6 +1214,8 @@
           "name": "MAPUTO",
           "sequence": 6,
           "purpose": "Discharging",
+          "arrival": "2026-11-01T03:04:13",
+          "departure": "2026-11-05T03:04:13",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1037,6 +1223,8 @@
           "name": "BEIRA",
           "sequence": 7,
           "purpose": "Discharging",
+          "arrival": "2026-11-06T23:15:03",
+          "departure": "2026-11-14T23:15:03",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1044,13 +1232,15 @@
           "name": "DURBAN",
           "sequence": 8,
           "purpose": "Redelivery",
+          "arrival": "2026-11-17T12:52:17",
+          "departure": "2026-11-17T12:52:17",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-24",
+      "id": "voyage-23",
       "dataloyId": "45716859",
       "name": "BAO RUN",
       "voyage": "2026 / 8",
@@ -1063,6 +1253,8 @@
           "name": "SINGAPORE",
           "sequence": 1,
           "purpose": "Delivery",
+          "arrival": "2026-08-30T22:30:00",
+          "departure": "2026-08-30T22:30:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -1070,6 +1262,8 @@
           "name": "SUEZ CANAL",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-09-18T11:58:14",
+          "departure": "2026-09-19T11:58:14",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1077,6 +1271,8 @@
           "name": "DARDANELLES",
           "sequence": 3,
           "purpose": "Canal passage",
+          "arrival": "2026-09-22T04:06:58",
+          "departure": "2026-09-22T16:06:58",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1084,13 +1280,15 @@
           "name": "DILISKELESI",
           "sequence": 4,
           "purpose": "Redelivery",
+          "arrival": "2026-10-14T17:29:59",
+          "departure": "2026-10-14T17:29:59",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-25",
+      "id": "voyage-24",
       "dataloyId": "46044669",
       "name": "SAFEEN AL SAFA",
       "voyage": "2026 / 23",
@@ -1103,6 +1301,8 @@
           "name": "GIBRALTAR",
           "sequence": 1,
           "purpose": "Delivery",
+          "arrival": "2026-08-27T11:40:00",
+          "departure": "2026-08-27T11:40:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1110,6 +1310,8 @@
           "name": "SAO LUIZ DE MARANHAO",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-09-06T16:18:00",
+          "departure": "2026-09-13T16:18:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -1117,6 +1319,38 @@
           "name": "CARTAGENA",
           "sequence": 3,
           "purpose": "Redelivery",
+          "arrival": "2026-10-04T11:40:00",
+          "departure": "2026-10-11T11:40:00",
+          "arrivalFixed": false,
+          "departureFixed": false
+        }
+      ]
+    },
+    {
+      "id": "voyage-25",
+      "dataloyId": "48087956",
+      "name": "MARIGOULA",
+      "voyage": "2026 / 3",
+      "reference": "MARIGOULA003",
+      "status": "OPR",
+      "start": "2026-09-08T06:00:00Z",
+      "end": "2026-10-22T01:04:00Z",
+      "ports": [
+        {
+          "name": "RICHARDS BAY",
+          "sequence": 1,
+          "purpose": "Loading",
+          "arrival": "2026-09-21T06:24:00",
+          "departure": "2026-09-23T20:24:00",
+          "arrivalFixed": false,
+          "departureFixed": false
+        },
+        {
+          "name": "DJIBOUTI",
+          "sequence": 2,
+          "purpose": "Discharging",
+          "arrival": "2026-10-09T10:44:00",
+          "departure": "2026-10-22T04:04:00",
           "arrivalFixed": false,
           "departureFixed": false
         }
@@ -1130,12 +1364,14 @@
       "reference": "SAFNSR003",
       "status": "OPR",
       "start": "2026-07-06T04:00:00Z",
-      "end": "2026-10-01T15:26:40Z",
+      "end": "2026-10-02T21:00:00Z",
       "ports": [
         {
           "name": "FUJAIRAH",
           "sequence": 1,
           "purpose": "Crew",
+          "arrival": "2026-07-15T14:30:00",
+          "departure": "2026-07-15T23:06:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1143,6 +1379,8 @@
           "name": "KHOR AL FAKKAN",
           "sequence": 2,
           "purpose": "Extra port",
+          "arrival": "2026-07-16T00:06:00",
+          "departure": "2026-07-24T00:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1150,6 +1388,8 @@
           "name": "SHARJAH",
           "sequence": 3,
           "purpose": "Extra port",
+          "arrival": "2026-07-25T08:30:00",
+          "departure": "2026-07-25T18:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1157,6 +1397,8 @@
           "name": "KHALIFA",
           "sequence": 4,
           "purpose": "Loading",
+          "arrival": "2026-07-25T22:18:00",
+          "departure": "2026-08-11T04:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1164,6 +1406,8 @@
           "name": "SHARJAH",
           "sequence": 5,
           "purpose": "Tank / hold cleaning",
+          "arrival": "2026-08-11T08:48:00",
+          "departure": "2026-08-11T20:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1171,6 +1415,8 @@
           "name": "FUJAIRAH",
           "sequence": 6,
           "purpose": "Bunkering",
+          "arrival": "2026-08-13T01:06:00",
+          "departure": "2026-08-13T21:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1178,6 +1424,8 @@
           "name": "SUEZ CANAL",
           "sequence": 7,
           "purpose": "Canal passage",
+          "arrival": "2026-08-24T11:18:00",
+          "departure": "2026-08-25T21:12:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1185,6 +1433,8 @@
           "name": "DARDANELLES",
           "sequence": 8,
           "purpose": "Canal passage",
+          "arrival": "2026-08-28T07:30:00",
+          "departure": "2026-08-28T13:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1192,6 +1442,8 @@
           "name": "GEBZE",
           "sequence": 9,
           "purpose": "Discharging",
+          "arrival": "2026-08-29T01:15:00",
+          "departure": "2026-09-04T01:42:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1199,6 +1451,8 @@
           "name": "DARDANELLES",
           "sequence": 10,
           "purpose": "Canal passage",
+          "arrival": "2026-09-04T12:00:00",
+          "departure": "2026-09-04T15:12:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1206,6 +1460,8 @@
           "name": "TRIESTE",
           "sequence": 11,
           "purpose": "Discharging",
+          "arrival": "2026-09-08T08:00:00",
+          "departure": "2026-09-15T12:00:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -1213,6 +1469,8 @@
           "name": "MALTA",
           "sequence": 12,
           "purpose": "Bunkering",
+          "arrival": "2026-09-19T12:00:00",
+          "departure": "2026-09-19T13:00:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1220,6 +1478,8 @@
           "name": "ROTTERDAM",
           "sequence": 13,
           "purpose": "Discharging",
+          "arrival": "2026-09-28T08:42:41",
+          "departure": "2026-10-02T23:00:00",
           "arrivalFixed": false,
           "departureFixed": false
         }
@@ -1227,46 +1487,6 @@
     },
     {
       "id": "voyage-27",
-      "dataloyId": "39952826",
-      "name": "AL MAQAM",
-      "voyage": "2026 / 6",
-      "reference": "ALMAQAM006",
-      "status": "OPR",
-      "start": "2026-07-12T01:48:00Z",
-      "end": "2026-08-28T12:06:00Z",
-      "ports": [
-        {
-          "name": "SOHAR",
-          "sequence": 1,
-          "purpose": "Loading",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "KHOR AL FAKKAN",
-          "sequence": 2,
-          "purpose": "Bunkering",
-          "arrivalFixed": false,
-          "departureFixed": false
-        },
-        {
-          "name": "RAS AL KHAIMAH",
-          "sequence": 3,
-          "purpose": "Crew",
-          "arrivalFixed": false,
-          "departureFixed": false
-        },
-        {
-          "name": "JEBEL ALI",
-          "sequence": 4,
-          "purpose": "Discharging",
-          "arrivalFixed": true,
-          "departureFixed": true
-        }
-      ]
-    },
-    {
-      "id": "voyage-28",
       "dataloyId": "40375751",
       "name": "JIA DA",
       "voyage": "2026 / 1",
@@ -1279,6 +1499,8 @@
           "name": "HONG KONG",
           "sequence": 1,
           "purpose": "Delivery",
+          "arrival": "2026-07-08T07:06:00",
+          "departure": "2026-07-08T07:06:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1286,6 +1508,8 @@
           "name": "SINGAPORE",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-07-13T07:00:00",
+          "departure": "2026-07-14T01:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1293,6 +1517,8 @@
           "name": "RECALADA LIGHTSHIPS",
           "sequence": 3,
           "purpose": "Waiting",
+          "arrival": "2026-08-15T16:36:00",
+          "departure": "2026-08-16T00:01:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1300,6 +1526,8 @@
           "name": "SAN LORENZO ARG",
           "sequence": 4,
           "purpose": "Loading",
+          "arrival": "2026-08-18T00:32:41",
+          "departure": "2026-08-24T03:10:00",
           "arrivalFixed": false,
           "departureFixed": true
         },
@@ -1307,6 +1535,8 @@
           "name": "BAHIA BLANCA",
           "sequence": 5,
           "purpose": "Loading",
+          "arrival": "2026-08-27T03:12:00",
+          "departure": "2026-08-31T12:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1314,6 +1544,8 @@
           "name": "LAS PALMAS",
           "sequence": 6,
           "purpose": "Bunkering",
+          "arrival": "2026-09-18T18:12:00",
+          "departure": "2026-09-19T06:12:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1321,6 +1553,8 @@
           "name": "MALTA",
           "sequence": 7,
           "purpose": "Bunkering",
+          "arrival": "2026-09-25T23:46:43",
+          "departure": "2026-09-26T11:46:43",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1328,6 +1562,8 @@
           "name": "SUEZ CANAL",
           "sequence": 8,
           "purpose": "Canal passage",
+          "arrival": "2026-09-30T08:39:46",
+          "departure": "2026-10-01T08:39:46",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1335,6 +1571,8 @@
           "name": "AQABA",
           "sequence": 9,
           "purpose": "Discharging",
+          "arrival": "2026-10-02T17:45:20",
+          "departure": "2026-10-17T01:38:17",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1342,13 +1580,15 @@
           "name": "YANBO",
           "sequence": 10,
           "purpose": "Discharging",
+          "arrival": "2026-10-18T16:37:28",
+          "departure": "2026-10-29T02:05:15",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-29",
+      "id": "voyage-28",
       "dataloyId": "41156157",
       "name": "Al NAHDA",
       "voyage": "2026 / 7",
@@ -1361,6 +1601,8 @@
           "name": "GALLE",
           "sequence": 1,
           "purpose": "Bunkering",
+          "arrival": "2026-07-30T01:00:00",
+          "departure": "2026-08-05T21:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1368,6 +1610,8 @@
           "name": "KWINANA",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-08-19T09:00:00",
+          "departure": "2026-08-30T12:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1375,6 +1619,8 @@
           "name": "COLOMBO",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-11T20:42:00",
+          "departure": "2026-09-12T10:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1382,25 +1628,29 @@
           "name": "AQABA",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-09-27T09:25:31",
+          "departure": "2026-10-09T11:06:04",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-30",
+      "id": "voyage-29",
       "dataloyId": "41554906",
       "name": "KIRRY MANX",
       "voyage": "2026 / 1",
       "reference": "KRMX001",
       "status": "OPR",
       "start": "2026-07-16T14:36:00Z",
-      "end": "2026-10-27T23:56:00Z",
+      "end": "2026-10-24T23:55:15Z",
       "ports": [
         {
           "name": "VANCOUVER, BC",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-02T20:30:00",
+          "departure": "2026-08-19T20:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1408,6 +1658,8 @@
           "name": "SINGAPORE",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-09-18T01:00:00",
+          "departure": "2026-09-18T13:00:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1415,6 +1667,8 @@
           "name": "NACALA",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-10-01T08:29:00",
+          "departure": "2026-10-04T02:29:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1422,6 +1676,8 @@
           "name": "MAPUTO",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-10-07T13:44:36",
+          "departure": "2026-10-10T18:32:36",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1429,13 +1685,15 @@
           "name": "BEIRA",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-10-12T15:31:39",
+          "departure": "2026-10-25T01:55:15",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-31",
+      "id": "voyage-30",
       "dataloyId": "41616147",
       "name": "WADI ALARAB",
       "voyage": "2026 / 1",
@@ -1448,6 +1706,8 @@
           "name": "PORT SAID",
           "sequence": 1,
           "purpose": "Bunkering",
+          "arrival": "2026-08-11T16:15:00",
+          "departure": "2026-08-12T03:12:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1455,6 +1715,8 @@
           "name": "DARDANELLES",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-08-14T06:30:00",
+          "departure": "2026-08-14T15:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1462,6 +1724,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 3,
           "purpose": "Canal passage",
+          "arrival": "2026-08-15T06:30:00",
+          "departure": "2026-08-15T13:18:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1469,6 +1733,8 @@
           "name": "NOVOROSSIYSK",
           "sequence": 4,
           "purpose": "Loading",
+          "arrival": "2026-08-16T15:54:00",
+          "departure": "2026-08-25T13:30:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -1476,6 +1742,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-08-27T05:58:37",
+          "departure": "2026-08-28T05:58:37",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1483,6 +1751,8 @@
           "name": "DARDANELLES",
           "sequence": 6,
           "purpose": "Canal passage",
+          "arrival": "2026-08-28T19:50:44",
+          "departure": "2026-08-29T07:50:44",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1490,6 +1760,8 @@
           "name": "SUEZ CANAL",
           "sequence": 7,
           "purpose": "Canal passage",
+          "arrival": "2026-08-31T23:24:54",
+          "departure": "2026-09-02T11:24:54",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1497,6 +1769,8 @@
           "name": "PORT SUDAN",
           "sequence": 8,
           "purpose": "Discharging",
+          "arrival": "2026-09-05T04:28:49",
+          "departure": "2026-09-14T11:04:49",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1504,6 +1778,8 @@
           "name": "SUEZ CANAL",
           "sequence": 9,
           "purpose": "Canal passage",
+          "arrival": "2026-09-17T01:48:32",
+          "departure": "2026-09-18T01:48:32",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1511,74 +1787,15 @@
           "name": "PORT SAID",
           "sequence": 10,
           "purpose": "Redelivery",
+          "arrival": "2026-09-18T05:07:04",
+          "departure": "2026-09-18T05:07:04",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-32",
-      "dataloyId": "43622252",
-      "name": "TUO FU 8",
-      "voyage": "2026 / 2",
-      "reference": "TUOFU8002",
-      "status": "OPR",
-      "start": "2026-08-23T16:00:00Z",
-      "end": "2026-10-21T15:10:43Z",
-      "ports": [
-        {
-          "name": "SKAW",
-          "sequence": 1,
-          "purpose": "Bunkering",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "LIEPAJA",
-          "sequence": 2,
-          "purpose": "Loading",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "SKAW",
-          "sequence": 3,
-          "purpose": "Embarking / Disembarking Pilot",
-          "arrivalFixed": true,
-          "departureFixed": false
-        },
-        {
-          "name": "ALGECIRAS",
-          "sequence": 4,
-          "purpose": "Bunkering",
-          "arrivalFixed": false,
-          "departureFixed": false
-        },
-        {
-          "name": "SUEZ CANAL",
-          "sequence": 5,
-          "purpose": "Canal passage",
-          "arrivalFixed": false,
-          "departureFixed": false
-        },
-        {
-          "name": "FUJAIRAH",
-          "sequence": 6,
-          "purpose": "Bunkering",
-          "arrivalFixed": false,
-          "departureFixed": false
-        },
-        {
-          "name": "MINA ZAYED",
-          "sequence": 7,
-          "purpose": "Discharging",
-          "arrivalFixed": false,
-          "departureFixed": false
-        }
-      ]
-    },
-    {
-      "id": "voyage-33",
+      "id": "voyage-31",
       "dataloyId": "43806978",
       "name": "YEDITEPE",
       "voyage": "2026 / 1",
@@ -1591,6 +1808,8 @@
           "name": "NOVOROSSIYSK",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-08T00:05:00",
+          "departure": "2026-08-13T23:50:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1598,6 +1817,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-08-13T23:50:00",
+          "departure": "2026-08-14T11:50:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1605,6 +1826,8 @@
           "name": "DARDANELLES",
           "sequence": 3,
           "purpose": "Canal passage",
+          "arrival": "2026-08-14T11:50:00",
+          "departure": "2026-08-14T23:50:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1612,13 +1835,15 @@
           "name": "ALEXANDRIA",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-08-18T11:20:00",
+          "departure": "2026-08-24T12:00:00",
           "arrivalFixed": true,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-34",
+      "id": "voyage-32",
       "dataloyId": "43812523",
       "name": "FAHED",
       "voyage": "2026 / 1",
@@ -1631,6 +1856,8 @@
           "name": "DARDANELLES",
           "sequence": 1,
           "purpose": "Canal passage",
+          "arrival": "2026-08-07T17:36:35",
+          "departure": "2026-08-08T05:36:35",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1638,6 +1865,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 2,
           "purpose": "Canal passage",
+          "arrival": "2026-08-08T20:10:03",
+          "departure": "2026-08-11T04:42:00",
           "arrivalFixed": false,
           "departureFixed": true
         },
@@ -1645,6 +1874,8 @@
           "name": "NOVOROSSIYSK",
           "sequence": 3,
           "purpose": "Loading",
+          "arrival": "2026-08-21T15:13:00",
+          "departure": "2026-08-24T00:10:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1652,6 +1883,8 @@
           "name": "BOSPORUS STRAIT",
           "sequence": 4,
           "purpose": "Canal passage",
+          "arrival": "2026-08-26T02:59:16",
+          "departure": "2026-08-27T02:59:16",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1659,6 +1892,8 @@
           "name": "DARDANELLES",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-08-27T20:24:02",
+          "departure": "2026-08-28T08:24:02",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1666,13 +1901,15 @@
           "name": "DAMIETTA",
           "sequence": 6,
           "purpose": "Discharging",
+          "arrival": "2026-08-31T07:28:02",
+          "departure": "2026-09-01T07:28:02",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-35",
+      "id": "voyage-33",
       "dataloyId": "43850152",
       "name": "WADI ALNEEL",
       "voyage": "2026 / 1",
@@ -1685,6 +1922,8 @@
           "name": "ZHOUSHAN PT",
           "sequence": 1,
           "purpose": "Bunkering",
+          "arrival": "2026-09-02T13:30:00",
+          "departure": "2026-09-02T13:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1692,6 +1931,8 @@
           "name": "CAOFEIDIAN PT",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-09-04T23:30:00",
+          "departure": "2026-09-08T21:15:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1699,6 +1940,8 @@
           "name": "SINGAPORE",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-19T10:54:43",
+          "departure": "2026-09-19T22:54:43",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1706,6 +1949,8 @@
           "name": "OFF AIN SUKHNA",
           "sequence": 4,
           "purpose": "Waiting",
+          "arrival": "2026-10-09T02:23:46",
+          "departure": "2026-10-09T14:23:46",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1713,6 +1958,8 @@
           "name": "SUEZ CANAL",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-10-09T19:35:27",
+          "departure": "2026-10-10T19:35:27",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1720,13 +1967,15 @@
           "name": "DAMIETTA",
           "sequence": 6,
           "purpose": "Discharging",
+          "arrival": "2026-10-11T04:13:11",
+          "departure": "2026-10-18T08:05:23",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-36",
+      "id": "voyage-34",
       "dataloyId": "44208429",
       "name": "AL LULU",
       "voyage": "2026 / 5",
@@ -1739,6 +1988,8 @@
           "name": "JUBAIL",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-10T16:36:00",
+          "departure": "2026-08-16T21:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1746,6 +1997,8 @@
           "name": "RAS AL KHAIMAH",
           "sequence": 2,
           "purpose": "Extra port",
+          "arrival": "2026-08-18T07:42:58",
+          "departure": "2026-08-20T07:42:58",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1753,6 +2006,8 @@
           "name": "KHOR AL FAKKAN",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-08-20T22:13:36",
+          "departure": "2026-08-21T10:13:36",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1760,13 +2015,15 @@
           "name": "DJIBOUTI",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-08-28T14:00:00",
+          "departure": "2026-09-19T18:33:36",
           "arrivalFixed": true,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-37",
+      "id": "voyage-35",
       "dataloyId": "44280143",
       "name": "AL DANAH",
       "voyage": "2026 / 4",
@@ -1779,6 +2036,8 @@
           "name": "MESAIEED",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-15T13:18:00",
+          "departure": "2026-08-16T23:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1786,6 +2045,8 @@
           "name": "MESAIEED",
           "sequence": 2,
           "purpose": "Repair",
+          "arrival": "2026-08-16T23:30:00",
+          "departure": "2026-08-23T19:42:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1793,6 +2054,8 @@
           "name": "RAS LAFFAN",
           "sequence": 3,
           "purpose": "Loading",
+          "arrival": "2026-08-23T19:42:00",
+          "departure": "2026-08-26T11:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1800,6 +2063,8 @@
           "name": "MINA AL AHMADI",
           "sequence": 4,
           "purpose": "Loading",
+          "arrival": "2026-08-27T07:54:00",
+          "departure": "2026-09-02T20:06:00",
           "arrivalFixed": false,
           "departureFixed": true
         },
@@ -1807,6 +2072,8 @@
           "name": "MINA SAQR",
           "sequence": 5,
           "purpose": "Embarking / Disembarking Guards",
+          "arrival": "2026-09-04T14:30:00",
+          "departure": "2026-09-07T14:30:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -1814,6 +2081,8 @@
           "name": "FUJAIRAH",
           "sequence": 6,
           "purpose": "Bunkering",
+          "arrival": "2026-09-08T06:00:00",
+          "departure": "2026-09-09T09:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1821,6 +2090,8 @@
           "name": "KHOR AL FAKKAN",
           "sequence": 7,
           "purpose": "Repair",
+          "arrival": "2026-09-09T10:39:01",
+          "departure": "2026-09-10T14:00:00",
           "arrivalFixed": false,
           "departureFixed": true
         },
@@ -1828,6 +2099,8 @@
           "name": "PARADIP",
           "sequence": 8,
           "purpose": "Discharging",
+          "arrival": "2026-09-22T15:05:40",
+          "departure": "2026-09-28T07:53:30",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1835,39 +2108,15 @@
           "name": "FUJIAN JIANGYIN",
           "sequence": 9,
           "purpose": "Dry dock",
+          "arrival": "2026-10-12T01:51:24",
+          "departure": "2026-10-12T13:51:24",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-38",
-      "dataloyId": "45244331",
-      "name": "SAFEEN AL SAFA",
-      "voyage": "2026 / 22",
-      "reference": "SAFA022",
-      "status": "OPR",
-      "start": "2026-08-13T12:00:00Z",
-      "end": "2026-08-26T17:00:00Z",
-      "ports": [
-        {
-          "name": "SUEZ CANAL",
-          "sequence": 1,
-          "purpose": "Canal passage",
-          "arrivalFixed": true,
-          "departureFixed": true
-        },
-        {
-          "name": "GIBRALTAR",
-          "sequence": 2,
-          "purpose": "Delivery",
-          "arrivalFixed": true,
-          "departureFixed": true
-        }
-      ]
-    },
-    {
-      "id": "voyage-39",
+      "id": "voyage-36",
       "dataloyId": "45452793",
       "name": "DONATELLO",
       "voyage": "2026 / 1",
@@ -1880,6 +2129,8 @@
           "name": "SKAW",
           "sequence": 1,
           "purpose": "Embarking / Disembarking Pilot",
+          "arrival": "2026-08-27T03:09:00",
+          "departure": "2026-08-27T15:09:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1887,6 +2138,8 @@
           "name": "KLAIPEDA",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-08-29T06:00:00",
+          "departure": "2026-09-04T19:42:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1894,6 +2147,8 @@
           "name": "SKAW",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-07T10:48:00",
+          "departure": "2026-09-08T12:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1901,6 +2156,8 @@
           "name": "MALTA",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-09-19T20:16:00",
+          "departure": "2026-09-20T08:16:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1908,6 +2165,8 @@
           "name": "SUEZ CANAL",
           "sequence": 5,
           "purpose": "Canal passage",
+          "arrival": "2026-09-24T16:24:07",
+          "departure": "2026-09-25T16:24:07",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1915,6 +2174,8 @@
           "name": "PORT SUDAN",
           "sequence": 6,
           "purpose": "Discharging",
+          "arrival": "2026-09-28T21:17:16",
+          "departure": "2026-10-14T18:06:22",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1922,6 +2183,8 @@
           "name": "SUEZ CANAL",
           "sequence": 7,
           "purpose": "Canal passage",
+          "arrival": "2026-10-18T04:50:23",
+          "departure": "2026-10-19T04:50:23",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1929,13 +2192,15 @@
           "name": "GIBRALTAR",
           "sequence": 8,
           "purpose": "Redelivery",
+          "arrival": "2026-10-28T03:37:32",
+          "departure": "2026-10-28T03:37:32",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-40",
+      "id": "voyage-37",
       "dataloyId": "45490749",
       "name": "SAFEEN AL AMAN",
       "voyage": "2026 / 27",
@@ -1948,6 +2213,8 @@
           "name": "MALTA",
           "sequence": 1,
           "purpose": "Bunkering",
+          "arrival": "2026-08-09T18:00:00",
+          "departure": "2026-08-10T12:30:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1955,6 +2222,8 @@
           "name": "GIBRALTAR",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-08-16T03:00:00",
+          "departure": "2026-08-19T00:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1962,6 +2231,8 @@
           "name": "PORT KAMSAR",
           "sequence": 3,
           "purpose": "Loading",
+          "arrival": "2026-08-25T01:00:00",
+          "departure": "2026-08-30T20:20:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -1969,6 +2240,8 @@
           "name": "FUJAIRAH",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-10-01T17:18:54",
+          "departure": "2026-10-04T17:18:54",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -1976,13 +2249,15 @@
           "name": "KHALIFA",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-10-05T16:33:12",
+          "departure": "2026-10-10T00:09:40",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-41",
+      "id": "voyage-38",
       "dataloyId": "45605295",
       "name": "AL MAQAM",
       "voyage": "2026 / 7",
@@ -1995,6 +2270,8 @@
           "name": "RAS AL KHAIR",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-08-30T18:00:00",
+          "departure": "2026-09-05T15:00:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -2002,6 +2279,8 @@
           "name": "RAS AL KHAIMAH",
           "sequence": 2,
           "purpose": "Extra port",
+          "arrival": "2026-09-07T01:36:27",
+          "departure": "2026-09-10T01:36:27",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2009,6 +2288,8 @@
           "name": "FUJAIRAH",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-10T08:30:00",
+          "departure": "2026-09-11T06:12:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -2016,13 +2297,15 @@
           "name": "KAKINADA",
           "sequence": 4,
           "purpose": "Discharging",
+          "arrival": "2026-09-20T16:45:18",
+          "departure": "2026-09-30T11:30:18",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-42",
+      "id": "voyage-39",
       "dataloyId": "46203350",
       "name": "SAFEEN AL AMAL",
       "voyage": "2026 / 28",
@@ -2035,6 +2318,8 @@
           "name": "KHALIFA",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-09-07T19:00:00",
+          "departure": "2026-09-15T12:00:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -2042,6 +2327,8 @@
           "name": "RAS AL KHAIMAH",
           "sequence": 2,
           "purpose": "Extra port",
+          "arrival": "2026-09-15T22:49:41",
+          "departure": "2026-09-18T22:49:41",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2049,6 +2336,8 @@
           "name": "FUJAIRAH",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-09-19T15:42:18",
+          "departure": "2026-09-20T15:42:18",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2056,6 +2345,8 @@
           "name": "BUSAN",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-10-16T09:12:10",
+          "departure": "2026-10-16T21:12:10",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2063,6 +2354,8 @@
           "name": "VANCOUVER, WA",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-11-05T14:15:16",
+          "departure": "2026-11-08T02:15:16",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2070,6 +2363,8 @@
           "name": "LONG BEACH, CA",
           "sequence": 6,
           "purpose": "Discharging",
+          "arrival": "2026-11-12T09:44:24",
+          "departure": "2026-11-14T21:44:24",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2077,25 +2372,29 @@
           "name": "ENSENADA",
           "sequence": 7,
           "purpose": "Discharging",
+          "arrival": "2026-11-15T13:29:31",
+          "departure": "2026-11-18T11:05:31",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-43",
+      "id": "voyage-40",
       "dataloyId": "46316162",
       "name": "AL WATHBA",
       "voyage": "2026 / 6",
       "reference": "ALWATHBA006",
       "status": "OPR",
       "start": "2026-09-01T11:30:00Z",
-      "end": "2026-10-20T09:43:20Z",
+      "end": "2026-10-20T10:33:20Z",
       "ports": [
         {
           "name": "SHARJAH",
           "sequence": 1,
           "purpose": "Hold Upgrade",
+          "arrival": "2026-09-01T19:55:58",
+          "departure": "2026-09-04T19:55:58",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2103,13 +2402,17 @@
           "name": "JUBAIL",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-09-05T12:12:00",
+          "departure": "2026-09-15T05:30:00",
           "arrivalFixed": true,
-          "departureFixed": false
+          "departureFixed": true
         },
         {
           "name": "RAS AL KHAIMAH",
           "sequence": 3,
           "purpose": "Extra port",
+          "arrival": "2026-09-16T11:39:23",
+          "departure": "2026-09-20T11:39:23",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2117,6 +2420,8 @@
           "name": "OFF KHOR FAKKAN",
           "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-09-20T22:41:16",
+          "departure": "2026-09-21T10:41:16",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2124,53 +2429,72 @@
           "name": "DJIBOUTI",
           "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-09-26T15:57:20",
+          "departure": "2026-10-20T13:33:20",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-44",
+      "id": "voyage-41",
       "dataloyId": "46692331",
       "name": "AL SAAD",
       "voyage": "2026 / 10",
       "reference": "ALSAAD010",
       "status": "OPR",
-      "start": "2026-09-14T16:29:00Z",
-      "end": "2026-10-29T05:28:28Z",
+      "start": "2026-09-15T02:30:00Z",
+      "end": "2026-10-30T11:32:00Z",
       "ports": [
         {
-          "name": "RUWAIS",
+          "name": "SHARJAH",
           "sequence": 1,
+          "purpose": "Tank / hold cleaning",
+          "arrival": "2026-09-15T10:30:00",
+          "departure": "2026-09-15T22:30:00",
+          "arrivalFixed": true,
+          "departureFixed": false
+        },
+        {
+          "name": "RUWAIS",
+          "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-09-17T19:08:32",
+          "departure": "2026-09-27T22:58:56",
           "arrivalFixed": false,
           "departureFixed": false
         },
         {
           "name": "RAS AL KHAIMAH",
-          "sequence": 2,
+          "sequence": 3,
           "purpose": "Extra port",
+          "arrival": "2026-09-28T21:33:01",
+          "departure": "2026-10-02T21:33:01",
           "arrivalFixed": false,
           "departureFixed": false
         },
         {
           "name": "FUJAIRAH",
-          "sequence": 3,
+          "sequence": 4,
           "purpose": "Bunkering",
+          "arrival": "2026-10-03T12:35:10",
+          "departure": "2026-10-04T12:35:10",
           "arrivalFixed": false,
           "departureFixed": false
         },
         {
           "name": "KOH SICHANG",
-          "sequence": 4,
+          "sequence": 5,
           "purpose": "Discharging",
+          "arrival": "2026-10-20T14:41:36",
+          "departure": "2026-10-30T18:32:00",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-45",
+      "id": "voyage-42",
       "dataloyId": "46879164",
       "name": "V TRE",
       "voyage": "2026 / 1",
@@ -2183,6 +2507,8 @@
           "name": "ROUEN",
           "sequence": 1,
           "purpose": "Loading",
+          "arrival": "2026-09-04T16:30:00",
+          "departure": "2026-09-08T01:45:00",
           "arrivalFixed": true,
           "departureFixed": false
         },
@@ -2190,6 +2516,8 @@
           "name": "LAS PALMAS",
           "sequence": 2,
           "purpose": "Bunkering",
+          "arrival": "2026-09-13T16:11:59",
+          "departure": "2026-09-14T16:11:59",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2197,13 +2525,15 @@
           "name": "DOUALA",
           "sequence": 3,
           "purpose": "Discharging",
+          "arrival": "2026-09-24T23:18:16",
+          "departure": "2026-10-01T23:18:32",
           "arrivalFixed": false,
           "departureFixed": false
         }
       ]
     },
     {
-      "id": "voyage-46",
+      "id": "voyage-43",
       "dataloyId": "47198666",
       "name": "CHARLES",
       "voyage": "2026 / 1",
@@ -2216,6 +2546,8 @@
           "name": "BUSAN",
           "sequence": 1,
           "purpose": "Bunkering",
+          "arrival": "2026-09-11T08:00:00",
+          "departure": "2026-09-11T21:24:00",
           "arrivalFixed": true,
           "departureFixed": true
         },
@@ -2223,6 +2555,8 @@
           "name": "VANCOUVER, BC",
           "sequence": 2,
           "purpose": "Loading",
+          "arrival": "2026-09-27T04:11:00",
+          "departure": "2026-10-04T12:35:00",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2230,6 +2564,8 @@
           "name": "SINGAPORE",
           "sequence": 3,
           "purpose": "Bunkering",
+          "arrival": "2026-11-02T17:25:31",
+          "departure": "2026-11-03T05:25:31",
           "arrivalFixed": false,
           "departureFixed": false
         },
@@ -2237,32 +2573,8 @@
           "name": "PORT SUDAN",
           "sequence": 4,
           "purpose": "Discharging",
-          "arrivalFixed": false,
-          "departureFixed": false
-        }
-      ]
-    },
-    {
-      "id": "voyage-47",
-      "dataloyId": "48087956",
-      "name": "MARIGOULA",
-      "voyage": "2026 / 3",
-      "reference": "MARIGOULA003",
-      "status": "OPR",
-      "start": "2026-09-08T06:00:00Z",
-      "end": "2026-10-22T01:04:00Z",
-      "ports": [
-        {
-          "name": "RICHARDS BAY",
-          "sequence": 1,
-          "purpose": "Loading",
-          "arrivalFixed": false,
-          "departureFixed": false
-        },
-        {
-          "name": "DJIBOUTI",
-          "sequence": 2,
-          "purpose": "Discharging",
+          "arrival": "2026-11-20T22:44:27",
+          "departure": "2026-11-28T01:08:27",
           "arrivalFixed": false,
           "departureFixed": false
         }

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {dateState,selectVoyages,sortVoyages,partyOptions,laycan,laycanLabel,money,amountLabel,escapeHtml,snapshotCsv} from '../src/operational.js';
+import {dateState,selectVoyages,sortVoyages,partyOptions,laycan,laycanLabel,laycanStatus,registeredCount,rotationContext,callDateLabel,money,amountLabel,escapeHtml,snapshotCsv} from '../src/operational.js';
 const asOf='2026-09-14T12:00:00Z';
 const row={id:'a',name:'TEST SHIP',voyage:'2026 / 1',reference:'42',status:'OPR',start:'2026-09-01T00:00:00Z',end:'2026-09-13T00:00:00Z',ports:[{name:'TEST PORT',sequence:1}]};
 test('OPR remains distinct from dates; missing dates never imply active sailing',()=>{
@@ -28,7 +28,7 @@ test('public artifact has only approved display fields and stable snapshot dates
    const call=['name','sequence','purpose','arrivalFixed','departureFixed'],callOptional=['arrival','departure'];
    for(const k of call)assert.ok(k in p,`missing port ${k}`);
    for(const k of Object.keys(p))assert.ok(call.includes(k)||callOptional.includes(k),`unapproved port field ${k}`);
-   for(const d of [p.arrival,p.departure])if(d)assert.ok(d.endsWith('Z')&&!Number.isNaN(Date.parse(d)));
+   for(const d of [p.arrival,p.departure])if(d)assert.ok(/^\d{4}-\d{2}-\d{2}T/.test(d)&&!Number.isNaN(Date.parse(d)), 'port time is local or explicitly zoned');
   }
  }
 });
@@ -75,8 +75,37 @@ test('money formats the registered currency and survives a bad currency code',()
  assert.equal(money(1250000,'USD'),'USD 1,250,000');
  assert.equal(money(12.75,'EUR'),'EUR 12.75');
  assert.equal(money(4200,'NOTACODE'),'NOTACODE 4,200');
- assert.equal(money(4200,null),'USD 4,200');
+ assert.equal(money(4200,null),'4,200 · Currency not collected');
  for(const bad of [null,undefined,'1000',NaN,Infinity])assert.equal(money(bad,'USD'),null,`${bad} must not format`);
+});
+test('completed rotations show the last completed port and never restart at the first',()=>{
+ const ports=['A','B','C'].map(name=>({name,departureFixed:true}));
+ const r=rotationContext(ports);
+ assert.equal(r.completed,true);
+ assert.deepEqual(r.calls.map(c=>c.port.name),['B','C']);
+ assert.ok(r.calls.every(c=>c.state==='previous'));
+ assert.equal(r.calls.at(-1).label,'Last completed port');
+ assert.deepEqual(rotationContext([]),{completed:false,calls:[]});
+ assert.equal(rotationContext([ports[0]]).calls[0].label,'Last completed port');
+ const active=rotationContext([ports[0],{name:'B',departureFixed:false},{name:'C',departureFixed:false}]);
+ assert.deepEqual(active.calls.map(c=>c.label),['Previous','Current schedule','Next']);
+});
+test('missing commercial fields never imply zero or an unregistered laycan',()=>{
+ assert.equal(registeredCount(null),'Count not collected');
+ assert.equal(registeredCount(undefined),'Count not collected');
+ assert.equal(registeredCount(0),'0 registered');
+ assert.equal(laycanStatus({commercial:{cargo:{description:'Coal'}}}),'Not collected');
+ assert.equal(laycanStatus({commercial:{cargo:{laycanRegistered:false}}}),'Not registered');
+ assert.equal(laycanStatus({commercial:{cargo:{laycanRegistered:null}}}),'Not determined');
+ const csv=snapshotCsv([{...row,commercial:{cargo:{description:'Coal'}}}],asOf);
+ assert.ok(csv.includes('Coal'));
+ assert.ok(!csv.includes('Laycan from'));
+});
+test('call dates preserve local clock time and distinguish fixed from planned',()=>{
+ assert.equal(callDateLabel('2026-09-11T08:00:00',true,'arrival'),'ATA 11 Sept 2026, 08:00 LT');
+ assert.equal(callDateLabel('2026-09-11T08:00:00',false,'arrival'),'ARR · planned 11 Sept 2026, 08:00 LT');
+ assert.equal(callDateLabel('2026-09-11T08:00:00+09:00',true,'departure'),'ATD 10 Sept 2026, 23:00 UTC');
+ assert.equal(callDateLabel(null,false,'arrival'),'');
 });
 test('an absent figure, an unregistered one and an uncollected amount never read alike',()=>{
  assert.equal(amountLabel(undefined),'Not collected');

@@ -59,7 +59,7 @@ export async function probe(env, fetchImpl = fetch) {
   } catch { return {ok:false, code:'INVALID_OR_INTERRUPTED_JSON'}; }
 }
 
-async function oauthToken(env, fetchImpl) {
+export async function oauthToken(env, fetchImpl = fetch) {
   if (!env.DATALOY_CLIENT_ID || !env.DATALOY_CLIENT_SECRET) throw new Error('DATALOY_OAUTH_CREDENTIALS_REQUIRED');
   // Destination verified against the existing dataloy-tool tenant configuration.
   if (env.DATALOY_TOKEN_URL !== 'https://dataloy.eu.auth0.com/oauth/token') throw new Error('DATALOY_TOKEN_URL_UNCONFIRMED');

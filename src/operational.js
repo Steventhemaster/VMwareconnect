@@ -46,7 +46,8 @@ export function laycanLabel(v,timeZone='UTC'){
 // throw and take the whole card down with it, so the plain-code form is the fallback.
 export function money(value,currency){
  if(typeof value!=='number'||!Number.isFinite(value))return null;
- try{return new Intl.NumberFormat('en-GB',{style:'currency',currency:currency||'USD',currencyDisplay:'code',minimumFractionDigits:0,maximumFractionDigits:2}).format(value);}
+ if(!currency||!String(currency).trim())return `${new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(value)} · Currency not collected`;
+ try{return new Intl.NumberFormat('en-GB',{style:'currency',currency,currencyDisplay:'code',minimumFractionDigits:0,maximumFractionDigits:2}).format(value);}
  catch{return `${currency?String(currency)+' ':''}${new Intl.NumberFormat('en-GB',{minimumFractionDigits:0,maximumFractionDigits:2}).format(value)}`;}
 }
 // One vocabulary for every figure on the card, so "none", "not yet pulled" and
@@ -62,8 +63,36 @@ export function amountLabel(group){
 export function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 export function snapshotCsv(rows,asOf){
  const cell=v=>'"'+String(v??'').replace(/^[=+@-]/,"'$&").replaceAll('"','""')+'"';
- const parties=rows.some(v=>v.charterer||v.operator),cargo=rows.some(v=>laycan(v));
- const head=['Vessel','Voyage','Reference','Status',...parties?['Charterer','Operator']:[],...cargo?['Cargo','Laycan from','Laycan to']:[],'Ports in sequence','Registered start UTC','Registered end UTC'];
- const line=v=>{const l=laycan(v);return [v.name,v.voyage,v.reference,v.status,...parties?[v.charterer,v.operator]:[],...cargo?[v.commercial?.cargo?.description,l?.from,l?.to]:[],v.ports.map(p=>p.name).join(' → '),v.start,v.end];};
+ const parties=rows.some(v=>v.charterer||v.operator),cargo=rows.some(v=>v.commercial?.cargo),hasLaycan=rows.some(v=>laycan(v));
+ const head=['Vessel','Voyage','Reference','Status',...parties?['Charterer','Operator']:[],...cargo?['Cargo']:[],...hasLaycan?['Laycan from','Laycan to']:[],'Ports in sequence','Registered start UTC','Registered end UTC'];
+ const line=v=>{const l=laycan(v);return [v.name,v.voyage,v.reference,v.status,...parties?[v.charterer,v.operator]:[],...cargo?[v.commercial?.cargo?.description]:[],...hasLaycan?[l?.from,l?.to]:[],v.ports.map(p=>p.name).join(' → '),v.start,v.end];};
  return '﻿'+[['DATALOY SNAPSHOT',asOf],head,...rows.map(line)].map(r=>r.map(cell).join(',')).join('\r\n');
+}
+
+export function registeredCount(value){
+ return Number.isInteger(value)&&value>=0?`${value} registered`:'Count not collected';
+}
+export function laycanStatus(v){
+ const cargo=v.commercial?.cargo;
+ return laycanLabel(v)||(cargo?.laycanRegistered===false?'Not registered':cargo?.laycanRegistered===true?'Registered · dates not collected':cargo?.laycanRegistered===null?'Not determined':'Not collected');
+}
+export function portCallState(p){
+ return p.departureFixed?'complete':p.arrivalFixed?'current':'scheduled';
+}
+export function rotationContext(ports){
+ const next=ports.findIndex(p=>!p.departureFixed);
+ const completed=ports.length>0&&next===-1;
+ const focus=completed?ports.length-1:next;
+ return {completed,calls:ports.map((port,index)=>({port,index})).filter(({index})=>Math.abs(index-focus)<=1).map(({port,index})=>({port,index,state:completed||index<focus?'previous':index===focus?'current':'next',label:completed?(index===focus?'Last completed port':'Previous'):index===focus?'Current schedule':index<focus?'Previous':'Next'}))};
+}
+// EventLog dates without an offset are port-local wall-clock times. Do not
+// convert them using the viewer's timezone or append Z in the published data.
+export function callDateLabel(value,fixed,kind){
+ if(!value)return '';
+ const zoned=/(?:Z|[+-]\d{2}:\d{2})$/i.test(value);
+ const date=new Date(zoned?value:value+'Z');
+ if(!Number.isFinite(date.getTime()))return 'Date unavailable';
+ const label=kind==='arrival'?(fixed?'ATA':'ARR · planned'):(fixed?'ATD':'DEP · planned');
+ const formatted=new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(date);
+ return `${label} ${formatted} ${zoned?'UTC':'LT'}`;
 }
