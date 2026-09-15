@@ -22,7 +22,7 @@ the comparison product described below. Every screen states this.
 | Published snapshot — 47 voyages / 43 vessels / 243 port calls, with call purpose and fixed-date flags | published, no auto-refresh |
 | Outlook vessel report collection | not connected |
 | Vessel position / map | none held — nothing plotted |
-| Cargo, invoicing and laytime | requested — contract agreed, collection pending |
+| Cargo, invoicing and laytime | contract agreed; collection and screens both pending |
 | Report ↔ Dataloy comparison | not performed |
 | Sign-in and fleet-scoped permissions | not implemented — see the open question below |
 
@@ -59,7 +59,7 @@ node scripts/prepare-public-snapshot.mjs                  # project to approved 
 | [DigitalOcean deployment](docs/DEPLOYMENT-DIGITALOCEAN.md) | App Platform components, VM collection link, durable storage, secrets |
 | [Dataloy connection verification](docs/DATALOY-CONNECTION-CHECK.md) | What was proven, how the probe is hardened, how to run it |
 | [Published snapshot](docs/PUBLIC-SNAPSHOT.md) | What is published, what is excluded, and what the site does not claim |
-| [Data request — cargo, invoicing, laytime](docs/DATA-REQUEST-COMMERCIAL.md) | The contract the UI is already built against, and what the collection side needs to verify first |
+| [Data request — cargo, invoicing, laytime](docs/DATA-REQUEST-COMMERCIAL.md) | The agreed contract for the pull, what to verify first, and why no amounts are published |
 | [Visual design](docs/DESIGN-ENGLISH.md) | Palette measured from the Dataloy VMS product, and the information hierarchy |
 | [Site scope](docs/REVIEW-SITE.md) | Screens built, what is verified, and what remains |
 | [Claude implementation brief](docs/CLAUDE-HANDOFF.md) | Brief to use if implementation is handed to Claude Code |

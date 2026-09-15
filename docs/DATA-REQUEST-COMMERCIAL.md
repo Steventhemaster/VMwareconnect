@@ -1,13 +1,14 @@
 # Data request — cargo, invoicing and laytime
 
-This is a request to the collection side, and a contract the UI is already built
-against. The register and the voyage drawer render these three groups today; with
-the keys absent they read "not collected", and they light up the moment a snapshot
-carries them. **No UI change is needed when this lands** — only a re-pull and a
-re-projection.
+This is a request to the collection side. Requested by the user on 2026-09-15:
+invoice status for laden voyages, and whether demurrage / despatch has been
+registered.
 
-Requested by the user on 2026-09-15: invoice status for laden voyages, and whether
-demurrage / despatch has been registered.
+**The UI for this is not built.** A first attempt was made and reverted along with
+the rest of that design pass, so when the data lands the screens for it still need
+designing. The contract below stands on its own — it says what to pull and what not
+to publish — and holding it steady means the collection work does not have to wait
+for the UI question to be settled.
 
 ## Why it cannot be derived from what is published
 
@@ -65,16 +66,16 @@ negative finding.
 }
 ```
 
-Rules the UI relies on:
+Rules for whoever builds the screens:
 
-- `commercial` absent → all three groups read "not collected".
-- A group present but its value `null` → reads "not determined", which is different
-  from "none" and is displayed differently.
-- `invoices.statuses` is rendered generically from `code` and `label`. Do not map
-  the tenant's codes onto invented ones; pass them through and the UI will show
-  them as they are.
+- `commercial` absent must read as "not collected", never as zero and never as a
+  finding.
+- A group present but its value `null` means "not determined", which is different
+  from "none" and should not look the same.
+- `invoices.statuses` carries the tenant's own codes. Do not map them onto invented
+  ones on either side; pass them through and show them as they are.
 - `laytime.registered: false` means a calculation has not been registered. It does
-  **not** mean there is no claim, and the UI says so.
+  **not** mean there is no claim, and the screen should say so.
 - `cargo.laden` should come from a field that actually states it. If the only
   honest answer is "we cannot tell from what we pulled", send `null`.
 
