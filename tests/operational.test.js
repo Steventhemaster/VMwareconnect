@@ -16,10 +16,12 @@ test('public artifact has only approved display fields and stable snapshot dates
  assert.equal(s.mode,'published-snapshot');
  assert.ok(s.voyages.length>0);
  for(const v of s.voyages){
-  assert.deepEqual(Object.keys(v).sort(),['id','name','voyage','reference','status','start','end','ports'].sort());
+  assert.deepEqual(Object.keys(v).sort(),['id','dataloyId','name','voyage','reference','status','start','end','ports'].sort());
+  assert.match(v.dataloyId,/^\d+$/);
+  assert.ok(v.reference.length>0);
   assert.equal(v.status,'OPR');
   for(const d of [v.start,v.end])if(d)assert.ok(d.endsWith('Z')&&!Number.isNaN(Date.parse(d)));
-  for(const p of v.ports)assert.deepEqual(Object.keys(p).sort(),['name','sequence']);
+  for(const p of v.ports)assert.deepEqual(Object.keys(p).sort(),['name','sequence','purpose','arrivalFixed','departureFixed'].sort());
  }
 });
 test('upstream text is escaped and CSV formula values are neutralized',()=>{

@@ -8,7 +8,9 @@ The palette was measured from the running Dataloy VMS interface using computed b
 
 | Role | Observed Dataloy value | Application |
 | --- | --- | --- |
-| Primary action | #0060F0 | Buttons, active tabs, navigation accents |
+| Dataloy magenta | #DF1078 | Brand mark and identity accents |
+| Dataloy navy | #092454 | Brand typography and high-priority headings |
+| Primary action | #0060F0 | Buttons, active tabs and interactive controls |
 | Selected navigation | rgba(0,96,240,0.12) | Pale blue navigation background |
 | Divider | #E0E0E0 | Thin borders and separators |
 | Amber accent | #F2B835 | Schedule review emphasis, with darker readable text |
