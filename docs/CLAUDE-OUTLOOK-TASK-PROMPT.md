@@ -1,0 +1,15 @@
+# Paste into Claude's VMware-capable work environment
+
+Implement and configure the VMwareconnect daily Outlook report task using `docs/CLAUDE-OUTLOOK-DAILY-AUTOMATION.md` in Steventhemaster/VMwareconnect as the acceptance specification. Work in the existing project and preserve the current DigitalOcean deployment and 09:00 Dataloy refresh.
+
+Schedule one run every day at 10:00 Asia/Dubai (06:00 UTC). Each run reads messages received from the preceding day's 10:00 inclusive to today's 10:00 exclusive. Use the scheduled boundary even when execution starts late. Do not create duplicate scheduled tasks.
+
+Use the latest successful morning Dataloy Operational list, including both Voyage and TC Out. In Outlook inside VMware, read Noon/Daily, Arrival, Departure and Working reports from all configured report folders and shared mailboxes, including relevant bodies, forwards and attachments. Verify mailbox scope and unattended access first. Use the existing authorized access method; do not assume access to a local desktop Outlook controls the VMware mailbox.
+
+Extract each report's vessel, voyage candidate, report type, event time/timezone, reported position, port, next port/ETA and available operational fields with private source evidence. Preserve missing values, ambiguities, multiple events and corrections. Distinguish the message's received time from the report's observation time. Deduplicate idempotently, retain corrections and resume incomplete windows after failures.
+
+Generate an English daily vessel summary plus a private run receipt. Distinguish complete searches with no report, partial searches, unparsed attachments and unavailable sources. Arrival/departure/working reports are conditional; do not declare all four daily types mandatory or infer that missing reports are overdue. Never label an old reported position as live.
+
+Implement private persistence, durable checkpoints and an upload outbox. Use the project's authenticated ingestion contract only when a real deployed endpoint is verified. The existing public site is static: if ingestion/report display is not implemented, save private output as publication pending and state what remains. Do not publish raw internal emails, attachments, source identifiers or credentials to GitHub or the public bundle. Keep Dataloy and Outlook read-only, apart from unavoidable Outlook read-state changes, and send no messages to third parties.
+
+First inspect the current code and environment, then implement the collector and scheduler supported by that environment. Run a real fixed-window pilot, repeat it to prove deduplication, test session loss and recovery, and verify a scheduled run. Continue all feasible work and identify only specific missing access/configuration. In your completion report give the actual task name, timezone, next scheduled execution, verified mailbox/folder scope, latest run result, private output location, publication result and outstanding blockers. Do not say scheduling or site integration is active unless demonstrated.
