@@ -24,7 +24,7 @@ const icon=n=>`<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="curr
 
 const NAV=[['fleet','Voyages','fleet'],['review','Review queue','review'],['brief','Voyage briefing','brief'],['connections','Connections','connections']];
 let page=NAV.some(([p])=>p===location.hash.slice(1))?location.hash.slice(1):'fleet';
-let search='',filter='all',sort='attention',selected=null,lastFocus=null;
+let search='',filter='all',sort='name',selected=null,lastFocus=null;
 
 /* Shell. The rail foot carries source state, not a slogan. */
 document.querySelector('#app').innerHTML=`<a class="skip" href="#main">Skip to content</a>
@@ -62,22 +62,21 @@ function snapbar(){
    the rotation is pointed at. */
 function route(v){
  if(!v.ports||!v.ports.length)return '<span class="route-empty">No port calls</span>';
- const f=focusIndex(v), p=v.ports, bits=[];
- if(f>0)bits.push(`<span class="prev">${esc(p[f-1].name)}</span><span class="sep">›</span>`);
- bits.push(`<span class="cur">${esc(p[f].name)}</span><span class="purpose">${esc(p[f].purpose)}</span>`);
- if(f<p.length-1)bits.push(`<span class="sep">›</span><span class="next">${esc(p[f+1].name)}</span>`);
- return `<span class="route">${bits.join('')}<span class="calls">${p.length} calls</span></span>`;
+ const f=focusIndex(v), p=v.ports;
+ const stages=[[f-1,'Previous','prev'],[f,'Current','cur'],[f+1,'Next','next']].filter(([i])=>i>=0&&i<p.length);
+ return `<ol class="rot" aria-label="Previous, current schedule and next registered port calls">${stages.map(([i,label,cls])=>`<li class="${cls}"><span class="dot" aria-hidden="true"></span><span class="lab">${label}</span><span class="nm">${esc(p[i].name)}</span><span class="pp">${esc(p[i].purpose)}</span></li>`).join('')}</ol>
+ <div class="rot-foot"><span class="num">${fmtDay(v.start)||'\u2014'} \u2192 ${fmtDay(v.end)||'\u2014'}</span><span>registered start to end \u00b7 ${p.length} calls in rotation</span></div>`;
 }
 
 function fleet(){
- return heading('Voyages','Operational voyages as registered in Dataloy, ordered by how far each one sits from its own registered end date.',
+ return heading('Voyages','Operational voyages as registered in Dataloy, with the registered rotation and schedule for each one.',
   `<button class="button" id="export">${icon('download')}Export CSV</button><button class="button primary" data-page="brief">Voyage briefing</button>`)
  +snapbar()
  +`<section class="position-notice compact"><p><strong>Vessel positions are not connected.</strong> A port call is a scheduled destination, not a position, so nothing is plotted. Verified vessel reports or AIS data will enable a position map.</p><span class="flag unknown"><span class="mk">▨</span>Position unavailable</span></section>
  <section class="panel"><div class="panel-head"><div><h2>Voyage register <span id="result-count">${c.all}</span></h2><p>Registered end dates are not verified arrival times or completion records.</p></div>
  <div class="panel-tools"><label class="search">${icon('search')}<input id="fleet-search" aria-label="Search vessel, voyage, reference or port" placeholder="Vessel, voyage, reference or port" value="${esc(search)}"></label>
- <select id="sort" aria-label="Sort voyages"><option value="attention">Needs attention</option><option value="delta">Days vs end date</option><option value="name">Vessel name</option><option value="end">End date</option></select></div></div>
- <table><thead><tr><th>Vessel / voyage</th><th>Reference</th><th>Port rotation</th><th>Registered window</th><th class="right">Against end</th></tr></thead>
+ <select id="sort" aria-label="Sort voyages"><option value="name">Vessel name</option><option value="end">Registered end date</option><option value="attention">Needs attention first</option><option value="delta">Days vs end date</option></select></div></div>
+ <table><thead><tr><th>Vessel / voyage</th><th>Port rotation &amp; schedule</th><th>Open in Dataloy</th><th class="right">Against end</th></tr></thead>
  <tbody id="vessel-rows"></tbody></table>
  <div class="panel-foot"><span id="result-footer"></span><span>OPR is a workflow status, not a sailing status</span></div></section>`;
 }
@@ -89,12 +88,11 @@ function renderRows(){
   const flagClass=code==='past'?'past':code==='unknown'?'unknown':'';
   return `<tr class="${flagClass}">
   <td><button class="v-cell" data-voyage="${v.id}"><span class="mk" title="${s.label}"><span class="sr-only">${s.label}. </span><span aria-hidden="true">${s.mark}</span></span><span><strong>${esc(v.name)}</strong><small>${esc(v.voyage)} &middot; OPR</small></span></button></td>
-  <td data-label="Reference"><a class="ref-link" href="${DATALOY_VOYAGE}${encodeURIComponent(v.dataloyId)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${esc(v.reference)} in Dataloy VMS">${esc(v.reference)}${icon('arrow')}</a></td>
   <td data-label="Port rotation">${route(v)}</td>
-  <td data-label="Registered window"><span class="window"><span><i>start</i>${fmtDay(v.start)||'Not verified'}<b>${fmtTime(v.start)||''}</b></span><span><i>end</i>${fmtDay(v.end)||'Not verified'}<b>${fmtTime(v.end)||''}</b></span></span></td>
+  <td data-label="Open in Dataloy"><a class="dl-btn" href="${DATALOY_VOYAGE}${encodeURIComponent(v.dataloyId)}" target="_blank" rel="noopener noreferrer" aria-label="Open voyage ${esc(v.reference)} in Dataloy VMS">Open in Dataloy${icon('arrow')}<span class="ref">${esc(v.reference)}</span></a></td>
   <td class="cell-delta"><span class="delta ${d.tone}" title="${d.title}"><b>${d.text}</b><small>vs end date</small></span></td>
   <td class="cell-flag" data-label="Schedule review"><span class="flag ${flagClass}"><span class="mk" aria-hidden="true">${s.mark}</span>${s.label}</span></td></tr>`;
- }).join(''):`<tr><td colspan="6"><div class="empty-state"><strong>No voyages found</strong><p>Try another vessel, reference or port.</p><button class="button" id="clear">Clear search and filter</button></div></td></tr>`;
+ }).join(''):`<tr><td colspan="4"><div class="empty-state"><strong>No voyages found</strong><p>Try another vessel, reference or port.</p><button class="button" id="clear">Clear search and filter</button></div></td></tr>`;
  document.querySelector('#result-count').textContent=list.length;
  document.querySelector('#result-footer').textContent=`Showing ${list.length} of ${c.all} voyages`;
  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter));
@@ -172,7 +170,8 @@ function open(id){
  <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
  <div class="drawer-top"><span class="lbl">DATALOY VOYAGE</span><button class="icon-button" id="close" aria-label="Close voyage details">${icon('close')}</button></div>
  <div class="drawer-title"><h2 id="drawer-title">${esc(v.name)}</h2>
- <p>Voyage ${esc(v.voyage)} <a class="ref-link" href="${DATALOY_VOYAGE}${encodeURIComponent(v.dataloyId)}" target="_blank" rel="noopener noreferrer">${esc(v.reference)}${icon('arrow')}</a> <span class="opr">OPR</span></p></div>
+ <p>Voyage ${esc(v.voyage)} <span class="opr">OPR</span> <span class="opr">${esc(v.reference)}</span></p>
+ <a class="dl-btn wide" href="${DATALOY_VOYAGE}${encodeURIComponent(v.dataloyId)}" target="_blank" rel="noopener noreferrer">Open in Dataloy${icon('arrow')}</a></div>
  <div class="drawer-content">
  <span class="flag ${flagClass}"><span class="mk">${s.mark}</span>${s.label}</span>
  <div class="detail-grid">
