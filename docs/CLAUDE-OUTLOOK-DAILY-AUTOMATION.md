@@ -12,6 +12,7 @@ Status: implementation and scheduler handoff, not an activated Claude task. The 
 | Equivalent UTC schedule | 06:00 UTC daily |
 | Main reporting window | Previous day's 10:00 inclusive to today's 10:00 exclusive, Dubai time |
 | Vessel scope | All vessels on the latest successfully collected Dataloy OPR list, both Voyage and TC Out |
+| Mailbox | `operation@safeen-invictus.com` only; include its configured report folders and subfolders |
 | Report types | Noon, Arrival, Departure and Working Report |
 | Output language | English dashboard fields and operational summaries |
 
@@ -21,7 +22,7 @@ Use the host/scheduler's verified timezone setting. Register this task only once
 
 ## One-time setup and acceptance
 
-1. Confirm the VMware desktop, Outlook variant, mailbox identity, explicitly included shared mailboxes and report folders/subfolders, Outlook timezone, and the mail access method that actually works. Do not assume that local Outlook COM controls Outlook inside the remote desktop.
+1. Confirm the VMware desktop, Outlook variant, access to `operation@safeen-invictus.com` and its report folders/subfolders, Outlook timezone, and the mail access method that actually works. Do not assume that local Outlook COM controls Outlook inside the remote desktop.
 2. Verify approved programmatic read access where available. Otherwise use the demonstrated in-VM UI access, documenting its session and unattended-execution limitations. Do not install or register new mailbox access applications solely on the assumption that access is permitted.
 3. Record the actual configured paths for private raw storage, normalized output, run receipts and durable checkpoints. Keep these outside the public web root and Git-tracked paths. Use the existing authorised storage environment; do not invent a cloud upload destination.
 4. Obtain the Operational list from the validated snapshot, retaining `fetchedAt`, vessel identity, reference, `dataloyId`, `contractType`, responsible charterer, operator and port calls. Do not give Dataloy credentials to the Outlook collector just to read that list. Add a private vessel master/alias mapping if stable IMO identity is not yet available in the published snapshot.
@@ -41,7 +42,7 @@ For completeness, include known vessel aliases and the preceding successful scop
 
 ### 2. Read the received-time window
 
-Enumerate all configured folders and all result pages, filtered by received timestamp in the window. Outlook date-only searches may over-select: apply the exact timestamp boundary after retrieval. Preserve source offsets and verify the mailbox's timestamp interpretation.
+Search `operation@safeen-invictus.com` only, whether mounted as the primary or a shared mailbox. Do not search other mailboxes. Enumerate its Inbox and configured report folders/subfolders and all result pages, filtered by received timestamp in the window. Outlook date-only searches may over-select: apply the exact timestamp boundary after retrieval. Preserve source offsets and verify the mailbox's timestamp interpretation.
 
 Match against registered vessel names and verified aliases. Inspect subject, body and relevant attachments. Do not rely exclusively on subject keywords, sender domain, conversation headers, the first results page, or a search UI's estimated count. Bodies and forwarded reports may identify a vessel absent from the subject. If message content cannot be read completely, mark the affected coverage partial.
 

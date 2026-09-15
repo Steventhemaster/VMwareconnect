@@ -2,7 +2,7 @@
 
 ## Requested daily Outlook task — 10:00 Dubai
 
-The user requested a once-daily collection of the preceding 24 hours of Noon, Arrival, Departure and Working reports for the Dataloy Operational fleet, including Voyage and TC Out. Use [the current automation specification](CLAUDE-OUTLOOK-DAILY-AUTOMATION.md) and [the ready-to-paste task prompt](CLAUDE-OUTLOOK-TASK-PROMPT.md). These define the requested handoff; they do not mean a task has already been registered in Claude. This specific request supersedes the conditional handoff wording below for daily report collection.
+The source mailbox is `operation@safeen-invictus.com` (including its report folders/subfolders, excluding other mailboxes). The user requested a once-daily collection of the preceding 24 hours of Noon, Arrival, Departure and Working reports for the Dataloy Operational fleet, including Voyage and TC Out. Use [the current automation specification](CLAUDE-OUTLOOK-DAILY-AUTOMATION.md) and [the ready-to-paste task prompt](CLAUDE-OUTLOOK-TASK-PROMPT.md). These define the requested handoff; they do not mean a task has already been registered in Claude. This specific request supersedes the conditional handoff wording below for daily report collection.
 
 > The initial design is currently owned by Codex. This document is the brief to use if implementation is later handed to Claude Code. It does not delegate any work automatically.
 
